@@ -16,7 +16,7 @@ export interface IUserDocument extends Document {
   password: string;
   sessions: IToken[];
   resetPasswordToken: IToken;
-  generateAccessAuthToken(): Promise<void>;
+  generateAccessAuthToken(): Promise<string>;
   generateToken(): Promise<void>;
   createSession(): Promise<string>;
 }
@@ -90,7 +90,7 @@ UserSchema.methods.generateAccessAuthToken = function (): Promise<string> {
   });
 };
 
-UserSchema.methods.generateToken = function (): Promise<string> {
+UserSchema.methods.generateToken = async function (): Promise<string> {
   return new Promise((resolve, reject) => {
     crypto.randomBytes(64, (error, buf) => {
       if (!error) {

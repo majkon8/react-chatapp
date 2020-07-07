@@ -1,7 +1,8 @@
 import { User } from "../models/user.model";
+import { Request, Response } from "express";
 
 // GET ONE USER
-export const findUser = async (req: any, res: any) => {
+export const findUser = async (req: Request, res: Response) => {
   const userId = req.params.id;
   try {
     const user = await User.findById(userId);
@@ -13,7 +14,7 @@ export const findUser = async (req: any, res: any) => {
 };
 
 // UPDATE USER
-export const update = async (req: any, res: any) => {
+export const update = async (req: Request, res: Response) => {
   try {
     const user = await User.findByIdAndUpdate(
       req.params.id,
@@ -28,7 +29,7 @@ export const update = async (req: any, res: any) => {
 };
 
 // CREATE USER (SIGN UP)
-export const signup = async (req: any, res: any) => {
+export const signup = async (req: Request, res: Response) => {
   const body = req.body;
   const newUser = new User(body);
   try {
@@ -45,7 +46,7 @@ export const signup = async (req: any, res: any) => {
 };
 
 // LOG IN
-export const login = async (req: any, res: any) => {
+export const login = async (req: Request, res: Response) => {
   const email: string = req.body.email;
   const password: string = req.body.password;
   try {
