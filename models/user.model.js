@@ -129,15 +129,19 @@ UserSchema.methods.generateAccessAuthToken = function () {
     });
 };
 UserSchema.methods.generateToken = function () {
-    return new Promise(function (resolve, reject) {
-        crypto_1.default.randomBytes(64, function (error, buf) {
-            if (!error) {
-                var token = buf.toString("hex");
-                return resolve(token);
-            }
-            else {
-                reject(error);
-            }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, new Promise(function (resolve, reject) {
+                    crypto_1.default.randomBytes(64, function (error, buf) {
+                        if (!error) {
+                            var token = buf.toString("hex");
+                            return resolve(token);
+                        }
+                        else {
+                            reject(error);
+                        }
+                    });
+                })];
         });
     });
 };

@@ -13,7 +13,7 @@ const conversationSchema: Schema = new Schema({
   },
 });
 
-export const Conversation: IConversationModel = mongoose.model<IConversationDocument, IConversationModel>(
-  "Conversation",
-  conversationSchema
-);
+export const Conversation: IConversationModel = mongoose.model<
+  IConversationDocument,
+  IConversationModel
+>("Conversation", conversationSchema);
