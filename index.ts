@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 const userRoutes = require("./routes/user.routes");
-require("./mongoose");
+import "./mongoose";
 
 const app = express();
 
