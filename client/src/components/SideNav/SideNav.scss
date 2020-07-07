@@ -1,0 +1,22 @@
+$hamburger-layer-color: hsl(171, 100%, 41%);
+$hamburger-padding-x: 0;
+$hamburger-padding-y: 0;
+$hamburger-layer-width: 30px;
+$hamburger-layer-height: 3px;
+$hamburger-layer-apacing: 3px;
+
+@import "../../../node_modules/hamburgers/_sass/hamburgers/hamburgers.scss";
+
+.hamburger {
+  position: absolute;
+  margin-top: 10px;
+  right: 20px;
+
+  @media screen and (min-width: 1025px) {
+    display: none;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+}

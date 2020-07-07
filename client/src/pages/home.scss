@@ -1,0 +1,23 @@
+.welcome-message {
+  position: absolute;
+  z-index: 99;
+  width: 60%;
+  left: 10%;
+  transform: translateX(-10%);
+  top: 140px;
+
+  @media screen and (max-width: 1024px) {
+    top: 80px;
+  }
+
+  @media screen and (max-width: 640px) {
+    display: none;
+  }
+
+  .big {
+    font-size: 5vw;
+  }
+  .small {
+    font-size: 1.8vw;
+  }
+}

@@ -3,5 +3,16 @@
 // Global styles
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
 
-// Update Bulma's global variables
-$family-sans-serif: "Nunito", sans-serif;
+// Variables
+$base-color: rgb(84, 89, 230);
+
+html {
+  background: white;
+}
+
+html,
+body {
+  text-align: center;
+  min-height: 100%;
+  font-family: "Nunito", sans-serif;
+}
