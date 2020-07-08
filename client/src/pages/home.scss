@@ -1,13 +1,13 @@
 .welcome-message {
   position: absolute;
-  z-index: 99;
+  z-index: 1;
   width: 60%;
   left: 10%;
   transform: translateX(-10%);
   top: 140px;
 
   @media screen and (max-width: 1024px) {
-    top: 80px;
+    top: 100px;
   }
 
   @media screen and (max-width: 640px) {
@@ -20,4 +20,13 @@
   .small {
     font-size: 1.8vw;
   }
+}
+
+.side-container {
+  width: 250px;
+  height: 100%;
+  position: fixed;
+  right: 0;
+  z-index: 100;
+  background-color: gray;
 }

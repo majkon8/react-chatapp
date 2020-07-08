@@ -27,6 +27,7 @@ require("./home.scss");
 var Navbar_1 = __importDefault(require("../components/Navbar/Navbar"));
 var react_lottie_1 = __importDefault(require("react-lottie"));
 var homeAnimation_json_1 = __importDefault(require("../assets/homeAnimation.json"));
+var SideNav_1 = __importDefault(require("../components/SideNav/SideNav"));
 function getWindowWidth() {
     var width = window.innerWidth;
     return width;
@@ -45,10 +46,13 @@ function useWindowWidth() {
     return windowWidth;
 }
 function Home() {
+    var _a = react_1.useState(false), isSideOpen = _a[0], setIsSideOpen = _a[1];
     var width = useWindowWidth();
+    var toggleOpen = function () { return setIsSideOpen(!isSideOpen); };
     return (react_1.default.createElement(react_1.default.Fragment, null,
         react_1.default.createElement("div", { className: "container" },
-            react_1.default.createElement(Navbar_1.default, null)),
+            react_1.default.createElement(Navbar_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen })),
+        react_1.default.createElement(SideNav_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen }),
         react_1.default.createElement("div", { className: "welcome-message" },
             react_1.default.createElement("div", { className: "big" }, "Your place for chatting"),
             react_1.default.createElement("div", { className: "small" }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut dictum sapien. Maecenas elementum enim et ullamcorper iaculis. Sed maximus velit et quam ullamcorper, non malesuada purus aliquam.")),

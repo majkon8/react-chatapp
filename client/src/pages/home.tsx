@@ -3,6 +3,7 @@ import "./home.scss";
 import Navbar from "../components/Navbar/Navbar";
 import Lottie from "react-lottie";
 import mainAnimation from "../assets/homeAnimation.json";
+import SideNav from "../components/SideNav/SideNav";
 
 function getWindowWidth() {
   const { innerWidth: width } = window;
@@ -25,13 +26,17 @@ function useWindowWidth() {
 }
 
 export default function Home() {
+  const [isSideOpen, setIsSideOpen] = useState(false);
   const width = useWindowWidth();
+
+  const toggleOpen = () => setIsSideOpen(!isSideOpen);
 
   return (
     <>
       <div className="container">
-        <Navbar />
+        <Navbar toggleOpen={toggleOpen} isOpen={isSideOpen} />
       </div>
+      <SideNav toggleOpen={toggleOpen} isOpen={isSideOpen} />
       <div className="welcome-message">
         <div className="big">Your place for chatting</div>
         <div className="small">
