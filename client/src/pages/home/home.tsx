@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./home.scss";
-import Navbar from "../components/Navbar/Navbar";
+import Navbar from "../../components/Navbar/Navbar";
 import Lottie from "react-lottie";
-import SideNav from "../components/SideNav/SideNav";
+import SideNav from "../../components/SideNav/SideNav";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 // Assets
-import mainAnimation from "../assets/homeAnimation.json";
-import aboutUs from "../assets/about_us.jpg";
-import features from "../assets/features.jpg";
-import security from "../assets/security.jpg";
-import support from "../assets/support.jpg";
-import download from "../assets/download.jpg";
+import mainAnimation from "../../assets/homeAnimation.json";
+import aboutUs from "../../assets/about_us.jpg";
+import features from "../../assets/features.jpg";
+import security from "../../assets/security.jpg";
+import support from "../../assets/support.jpg";
+import download from "../../assets/download.jpg";
 // Icons
 import GitHubIcon from "@material-ui/icons/GitHub";
 import FacebookIcon from "@material-ui/icons/Facebook";
@@ -38,18 +40,82 @@ function useWindowWidth() {
 export default function Home() {
   const [isSideOpen, setIsSideOpen] = useState(false);
   const width = useWindowWidth();
+  let wrapper = useRef<HTMLDivElement>(null);
+  let welcomeMessageBig = useRef(null);
+  let welcomeMessageSmall = useRef(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const elements = wrapper!.current!.children[4];
+    const sectionTextElements = elements.querySelectorAll(
+      ".section-text-big, .section-text-small"
+    );
+    const sectionImageLeftElements = elements.querySelectorAll(
+      ".section-image-left"
+    );
+    const sectionImageRightElements = elements.querySelectorAll(
+      ".section-image-right"
+    );
+    sectionTextElements.forEach((element) => {
+      ScrollTrigger.create({
+        trigger: element,
+        onEnter: () => {
+          gsap.from(element, 0.5, {
+            autoAlpha: 0,
+            y: 100,
+            ease: "Power3.inOut",
+          });
+        },
+        onEnterBack: () => {
+          gsap.from(element, 0.5, {
+            autoAlpha: 0,
+            y: -100,
+            ease: "Power3.inOut",
+          });
+        },
+      });
+    });
+    sectionImageLeftElements.forEach((element) => {
+      gsap.from(element, 1, {
+        scrollTrigger: {
+          trigger: element,
+          toggleActions: "restart none restart none",
+        },
+        autoAlpha: 0,
+        x: -100,
+        ease: "Power3.inOut",
+      });
+    });
+    sectionImageRightElements.forEach((element) => {
+      gsap.from(element, 1, {
+        scrollTrigger: {
+          trigger: element,
+          toggleActions: "restart none restart none",
+        },
+        autoAlpha: 0,
+        x: 100,
+        ease: "Power3.inOut",
+      });
+    });
+    const timeline = gsap.timeline();
+    timeline
+      .to(welcomeMessageBig.current, 0.5, { opacity: 1 })
+      .to(welcomeMessageSmall.current, 0.5, { opacity: 1 });
+  }, []);
 
   const toggleOpen = () => setIsSideOpen(!isSideOpen);
 
   return (
-    <>
+    <div ref={wrapper}>
       <div className="container">
         <Navbar toggleOpen={toggleOpen} isOpen={isSideOpen} />
       </div>
       <SideNav toggleOpen={toggleOpen} isOpen={isSideOpen} />
       <div className="welcome-message">
-        <div className="big">Your place for chatting</div>
-        <div className="small">
+        <div ref={welcomeMessageBig} className="big">
+          Your place for chatting
+        </div>
+        <div ref={welcomeMessageSmall} className="small">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut
           dictum sapien. Maecenas elementum enim et ullamcorper iaculis. Sed
           maximus velit et quam ullamcorper, non malesuada purus aliquam.
@@ -64,6 +130,7 @@ export default function Home() {
           animationData: mainAnimation,
           rendererSettings: { preserveAspectRatio: "xMidYMid slice" },
         }}
+        isClickToPauseDisabled={true}
       />
       <div className="container">
         <section className="home-section mobile-welcome-message">
@@ -77,7 +144,7 @@ export default function Home() {
           </div>
         </section>
         <section id="about_us" className="home-section">
-          <div className="section-image">
+          <div className="section-image section-image-left">
             <img src={aboutUs} alt="about us" />
           </div>
           <div className="section-text">
@@ -102,12 +169,12 @@ export default function Home() {
               nec consequat nulla purus in nulla.
             </div>
           </div>
-          <div className="section-image">
+          <div className="section-image section-image-right">
             <img src={features} alt="features" />
           </div>
         </section>
         <section id="security" className="home-section">
-          <div className="section-image">
+          <div className="section-image section-image-left">
             <img src={security} alt="security" />
           </div>
           <div className="section-text">
@@ -132,12 +199,12 @@ export default function Home() {
               vitae dui pulvinar accumsan.
             </div>
           </div>
-          <div className="section-image">
+          <div className="section-image section-image-right">
             <img src={support} alt="support" />
           </div>
         </section>
         <section id="download" className="home-section">
-          <div className="section-image">
+          <div className="section-image section-image-left">
             <img src={download} alt="download" />
           </div>
           <div className="section-text">
@@ -172,6 +239,6 @@ export default function Home() {
           Copyright ® All rights reserved ChatApp
         </span>
       </footer>
-    </>
+    </div>
   );
 }

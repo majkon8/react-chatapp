@@ -17,8 +17,8 @@
   .logo {
     height: 60px;
     font-weight: bold;
-    font-size: 24px;
-    position: fixed;
+    font-size: 28px;
+    position: absolute;
     left: 20px;
     transition: transform 0.5s ease-out;
 
@@ -51,6 +51,7 @@
   .nav-item {
     margin-left: 10px;
     font-weight: bold;
+    opacity: 0;
 
     &:hover {
       color: $base-color !important;
@@ -65,13 +66,14 @@
 
 .navbar-login-button {
   margin-right: 0;
+  opacity: 0;
 
   @media screen and (max-width: 1024px) {
     display: none;
   }
 }
 
-$hamburger-layer-color: hsl(171, 100%, 41%);
+$hamburger-layer-color: $primary;
 $hamburger-padding-x: 0;
 $hamburger-padding-y: 0;
 $hamburger-layer-width: 30px;

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import "./Navbar.scss";
+import { gsap } from "gsap";
 
 interface IProps {
   isOpen: boolean;
@@ -7,13 +8,33 @@ interface IProps {
 }
 
 export default function Navbar({ isOpen, toggleOpen }: IProps) {
+  let nav = useRef<HTMLDivElement>(null);
+  let loginButton = useRef(null);
+
+  useEffect(() => {
+    const navElements = nav!.current!.children;
+    const timeline = gsap.timeline({
+      defaults: { ease: "Power3.inOut" },
+      delay: 0.5,
+    });
+    const from = { y: -100 };
+    const to = { opacity: 1, y: 0, duration: 0.1 };
+    timeline
+      .fromTo(loginButton.current, from, to)
+      .fromTo(navElements[4], from, to)
+      .fromTo(navElements[3], from, to)
+      .fromTo(navElements[2], from, to)
+      .fromTo(navElements[1], from, to)
+      .fromTo(navElements[0], from, to);
+  }, []);
+
   return (
     <div className="navBar">
       <a href="/" className="logo">
         <span className="logo-chat">CHAT</span>
         <span className="has-text-primary">APP</span>
       </a>
-      <nav className="main-nav">
+      <nav ref={nav} className="main-nav">
         <a href="#about_us" className="has-text-dark nav-item">
           About us
         </a>
@@ -30,7 +51,10 @@ export default function Navbar({ isOpen, toggleOpen }: IProps) {
           Download
         </a>
       </nav>
-      <button className="button is-primary is-rounded is-pulled-right navbar-login-button">
+      <button
+        ref={loginButton}
+        className="button is-primary is-rounded is-pulled-right navbar-login-button"
+      >
         Sign in
       </button>
       <button

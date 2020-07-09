@@ -1,4 +1,4 @@
-@import "../App.scss";
+@import "../../App.scss";
 
 .welcome-message {
   position: absolute;
@@ -19,9 +19,11 @@
   .big {
     font-size: 5vw;
     font-weight: bold;
+    opacity: 0;
   }
   .small {
     font-size: 1.8vw;
+    opacity: 0;
   }
 }
 
@@ -62,9 +64,11 @@
     .section-text-big {
       font-size: 48px;
       font-weight: bold;
+      line-height: 60px;
 
       @media screen and (max-width: 550px) {
         font-size: 30px;
+        line-height: 40px;
       }
     }
 
@@ -137,7 +141,7 @@
 
   .copyrights {
     color: white;
-    
+
     @media screen and (max-width: 332px) {
       font-size: 14px;
     }

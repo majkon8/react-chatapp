@@ -24,16 +24,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
 require("./home.scss");
-var Navbar_1 = __importDefault(require("../components/Navbar/Navbar"));
+var Navbar_1 = __importDefault(require("../../components/Navbar/Navbar"));
 var react_lottie_1 = __importDefault(require("react-lottie"));
-var SideNav_1 = __importDefault(require("../components/SideNav/SideNav"));
+var SideNav_1 = __importDefault(require("../../components/SideNav/SideNav"));
+var gsap_1 = require("gsap");
+var ScrollTrigger_1 = require("gsap/ScrollTrigger");
 // Assets
-var homeAnimation_json_1 = __importDefault(require("../assets/homeAnimation.json"));
-var about_us_jpg_1 = __importDefault(require("../assets/about_us.jpg"));
-var features_jpg_1 = __importDefault(require("../assets/features.jpg"));
-var security_jpg_1 = __importDefault(require("../assets/security.jpg"));
-var support_jpg_1 = __importDefault(require("../assets/support.jpg"));
-var download_jpg_1 = __importDefault(require("../assets/download.jpg"));
+var homeAnimation_json_1 = __importDefault(require("../../assets/homeAnimation.json"));
+var about_us_jpg_1 = __importDefault(require("../../assets/about_us.jpg"));
+var features_jpg_1 = __importDefault(require("../../assets/features.jpg"));
+var security_jpg_1 = __importDefault(require("../../assets/security.jpg"));
+var support_jpg_1 = __importDefault(require("../../assets/support.jpg"));
+var download_jpg_1 = __importDefault(require("../../assets/download.jpg"));
 // Icons
 var GitHub_1 = __importDefault(require("@material-ui/icons/GitHub"));
 var Facebook_1 = __importDefault(require("@material-ui/icons/Facebook"));
@@ -58,27 +60,82 @@ function useWindowWidth() {
 function Home() {
     var _a = react_1.useState(false), isSideOpen = _a[0], setIsSideOpen = _a[1];
     var width = useWindowWidth();
+    var wrapper = react_1.useRef(null);
+    var welcomeMessageBig = react_1.useRef(null);
+    var welcomeMessageSmall = react_1.useRef(null);
+    react_1.useEffect(function () {
+        gsap_1.gsap.registerPlugin(ScrollTrigger_1.ScrollTrigger);
+        var elements = wrapper.current.children[4];
+        var sectionTextElements = elements.querySelectorAll(".section-text-big, .section-text-small");
+        var sectionImageLeftElements = elements.querySelectorAll(".section-image-left");
+        var sectionImageRightElements = elements.querySelectorAll(".section-image-right");
+        sectionTextElements.forEach(function (element) {
+            ScrollTrigger_1.ScrollTrigger.create({
+                trigger: element,
+                onEnter: function () {
+                    gsap_1.gsap.from(element, 0.5, {
+                        autoAlpha: 0,
+                        y: 100,
+                        ease: "Power3.inOut",
+                    });
+                },
+                onEnterBack: function () {
+                    gsap_1.gsap.from(element, 0.5, {
+                        autoAlpha: 0,
+                        y: -100,
+                        ease: "Power3.inOut",
+                    });
+                },
+            });
+        });
+        sectionImageLeftElements.forEach(function (element) {
+            gsap_1.gsap.from(element, 1, {
+                scrollTrigger: {
+                    trigger: element,
+                    toggleActions: "restart none restart none",
+                },
+                autoAlpha: 0,
+                x: -100,
+                ease: "Power3.inOut",
+            });
+        });
+        sectionImageRightElements.forEach(function (element) {
+            gsap_1.gsap.from(element, 1, {
+                scrollTrigger: {
+                    trigger: element,
+                    toggleActions: "restart none restart none",
+                },
+                autoAlpha: 0,
+                x: 100,
+                ease: "Power3.inOut",
+            });
+        });
+        var timeline = gsap_1.gsap.timeline();
+        timeline
+            .to(welcomeMessageBig.current, 0.5, { opacity: 1 })
+            .to(welcomeMessageSmall.current, 0.5, { opacity: 1 });
+    }, []);
     var toggleOpen = function () { return setIsSideOpen(!isSideOpen); };
-    return (react_1.default.createElement(react_1.default.Fragment, null,
+    return (react_1.default.createElement("div", { ref: wrapper },
         react_1.default.createElement("div", { className: "container" },
             react_1.default.createElement(Navbar_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen })),
         react_1.default.createElement(SideNav_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen }),
         react_1.default.createElement("div", { className: "welcome-message" },
-            react_1.default.createElement("div", { className: "big" }, "Your place for chatting"),
-            react_1.default.createElement("div", { className: "small" }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut dictum sapien. Maecenas elementum enim et ullamcorper iaculis. Sed maximus velit et quam ullamcorper, non malesuada purus aliquam.")),
+            react_1.default.createElement("div", { ref: welcomeMessageBig, className: "big" }, "Your place for chatting"),
+            react_1.default.createElement("div", { ref: welcomeMessageSmall, className: "small" }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut dictum sapien. Maecenas elementum enim et ullamcorper iaculis. Sed maximus velit et quam ullamcorper, non malesuada purus aliquam.")),
         react_1.default.createElement(react_lottie_1.default, { style: { position: "relative", top: width > 1024 ? -80 : 0 }, width: "100%", options: {
                 loop: true,
                 autoplay: true,
                 animationData: homeAnimation_json_1.default,
                 rendererSettings: { preserveAspectRatio: "xMidYMid slice" },
-            } }),
+            }, isClickToPauseDisabled: true }),
         react_1.default.createElement("div", { className: "container" },
             react_1.default.createElement("section", { className: "home-section mobile-welcome-message" },
                 react_1.default.createElement("div", { className: "section-text" },
                     react_1.default.createElement("div", { className: "section-text-big" }, "Your place for chatting"),
                     react_1.default.createElement("div", { className: "section-text-small" }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut dictum sapien. Maecenas elementum enim et ullamcorper iaculis. Sed maximus velit et quam ullamcorper, non malesuada purus aliquam."))),
             react_1.default.createElement("section", { id: "about_us", className: "home-section" },
-                react_1.default.createElement("div", { className: "section-image" },
+                react_1.default.createElement("div", { className: "section-image section-image-left" },
                     react_1.default.createElement("img", { src: about_us_jpg_1.default, alt: "about us" })),
                 react_1.default.createElement("div", { className: "section-text" },
                     react_1.default.createElement("div", { className: "section-text-big" }, "From passionate team to everyone of you"),
@@ -87,10 +144,10 @@ function Home() {
                 react_1.default.createElement("div", { className: "section-text" },
                     react_1.default.createElement("div", { className: "section-text-big" }, "Chat with friend or group of friends"),
                     react_1.default.createElement("div", { className: "section-text-small" }, "Maecenas elementum non orci id sagittis. Ut efficitur lacinia lorem, sed tincidunt elit egestas in. Quisque dapibus tortor mi nec consequat nulla purus in nulla.")),
-                react_1.default.createElement("div", { className: "section-image" },
+                react_1.default.createElement("div", { className: "section-image section-image-right" },
                     react_1.default.createElement("img", { src: features_jpg_1.default, alt: "features" }))),
             react_1.default.createElement("section", { id: "security", className: "home-section" },
-                react_1.default.createElement("div", { className: "section-image" },
+                react_1.default.createElement("div", { className: "section-image section-image-left" },
                     react_1.default.createElement("img", { src: security_jpg_1.default, alt: "security" })),
                 react_1.default.createElement("div", { className: "section-text" },
                     react_1.default.createElement("div", { className: "section-text-big" }, "Designed with security in mind"),
@@ -99,10 +156,10 @@ function Home() {
                 react_1.default.createElement("div", { className: "section-text" },
                     react_1.default.createElement("div", { className: "section-text-big" }, "You can always get help from our team"),
                     react_1.default.createElement("div", { className: "section-text-small" }, "Cras rutrum facilisis posuere. Suspendisse facilisis mollis leo. Phasellus sed fermentum ante, ut fermentum lacus. In non sapien vitae dui pulvinar accumsan.")),
-                react_1.default.createElement("div", { className: "section-image" },
+                react_1.default.createElement("div", { className: "section-image section-image-right" },
                     react_1.default.createElement("img", { src: support_jpg_1.default, alt: "support" }))),
             react_1.default.createElement("section", { id: "download", className: "home-section" },
-                react_1.default.createElement("div", { className: "section-image" },
+                react_1.default.createElement("div", { className: "section-image section-image-left" },
                     react_1.default.createElement("img", { src: download_jpg_1.default, alt: "download" })),
                 react_1.default.createElement("div", { className: "section-text" },
                     react_1.default.createElement("div", { className: "section-text-big" }, "Available on every device for every user"),
