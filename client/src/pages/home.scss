@@ -1,3 +1,5 @@
+@import "../App.scss";
+
 .welcome-message {
   position: absolute;
   z-index: 1;
@@ -16,6 +18,7 @@
 
   .big {
     font-size: 5vw;
+    font-weight: bold;
   }
   .small {
     font-size: 1.8vw;
@@ -29,4 +32,114 @@
   right: 0;
   z-index: 100;
   background-color: gray;
+}
+
+.home-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 50px 10px 200px 10px;
+  margin-bottom: 200px;
+
+  @media screen and (max-width: 1000px) {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 150px;
+  }
+
+  .section-text {
+    width: 500px;
+    text-align: left;
+
+    @media screen and (max-width: 1216px) {
+      margin-left: 30px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      margin-left: 0;
+    }
+
+    .section-text-big {
+      font-size: 48px;
+      font-weight: bold;
+
+      @media screen and (max-width: 550px) {
+        font-size: 30px;
+      }
+    }
+
+    .section-text-small {
+      font-size: 20px;
+
+      @media screen and (max-width: 16px) {
+        font-size: 30px;
+      }
+    }
+  }
+
+  .section-image {
+    width: 500px;
+
+    @media screen and (max-width: 1216px) {
+      margin-left: 30px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      margin-left: 0;
+    }
+  }
+}
+
+.wrap-reverse {
+  @media screen and (max-width: 1000px) {
+    flex-wrap: wrap-reverse;
+  }
+}
+
+.mobile-welcome-message {
+  @media screen and (min-width: 641px) {
+    display: none;
+  }
+}
+
+.my-footer {
+  height: 100px;
+  background-color: $base-color;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .logo {
+    font-weight: bold;
+    font-size: 28px;
+
+    @media screen and (max-width: 1000px) {
+      font-size: 22px;
+    }
+  }
+
+  .socials {
+    a {
+      svg {
+        color: white;
+        font-size: 50px;
+        margin: 0 20px;
+
+        @media screen and (max-width: 1000px) {
+          font-size: 28px;
+          margin: 0 5px;
+        }
+      }
+    }
+  }
+
+  .copyrights {
+    color: white;
+    
+    @media screen and (max-width: 332px) {
+      font-size: 14px;
+    }
+  }
 }

@@ -14,17 +14,20 @@ export default function Navbar({ isOpen, toggleOpen }: IProps) {
         <span className="has-text-primary">APP</span>
       </a>
       <nav className="main-nav">
-        <a href="/" className="has-text-dark nav-item">
-          Features
-        </a>
-        <a href="/" className="has-text-dark nav-item">
+        <a href="#about_us" className="has-text-dark nav-item">
           About us
         </a>
-        <a href="/" className="has-text-dark nav-item">
+        <a href="#features" className="has-text-dark nav-item">
+          Features
+        </a>
+        <a href="#security" className="has-text-dark nav-item">
           Security
         </a>
-        <a href="/" className="has-text-dark nav-item">
+        <a href="#support" className="has-text-dark nav-item">
           Support
+        </a>
+        <a href="#download" className="has-text-dark nav-item">
+          Download
         </a>
       </nav>
       <button className="button is-primary is-rounded is-pulled-right navbar-login-button">

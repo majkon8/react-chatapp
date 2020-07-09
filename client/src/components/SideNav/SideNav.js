@@ -12,11 +12,11 @@ function SideNav(_a) {
             react_1.default.createElement("span", { className: "hamburger-box" },
                 react_1.default.createElement("span", { className: "hamburger-inner" }))),
         react_1.default.createElement("nav", { className: "side-nav" },
-            react_1.default.createElement("a", { href: "/", className: "has-text-dark nav-item" }, "Features"),
-            react_1.default.createElement("a", { href: "/", className: "has-text-dark nav-item" }, "About us"),
-            react_1.default.createElement("a", { href: "/", className: "has-text-dark nav-item" }, "Security"),
-            react_1.default.createElement("a", { href: "/", className: "has-text-dark nav-item" }, "Support"),
-            react_1.default.createElement("a", { href: "/", className: "has-text-dark nav-item" }, "Download")),
+            react_1.default.createElement("a", { href: "#about_us", className: "has-text-dark nav-item" }, "About us"),
+            react_1.default.createElement("a", { href: "#features", className: "has-text-dark nav-item" }, "Features"),
+            react_1.default.createElement("a", { href: "#security", className: "has-text-dark nav-item" }, "Security"),
+            react_1.default.createElement("a", { href: "#support", className: "has-text-dark nav-item" }, "Support"),
+            react_1.default.createElement("a", { href: "#download", className: "has-text-dark nav-item" }, "Download")),
         react_1.default.createElement("button", { className: "button is-medium is-primary is-rounded side-nav-login-button" }, "Sign in")));
 }
 exports.default = SideNav;
