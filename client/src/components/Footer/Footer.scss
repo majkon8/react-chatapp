@@ -1,0 +1,43 @@
+@import "../../App.scss";
+
+.my-footer {
+  height: 100px;
+  background-color: $base-color;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .logo {
+    font-weight: bold;
+    font-size: 28px;
+
+    @media screen and (max-width: 1000px) {
+      font-size: 22px;
+    }
+  }
+
+  .socials {
+    a {
+      svg {
+        color: white;
+        font-size: 50px;
+        margin: 0 20px;
+
+        @media screen and (max-width: 1000px) {
+          font-size: 28px;
+          margin: 0 5px;
+        }
+      }
+    }
+  }
+
+  .copyrights {
+    color: white;
+
+    @media screen and (max-width: 332px) {
+      font-size: 14px;
+    }
+  }
+}

@@ -17,6 +17,7 @@ function SideNav(_a) {
             react_1.default.createElement("a", { href: "#security", className: "has-text-dark nav-item" }, "Security"),
             react_1.default.createElement("a", { href: "#support", className: "has-text-dark nav-item" }, "Support"),
             react_1.default.createElement("a", { href: "#download", className: "has-text-dark nav-item" }, "Download")),
-        react_1.default.createElement("button", { className: "button is-medium is-primary is-rounded side-nav-login-button" }, "Sign in")));
+        react_1.default.createElement("a", { href: "/login" },
+            react_1.default.createElement("button", { className: "button is-medium is-primary is-rounded side-nav-login-button" }, "Sign in"))));
 }
 exports.default = SideNav;

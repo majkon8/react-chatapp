@@ -29,6 +29,8 @@ var react_lottie_1 = __importDefault(require("react-lottie"));
 var SideNav_1 = __importDefault(require("../../components/SideNav/SideNav"));
 var gsap_1 = require("gsap");
 var ScrollTrigger_1 = require("gsap/ScrollTrigger");
+var HomeSection_1 = __importDefault(require("../../components/HomeSection/HomeSection"));
+var Footer_1 = __importDefault(require("../../components/Footer/Footer"));
 // Assets
 var homeAnimation_json_1 = __importDefault(require("../../assets/homeAnimation.json"));
 var about_us_jpg_1 = __importDefault(require("../../assets/about_us.jpg"));
@@ -36,10 +38,6 @@ var features_jpg_1 = __importDefault(require("../../assets/features.jpg"));
 var security_jpg_1 = __importDefault(require("../../assets/security.jpg"));
 var support_jpg_1 = __importDefault(require("../../assets/support.jpg"));
 var download_jpg_1 = __importDefault(require("../../assets/download.jpg"));
-// Icons
-var GitHub_1 = __importDefault(require("@material-ui/icons/GitHub"));
-var Facebook_1 = __importDefault(require("@material-ui/icons/Facebook"));
-var Twitter_1 = __importDefault(require("@material-ui/icons/Twitter"));
 function getWindowWidth() {
     var width = window.innerWidth;
     return width;
@@ -130,51 +128,12 @@ function Home() {
                 rendererSettings: { preserveAspectRatio: "xMidYMid slice" },
             }, isClickToPauseDisabled: true }),
         react_1.default.createElement("div", { className: "container" },
-            react_1.default.createElement("section", { className: "home-section mobile-welcome-message" },
-                react_1.default.createElement("div", { className: "section-text" },
-                    react_1.default.createElement("div", { className: "section-text-big" }, "Your place for chatting"),
-                    react_1.default.createElement("div", { className: "section-text-small" }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut dictum sapien. Maecenas elementum enim et ullamcorper iaculis. Sed maximus velit et quam ullamcorper, non malesuada purus aliquam."))),
-            react_1.default.createElement("section", { id: "about_us", className: "home-section" },
-                react_1.default.createElement("div", { className: "section-image section-image-left" },
-                    react_1.default.createElement("img", { src: about_us_jpg_1.default, alt: "about us" })),
-                react_1.default.createElement("div", { className: "section-text" },
-                    react_1.default.createElement("div", { className: "section-text-big" }, "From passionate team to everyone of you"),
-                    react_1.default.createElement("div", { className: "section-text-small" }, "Fusce in dolor ac ex semper rutrum et rutrum nunc. Maecenas ac posuere orci. Cras quis ipsum tortor. Suspendisse potenti. Proin viverra porttitor interdum. Pellentesque in elit dui."))),
-            react_1.default.createElement("section", { id: "features", className: "home-section wrap-reverse" },
-                react_1.default.createElement("div", { className: "section-text" },
-                    react_1.default.createElement("div", { className: "section-text-big" }, "Chat with friend or group of friends"),
-                    react_1.default.createElement("div", { className: "section-text-small" }, "Maecenas elementum non orci id sagittis. Ut efficitur lacinia lorem, sed tincidunt elit egestas in. Quisque dapibus tortor mi nec consequat nulla purus in nulla.")),
-                react_1.default.createElement("div", { className: "section-image section-image-right" },
-                    react_1.default.createElement("img", { src: features_jpg_1.default, alt: "features" }))),
-            react_1.default.createElement("section", { id: "security", className: "home-section" },
-                react_1.default.createElement("div", { className: "section-image section-image-left" },
-                    react_1.default.createElement("img", { src: security_jpg_1.default, alt: "security" })),
-                react_1.default.createElement("div", { className: "section-text" },
-                    react_1.default.createElement("div", { className: "section-text-big" }, "Designed with security in mind"),
-                    react_1.default.createElement("div", { className: "section-text-small" }, "In non sapien vitae dui pulvinar accumsan. Nam gravida, elit bibendum accumsan iaculis, nulla lectus convallis ex. Nullam orci lorem, laoreet ac sem in."))),
-            react_1.default.createElement("section", { id: "support", className: "home-section wrap-reverse" },
-                react_1.default.createElement("div", { className: "section-text" },
-                    react_1.default.createElement("div", { className: "section-text-big" }, "You can always get help from our team"),
-                    react_1.default.createElement("div", { className: "section-text-small" }, "Cras rutrum facilisis posuere. Suspendisse facilisis mollis leo. Phasellus sed fermentum ante, ut fermentum lacus. In non sapien vitae dui pulvinar accumsan.")),
-                react_1.default.createElement("div", { className: "section-image section-image-right" },
-                    react_1.default.createElement("img", { src: support_jpg_1.default, alt: "support" }))),
-            react_1.default.createElement("section", { id: "download", className: "home-section" },
-                react_1.default.createElement("div", { className: "section-image section-image-left" },
-                    react_1.default.createElement("img", { src: download_jpg_1.default, alt: "download" })),
-                react_1.default.createElement("div", { className: "section-text" },
-                    react_1.default.createElement("div", { className: "section-text-big" }, "Available on every device for every user"),
-                    react_1.default.createElement("div", { className: "section-text-small" }, "In non sapien vitae dui pulvinar accumsan. Nam gravida, elit bibendum accumsan iaculis, nulla lectus convallis ex. Nullam orci lorem, laoreet ac sem in.")))),
-        react_1.default.createElement("footer", { className: "my-footer" },
-            react_1.default.createElement("a", { href: "/", className: "logo" },
-                react_1.default.createElement("span", { className: "has-text-white" }, "CHAT"),
-                react_1.default.createElement("span", { className: "has-text-primary" }, "APP")),
-            react_1.default.createElement("span", { className: "socials" },
-                react_1.default.createElement("a", { href: "https://www.facebook.com/" },
-                    react_1.default.createElement(Facebook_1.default, null)),
-                react_1.default.createElement("a", { href: "https://www.github.com/majkon8/chatapp" },
-                    react_1.default.createElement(GitHub_1.default, null)),
-                react_1.default.createElement("a", { href: "https://www.twitter.com/" },
-                    react_1.default.createElement(Twitter_1.default, null))),
-            react_1.default.createElement("span", { className: "copyrights" }, "Copyright \u00AE All rights reserved ChatApp"))));
+            react_1.default.createElement(HomeSection_1.default, { index: 0, textBig: "Your place for chatting", textSmall: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut\r\n              dictum sapien. Maecenas elementum enim et ullamcorper iaculis. Sed\r\n              maximus velit et quam ullamcorper, non malesuada purus aliquam." }),
+            react_1.default.createElement(HomeSection_1.default, { image: about_us_jpg_1.default, index: 1, name: "about_us", textBig: "From passionate team to everyone of you", textSmall: "Fusce in dolor ac ex semper rutrum et rutrum nunc. Maecenas ac\r\n              posuere orci. Cras quis ipsum tortor. Suspendisse potenti. Proin\r\n              viverra porttitor interdum. Pellentesque in elit dui." }),
+            react_1.default.createElement(HomeSection_1.default, { image: features_jpg_1.default, index: 2, name: "features", textBig: "Chat with friend or group of friends", textSmall: "Maecenas elementum non orci id sagittis. Ut efficitur lacinia\r\n              lorem, sed tincidunt elit egestas in. Quisque dapibus tortor mi\r\n              nec consequat nulla purus in nulla." }),
+            react_1.default.createElement(HomeSection_1.default, { image: security_jpg_1.default, index: 3, name: "security", textBig: "Designed with security in mind", textSmall: "In non sapien vitae dui pulvinar accumsan. Nam gravida, elit\r\n              bibendum accumsan iaculis, nulla lectus convallis ex. Nullam orci\r\n              lorem, laoreet ac sem in." }),
+            react_1.default.createElement(HomeSection_1.default, { image: support_jpg_1.default, index: 4, name: "support", textBig: "You can always get help from our team", textSmall: "Cras rutrum facilisis posuere. Suspendisse facilisis mollis leo.\r\n              Phasellus sed fermentum ante, ut fermentum lacus. In non sapien\r\n              vitae dui pulvinar accumsan." }),
+            react_1.default.createElement(HomeSection_1.default, { image: download_jpg_1.default, index: 5, name: "download", textBig: "Available on every device for every user", textSmall: "In non sapien vitae dui pulvinar accumsan. Nam gravida, elit\r\n              bibendum accumsan iaculis, nulla lectus convallis ex. Nullam orci\r\n              lorem, laoreet ac sem in." })),
+        react_1.default.createElement(Footer_1.default, null)));
 }
 exports.default = Home;

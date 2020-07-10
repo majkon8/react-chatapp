@@ -18,10 +18,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
 require("./Navbar.scss");
 var gsap_1 = require("gsap");
+var Logo_1 = __importDefault(require("../Logo/Logo"));
 function Navbar(_a) {
     var isOpen = _a.isOpen, toggleOpen = _a.toggleOpen;
     var nav = react_1.useRef(null);
@@ -43,16 +47,15 @@ function Navbar(_a) {
             .fromTo(navElements[0], from, to);
     }, []);
     return (react_1.default.createElement("div", { className: "navBar" },
-        react_1.default.createElement("a", { href: "/", className: "logo" },
-            react_1.default.createElement("span", { className: "logo-chat" }, "CHAT"),
-            react_1.default.createElement("span", { className: "has-text-primary" }, "APP")),
+        react_1.default.createElement(Logo_1.default, null),
         react_1.default.createElement("nav", { ref: nav, className: "main-nav" },
             react_1.default.createElement("a", { href: "#about_us", className: "has-text-dark nav-item" }, "About us"),
             react_1.default.createElement("a", { href: "#features", className: "has-text-dark nav-item" }, "Features"),
             react_1.default.createElement("a", { href: "#security", className: "has-text-dark nav-item" }, "Security"),
             react_1.default.createElement("a", { href: "#support", className: "has-text-dark nav-item" }, "Support"),
             react_1.default.createElement("a", { href: "#download", className: "has-text-dark nav-item" }, "Download")),
-        react_1.default.createElement("button", { ref: loginButton, className: "button is-primary is-rounded is-pulled-right navbar-login-button" }, "Sign in"),
+        react_1.default.createElement("a", { className: "login", href: "\\login" },
+            react_1.default.createElement("button", { ref: loginButton, className: "button is-primary is-rounded is-pulled-right navbar-login-button" }, "Sign in")),
         react_1.default.createElement("button", { onClick: toggleOpen, className: "hamburger hamburger--squeeze" + (isOpen && " is-active"), type: "button" },
             react_1.default.createElement("span", { className: "hamburger-box" },
                 react_1.default.createElement("span", { className: "hamburger-inner" })))));

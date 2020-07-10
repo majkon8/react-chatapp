@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import "./Navbar.scss";
 import { gsap } from "gsap";
+import Logo from "../Logo/Logo";
 
 interface IProps {
   isOpen: boolean;
@@ -30,10 +31,7 @@ export default function Navbar({ isOpen, toggleOpen }: IProps) {
 
   return (
     <div className="navBar">
-      <a href="/" className="logo">
-        <span className="logo-chat">CHAT</span>
-        <span className="has-text-primary">APP</span>
-      </a>
+      <Logo />
       <nav ref={nav} className="main-nav">
         <a href="#about_us" className="has-text-dark nav-item">
           About us
@@ -51,12 +49,14 @@ export default function Navbar({ isOpen, toggleOpen }: IProps) {
           Download
         </a>
       </nav>
-      <button
-        ref={loginButton}
-        className="button is-primary is-rounded is-pulled-right navbar-login-button"
-      >
-        Sign in
-      </button>
+      <a className="login" href="\login">
+        <button
+          ref={loginButton}
+          className="button is-primary is-rounded is-pulled-right navbar-login-button"
+        >
+          Sign in
+        </button>
+      </a>
       <button
         onClick={toggleOpen}
         className={"hamburger hamburger--squeeze" + (isOpen && " is-active")}

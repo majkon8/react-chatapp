@@ -13,33 +13,6 @@
     height: 60px;
     margin: 0;
   }
-
-  .logo {
-    height: 60px;
-    font-weight: bold;
-    font-size: 28px;
-    position: absolute;
-    left: 20px;
-    transition: transform 0.5s ease-out;
-
-    @media screen and (max-width: 1024px) {
-      margin-top: 10px;
-    }
-
-    &:hover {
-      transform: scale(1.1);
-      transition: transform 0.3s;
-    }
-
-    span {
-      line-height: 60px;
-      vertical-align: middle;
-    }
-
-    .logo-chat {
-      color: $base-color;
-    }
-  }
 }
 
 .main-nav {
@@ -67,7 +40,9 @@
 .navbar-login-button {
   margin-right: 0;
   opacity: 0;
+}
 
+.login {
   @media screen and (max-width: 1024px) {
     display: none;
   }

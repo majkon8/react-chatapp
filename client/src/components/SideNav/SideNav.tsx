@@ -35,9 +35,11 @@ export default function SideNav({ isOpen, toggleOpen }: IProps) {
           Download
         </a>
       </nav>
-      <button className="button is-medium is-primary is-rounded side-nav-login-button">
-        Sign in
-      </button>
+      <a href="/login">
+        <button className="button is-medium is-primary is-rounded side-nav-login-button">
+          Sign in
+        </button>
+      </a>
     </div>
   );
 }

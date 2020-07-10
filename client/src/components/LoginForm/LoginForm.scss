@@ -1,0 +1,57 @@
+@import "../../App.scss";
+
+.form {
+  max-width: 768px;
+  margin: auto;
+  margin-top: 100px;
+  padding: 20px;
+  color: white;
+
+  .title {
+    color: white;
+    font-size: 40px;
+
+    @media screen and (max-width: 420px) {
+      font-size: 30px;
+    }
+  }
+
+  .info {
+    a:hover {
+      text-decoration: underline;
+      color: inherit;
+    }
+  }
+
+  .forgot {
+    margin-top: -10px;
+  }
+}
+
+.control {
+  margin: 20px 0;
+
+  .input {
+    background-color: rgb(40, 40, 40);
+    transition: box-shadow 0.4s;
+    box-shadow: 0 0 0 0em $base-color;
+
+    &:focus {
+      box-shadow: 0 0 0 0.1em $base-color !important;
+    }
+
+    &::placeholder {
+      color: rgb(219, 219, 219);
+    }
+  }
+
+  .is-error {
+    box-shadow: 0 0 0 0.1em hsl(348, 100%, 61%) !important;
+  }
+}
+
+.button {
+  width: 100%;
+  max-width: 768px;
+  margin: 10px 0;
+}
