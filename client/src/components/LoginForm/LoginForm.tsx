@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import "./LoginForm.scss";
+import { NavLink } from "react-router-dom";
 
 interface IFormInputs {
   email: string;
@@ -18,6 +19,19 @@ export default function LoginForm() {
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
       <div className="title">Sign in to ChatApp</div>
+
+      <div className="social-sign-buttons-container">
+        <button className="button facebook-button">
+          <i className="fab fa-facebook-f" aria-hidden="true"></i>
+        </button>
+        <button className="button google-button">
+          <i className="fab fa-google" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div className="line-text">OR</div>
+      <div className="line"></div>
+
       {isSubmitted && errors.email && (
         <span className="has-text-danger is-pulled-left">
           {errors.email?.message}
@@ -44,6 +58,7 @@ export default function LoginForm() {
           <i className="fas fa-envelope"></i>
         </span>
       </div>
+
       {isSubmitted && errors.password && (
         <span className="has-text-danger is-pulled-left error">
           {errors.password?.message}
@@ -71,17 +86,20 @@ export default function LoginForm() {
           <i className="fas fa-lock"></i>
         </span>
       </div>
+
       <span className="is-pulled-left forgot info">
         <a>Forgot password?</a>
       </span>
+
       <input
-        className="button is-primary is-large"
+        className="button is-primary is-medium"
         type="submit"
         value="Sign in"
         disabled={!dirtyFields.email || !dirtyFields.password}
       />
+
       <span className="is-pulled-left info">
-        Don't have an account? <a href="/register">Sign up</a>
+        Don't have an account? <NavLink to="/register">Sign up</NavLink>
       </span>
     </form>
   );

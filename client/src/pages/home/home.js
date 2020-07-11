@@ -24,6 +24,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
 require("./home.scss");
+var framer_motion_1 = require("framer-motion");
 var Navbar_1 = __importDefault(require("../../components/Navbar/Navbar"));
 var react_lottie_1 = __importDefault(require("react-lottie"));
 var SideNav_1 = __importDefault(require("../../components/SideNav/SideNav"));
@@ -61,6 +62,28 @@ function Home() {
     var wrapper = react_1.useRef(null);
     var welcomeMessageBig = react_1.useRef(null);
     var welcomeMessageSmall = react_1.useRef(null);
+    var pageVariants = {
+        initial: {
+            opacity: 0,
+            x: "-100vw",
+            y: "100vh",
+        },
+        in: {
+            opacity: 1,
+            x: 0,
+            y: 0,
+        },
+        out: {
+            opacity: 0,
+            x: "100vw",
+            y: "-100vh",
+        },
+    };
+    var pageTransition = {
+        type: "tween",
+        ease: "anticipate",
+        duration: 0.8,
+    };
     react_1.useEffect(function () {
         gsap_1.gsap.registerPlugin(ScrollTrigger_1.ScrollTrigger);
         var elements = wrapper.current.children[4];
@@ -110,14 +133,15 @@ function Home() {
         });
         var timeline = gsap_1.gsap.timeline();
         timeline
+            .to(welcomeMessageBig.current, 0.5, { opacity: 0 })
             .to(welcomeMessageBig.current, 0.5, { opacity: 1 })
             .to(welcomeMessageSmall.current, 0.5, { opacity: 1 });
     }, []);
     var toggleOpen = function () { return setIsSideOpen(!isSideOpen); };
-    return (react_1.default.createElement("div", { ref: wrapper },
+    return (react_1.default.createElement(framer_motion_1.motion.div, { ref: wrapper, initial: "initial", animate: "in", exit: "out", variants: pageVariants, transition: pageTransition, style: { backgroundColor: "white", position: "absolute", width: "100%" } },
         react_1.default.createElement("div", { className: "container" },
-            react_1.default.createElement(Navbar_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen })),
-        react_1.default.createElement(SideNav_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen }),
+            react_1.default.createElement(Navbar_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen }),
+            react_1.default.createElement(SideNav_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen })),
         react_1.default.createElement("div", { className: "welcome-message" },
             react_1.default.createElement("div", { ref: welcomeMessageBig, className: "big" }, "Your place for chatting"),
             react_1.default.createElement("div", { ref: welcomeMessageSmall, className: "small" }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut dictum sapien. Maecenas elementum enim et ullamcorper iaculis. Sed maximus velit et quam ullamcorper, non malesuada purus aliquam.")),

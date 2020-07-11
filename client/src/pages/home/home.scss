@@ -19,17 +19,9 @@
     font-weight: bold;
     opacity: 0;
   }
+
   .small {
     font-size: 1.8vw;
     opacity: 0;
   }
-}
-
-.side-container {
-  width: 250px;
-  height: 100%;
-  position: fixed;
-  right: 0;
-  z-index: 100;
-  background-color: gray;
 }

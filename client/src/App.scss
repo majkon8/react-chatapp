@@ -16,4 +16,9 @@ body {
   text-align: center;
   min-height: 100%;
   font-family: "Nunito", sans-serif;
+  background-color: $dark-color;
+}
+
+.app-container {
+  position: relative;
 }

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importDefault(require("react"));
 var react_hook_form_1 = require("react-hook-form");
 require("./LoginForm.scss");
+var react_router_dom_1 = require("react-router-dom");
 function LoginForm() {
     var _a, _b;
     var _c = react_hook_form_1.useForm({
@@ -15,6 +16,13 @@ function LoginForm() {
     var onSubmit = function (data) { return console.log(); };
     return (react_1.default.createElement("form", { className: "form", onSubmit: handleSubmit(onSubmit) },
         react_1.default.createElement("div", { className: "title" }, "Sign in to ChatApp"),
+        react_1.default.createElement("div", { className: "social-sign-buttons-container" },
+            react_1.default.createElement("button", { className: "button facebook-button" },
+                react_1.default.createElement("i", { className: "fab fa-facebook-f", "aria-hidden": "true" })),
+            react_1.default.createElement("button", { className: "button google-button" },
+                react_1.default.createElement("i", { className: "fab fa-google", "aria-hidden": "true" }))),
+        react_1.default.createElement("div", { className: "line-text" }, "OR"),
+        react_1.default.createElement("div", { className: "line" }),
         isSubmitted && errors.email && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left" }, (_a = errors.email) === null || _a === void 0 ? void 0 : _a.message)),
         react_1.default.createElement("div", { className: "control has-icons-left" },
             react_1.default.createElement("input", { className: "input is-large is-black has-text-white" +
@@ -42,9 +50,9 @@ function LoginForm() {
                 react_1.default.createElement("i", { className: "fas fa-lock" }))),
         react_1.default.createElement("span", { className: "is-pulled-left forgot info" },
             react_1.default.createElement("a", null, "Forgot password?")),
-        react_1.default.createElement("input", { className: "button is-primary is-large", type: "submit", value: "Sign in", disabled: !dirtyFields.email || !dirtyFields.password }),
+        react_1.default.createElement("input", { className: "button is-primary is-medium", type: "submit", value: "Sign in", disabled: !dirtyFields.email || !dirtyFields.password }),
         react_1.default.createElement("span", { className: "is-pulled-left info" },
             "Don't have an account? ",
-            react_1.default.createElement("a", { href: "/register" }, "Sign up"))));
+            react_1.default.createElement(react_router_dom_1.NavLink, { to: "/register" }, "Sign up"))));
 }
 exports.default = LoginForm;

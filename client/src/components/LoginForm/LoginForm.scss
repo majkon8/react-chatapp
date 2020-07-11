@@ -7,6 +7,39 @@
   padding: 20px;
   color: white;
 
+  .social-sign-buttons-container {
+    display: flex;
+
+    .facebook-button {
+      background-color: #3b5998;
+      border-color: #3b5998;
+      color: white;
+      margin-right: 10px;
+    }
+
+    .google-button {
+      background-color: #db3236;
+      border-color: #db3236;
+      color: white;
+      margin-left: 10px;
+    }
+  }
+
+  .line-text {
+    font-size: 22px;
+    position: relative;
+    top: 16.5px;
+    background-color: rgb(30, 30, 30);
+    display: inline-block;
+    padding: 0 20px;
+  }
+
+  .line {
+    height: 1px;
+    background-color: white;
+    margin-bottom: 40px;
+  }
+
   .title {
     color: white;
     font-size: 40px;

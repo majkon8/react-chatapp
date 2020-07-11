@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./home.scss";
+import { motion } from "framer-motion";
 import Navbar from "../../components/Navbar/Navbar";
 import Lottie from "react-lottie";
 import SideNav from "../../components/SideNav/SideNav";
@@ -41,6 +42,29 @@ export default function Home() {
   let wrapper = useRef<HTMLDivElement>(null);
   let welcomeMessageBig = useRef(null);
   let welcomeMessageSmall = useRef(null);
+  const pageVariants = {
+    initial: {
+      opacity: 0,
+      x: "-100vw",
+      y: "100vh",
+    },
+    in: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+    },
+    out: {
+      opacity: 0,
+      x: "100vw",
+      y: "-100vh",
+    },
+  };
+
+  const pageTransition = {
+    type: "tween",
+    ease: "anticipate",
+    duration: 0.8,
+  };
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -97,6 +121,7 @@ export default function Home() {
     });
     const timeline = gsap.timeline();
     timeline
+      .to(welcomeMessageBig.current, 0.5, { opacity: 0 })
       .to(welcomeMessageBig.current, 0.5, { opacity: 1 })
       .to(welcomeMessageSmall.current, 0.5, { opacity: 1 });
   }, []);
@@ -104,11 +129,20 @@ export default function Home() {
   const toggleOpen = () => setIsSideOpen(!isSideOpen);
 
   return (
-    <div ref={wrapper}>
+    <motion.div
+      ref={wrapper}
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageVariants}
+      transition={pageTransition}
+      style={{ backgroundColor: "white", position: "absolute", width: "100%" }}
+    >
       <div className="container">
         <Navbar toggleOpen={toggleOpen} isOpen={isSideOpen} />
+        <SideNav toggleOpen={toggleOpen} isOpen={isSideOpen} />
       </div>
-      <SideNav toggleOpen={toggleOpen} isOpen={isSideOpen} />
+
       <div className="welcome-message">
         <div ref={welcomeMessageBig} className="big">
           Your place for chatting
@@ -185,6 +219,6 @@ export default function Home() {
         />
       </div>
       <Footer />
-    </div>
+    </motion.div>
   );
 }

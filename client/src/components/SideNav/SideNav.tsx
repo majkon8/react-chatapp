@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./SideNav.scss";
+import { NavLink } from "react-router-dom";
 
 interface IProps {
   isOpen: boolean;
@@ -7,8 +8,21 @@ interface IProps {
 }
 
 export default function SideNav({ isOpen, toggleOpen }: IProps) {
+  const [canOpen, setCanOpen] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setCanOpen(true);
+    }, 800);
+  }, []);
   return (
-    <div className={"side-container" + (isOpen ? " side-open" : " side-close")}>
+    <div
+      className={
+        "side-container" +
+        (isOpen ? " side-open" : " side-close") +
+        (canOpen ? " is-visible" : "")
+      }
+    >
       <button
         onClick={toggleOpen}
         className={"hamburger hamburger--squeeze" + (isOpen && " is-active")}
@@ -35,11 +49,11 @@ export default function SideNav({ isOpen, toggleOpen }: IProps) {
           Download
         </a>
       </nav>
-      <a href="/login">
+      <NavLink to="/login">
         <button className="button is-medium is-primary is-rounded side-nav-login-button">
           Sign in
         </button>
-      </a>
+      </NavLink>
     </div>
   );
 }

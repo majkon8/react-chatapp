@@ -1,0 +1,40 @@
+.register-form {
+  .birth-date-label {
+    float: left;
+    color: rgb(219, 219, 219);
+  }
+  .date-selects {
+    clear: both;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    .select {
+      margin: 0 5px 20px 0;
+      select {
+        background-color: rgb(40, 40, 40);
+        border-color: black;
+        color: rgb(219, 219, 219);
+      }
+
+      option {
+        background-color: rgb(40, 40, 40);
+        color: rgb(219, 219, 219);
+      }
+    }
+  }
+
+  .date-error {
+    margin-top: -20px;
+    margin-bottom: 20px;
+  }
+
+  .checkbox-label {
+    clear: both;
+    margin-bottom: 10px;
+  }
+}
+
+.register-button {
+  margin-top: 0;
+}
