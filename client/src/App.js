@@ -12,6 +12,8 @@ var Logo_1 = __importDefault(require("./components/Logo/Logo"));
 var login_1 = __importDefault(require("./pages/login/login"));
 var register_1 = __importDefault(require("./pages/register/register"));
 var resetPassword_1 = __importDefault(require("./pages/reset-password/resetPassword"));
+var terms_1 = __importDefault(require("./pages/terms/terms"));
+var pageNotFound_1 = __importDefault(require("./pages/page-not-found/pageNotFound"));
 function App() {
     var location = react_router_dom_1.useLocation();
     return (react_1.default.createElement(react_1.default.Fragment, null,
@@ -22,6 +24,8 @@ function App() {
                     react_1.default.createElement(react_router_dom_1.Route, { exact: true, path: "/", component: home_1.default }),
                     react_1.default.createElement(react_router_dom_1.Route, { path: "/login", component: login_1.default }),
                     react_1.default.createElement(react_router_dom_1.Route, { path: "/register", component: register_1.default }),
-                    react_1.default.createElement(react_router_dom_1.Route, { path: "/reset", component: resetPassword_1.default }))))));
+                    react_1.default.createElement(react_router_dom_1.Route, { path: "/reset", component: resetPassword_1.default }),
+                    react_1.default.createElement(react_router_dom_1.Route, { path: "/terms", component: terms_1.default }),
+                    react_1.default.createElement(react_router_dom_1.Route, { component: pageNotFound_1.default }))))));
 }
 exports.default = App;

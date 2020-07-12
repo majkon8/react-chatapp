@@ -1,0 +1,8 @@
+.page-not-found-container {
+  position: absolute;
+  width: 100%;
+
+  @media screen and (max-width: 1024px) {
+    top: 100px;
+  }
+}
