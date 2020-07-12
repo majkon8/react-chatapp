@@ -14,7 +14,7 @@ mongoose.Promise = global.Promise;
     console.log("Connected to MongoDB successfully");
   } catch (error) {
     console.log("Error while attempting to connect to MongoDB");
-    console.log(error);
+    console.error(error);
   }
 })();
 

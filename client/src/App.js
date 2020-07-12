@@ -33,8 +33,6 @@ var register_1 = __importDefault(require("./pages/register/register"));
 var resetPassword_1 = __importDefault(require("./pages/reset-password/resetPassword"));
 var Terms = react_1.lazy(function () { return Promise.resolve().then(function () { return __importStar(require("./pages/terms/terms")); }); });
 var PageNotFound = react_1.lazy(function () { return Promise.resolve().then(function () { return __importStar(require("./pages/page-not-found/pageNotFound")); }); });
-// import Terms from "./pages/terms/terms";
-// import PageNotFound from "./pages/page-not-found/pageNotFound";
 function App() {
     var location = react_router_dom_1.useLocation();
     return (react_1.default.createElement(react_1.default.Fragment, null,
