@@ -61,7 +61,7 @@ mongoose_1.default.Promise = global.Promise;
                 case 2:
                     error_1 = _a.sent();
                     console.log("Error while attempting to connect to MongoDB");
-                    console.log(error_1);
+                    console.error(error_1);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

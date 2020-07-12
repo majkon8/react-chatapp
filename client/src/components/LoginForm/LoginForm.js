@@ -26,7 +26,7 @@ function LoginForm() {
         isSubmitted && errors.email && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left" }, (_a = errors.email) === null || _a === void 0 ? void 0 : _a.message)),
         react_1.default.createElement("div", { className: "control has-icons-left" },
             react_1.default.createElement("input", { className: "input is-large is-black has-text-white" +
-                    (errors.email ? " is-error" : ""), name: "email", type: "email", placeholder: "Email", ref: register({
+                    (isSubmitted && errors.email ? " is-error" : ""), name: "email", type: "email", placeholder: "Email", ref: register({
                     required: { value: true, message: "This field is required" },
                     pattern: {
                         value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
@@ -38,7 +38,7 @@ function LoginForm() {
         isSubmitted && errors.password && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left error" }, (_b = errors.password) === null || _b === void 0 ? void 0 : _b.message)),
         react_1.default.createElement("div", { className: "control has-icons-left" },
             react_1.default.createElement("input", { className: "input is-large is-black has-text-white" +
-                    (errors.password ? " is-error" : ""), name: "password", type: "password", placeholder: "Password", ref: register({
+                    (isSubmitted && errors.password ? " is-error" : ""), name: "password", type: "password", placeholder: "Password", ref: register({
                     required: true,
                     minLength: { value: 8, message: "Password too short" },
                     pattern: {
