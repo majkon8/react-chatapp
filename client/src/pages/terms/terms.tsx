@@ -4,32 +4,10 @@ import { motion } from "framer-motion";
 import Navbar from "../../components/Navbar/Navbar";
 import SideNav from "../../components/SideNav/SideNav";
 import Footer from "../../components/Footer/Footer";
+import { pageVariants, pageTransition } from "../home/home";
 
 export default function Terms() {
   const [isSideOpen, setIsSideOpen] = useState(false);
-  const pageVariants = {
-    initial: {
-      opacity: 0,
-      x: "-100vw",
-      y: "100vh",
-    },
-    in: {
-      opacity: 1,
-      x: 0,
-      y: 0,
-    },
-    out: {
-      opacity: 0,
-      x: "100vw",
-      y: "-100vh",
-    },
-  };
-
-  const pageTransition = {
-    type: "tween",
-    ease: "anticipate",
-    duration: 0.8,
-  };
 
   const toggleOpen = () => setIsSideOpen(!isSideOpen);
 

@@ -22,6 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.pageTransition = exports.pageVariants = void 0;
 var react_1 = __importStar(require("react"));
 require("./home.scss");
 var framer_motion_1 = require("framer-motion");
@@ -39,6 +40,25 @@ var features_jpg_1 = __importDefault(require("../../assets/features.jpg"));
 var security_jpg_1 = __importDefault(require("../../assets/security.jpg"));
 var support_jpg_1 = __importDefault(require("../../assets/support.jpg"));
 var download_jpg_1 = __importDefault(require("../../assets/download.jpg"));
+exports.pageVariants = {
+    initial: {
+        opacity: 0,
+        x: "-100vw",
+    },
+    in: {
+        opacity: 1,
+        x: 0,
+    },
+    out: {
+        opacity: 0,
+        x: "100vw",
+    },
+};
+exports.pageTransition = {
+    type: "tween",
+    ease: "anticipate",
+    duration: 0.8,
+};
 function getWindowWidth() {
     var width = window.innerWidth;
     return width;
@@ -62,37 +82,16 @@ function Home() {
     var wrapper = react_1.useRef(null);
     var welcomeMessageBig = react_1.useRef(null);
     var welcomeMessageSmall = react_1.useRef(null);
-    var pageVariants = {
-        initial: {
-            opacity: 0,
-            x: "-100vw",
-            y: "100vh",
-        },
-        in: {
-            opacity: 1,
-            x: 0,
-            y: 0,
-        },
-        out: {
-            opacity: 0,
-            x: "100vw",
-            y: "-100vh",
-        },
-    };
-    var pageTransition = {
-        type: "tween",
-        ease: "anticipate",
-        duration: 0.8,
-    };
     react_1.useEffect(function () {
         gsap_1.gsap.registerPlugin(ScrollTrigger_1.ScrollTrigger);
-        var elements = wrapper.current.children[4];
+        var elements = wrapper.current.children[3];
         var sectionTextElements = elements.querySelectorAll(".section-text-big, .section-text-small");
         var sectionImageLeftElements = elements.querySelectorAll(".section-image-left");
         var sectionImageRightElements = elements.querySelectorAll(".section-image-right");
         sectionTextElements.forEach(function (element) {
             ScrollTrigger_1.ScrollTrigger.create({
                 trigger: element,
+                start: "top bottom",
                 onEnter: function () {
                     gsap_1.gsap.from(element, 0.5, {
                         autoAlpha: 0,
@@ -114,6 +113,7 @@ function Home() {
                 scrollTrigger: {
                     trigger: element,
                     toggleActions: "restart none restart none",
+                    start: "top bottom",
                 },
                 autoAlpha: 0,
                 x: -100,
@@ -125,6 +125,7 @@ function Home() {
                 scrollTrigger: {
                     trigger: element,
                     toggleActions: "restart none restart none",
+                    start: "top bottom",
                 },
                 autoAlpha: 0,
                 x: 100,
@@ -138,7 +139,7 @@ function Home() {
             .to(welcomeMessageSmall.current, 0.5, { opacity: 1 });
     }, []);
     var toggleOpen = function () { return setIsSideOpen(!isSideOpen); };
-    return (react_1.default.createElement(framer_motion_1.motion.div, { ref: wrapper, initial: "initial", animate: "in", exit: "out", variants: pageVariants, transition: pageTransition, style: { backgroundColor: "white", position: "absolute", width: "100%" } },
+    return (react_1.default.createElement(framer_motion_1.motion.div, { ref: wrapper, initial: "initial", animate: "in", exit: "out", variants: exports.pageVariants, transition: exports.pageTransition, style: { backgroundColor: "white", position: "absolute", width: "100%" } },
         react_1.default.createElement("div", { className: "container" },
             react_1.default.createElement(Navbar_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen }),
             react_1.default.createElement(SideNav_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen })),

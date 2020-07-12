@@ -16,6 +16,27 @@ import security from "../../assets/security.jpg";
 import support from "../../assets/support.jpg";
 import download from "../../assets/download.jpg";
 
+export const pageVariants = {
+  initial: {
+    opacity: 0,
+    x: "-100vw",
+  },
+  in: {
+    opacity: 1,
+    x: 0,
+  },
+  out: {
+    opacity: 0,
+    x: "100vw",
+  },
+};
+
+export const pageTransition = {
+  type: "tween",
+  ease: "anticipate",
+  duration: 0.8,
+};
+
 function getWindowWidth() {
   const { innerWidth: width } = window;
   return width;
@@ -42,33 +63,10 @@ export default function Home() {
   let wrapper = useRef<HTMLDivElement>(null);
   let welcomeMessageBig = useRef(null);
   let welcomeMessageSmall = useRef(null);
-  const pageVariants = {
-    initial: {
-      opacity: 0,
-      x: "-100vw",
-      y: "100vh",
-    },
-    in: {
-      opacity: 1,
-      x: 0,
-      y: 0,
-    },
-    out: {
-      opacity: 0,
-      x: "100vw",
-      y: "-100vh",
-    },
-  };
-
-  const pageTransition = {
-    type: "tween",
-    ease: "anticipate",
-    duration: 0.8,
-  };
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    const elements = wrapper!.current!.children[4];
+    const elements = wrapper!.current!.children[3];
     const sectionTextElements = elements.querySelectorAll(
       ".section-text-big, .section-text-small"
     );
@@ -81,6 +79,7 @@ export default function Home() {
     sectionTextElements.forEach((element) => {
       ScrollTrigger.create({
         trigger: element,
+        start: "top bottom",
         onEnter: () => {
           gsap.from(element, 0.5, {
             autoAlpha: 0,
@@ -102,6 +101,7 @@ export default function Home() {
         scrollTrigger: {
           trigger: element,
           toggleActions: "restart none restart none",
+          start: "top bottom",
         },
         autoAlpha: 0,
         x: -100,
@@ -113,6 +113,7 @@ export default function Home() {
         scrollTrigger: {
           trigger: element,
           toggleActions: "restart none restart none",
+          start: "top bottom",
         },
         autoAlpha: 0,
         x: 100,

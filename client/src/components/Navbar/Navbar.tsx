@@ -32,19 +32,19 @@ export default function Navbar({ isOpen, toggleOpen }: IProps) {
   return (
     <div className="navBar">
       <nav ref={nav} className="main-nav">
-        <a href="#about_us" className="has-text-dark nav-item">
+        <a href="/#about_us" className="has-text-dark nav-item">
           About us
         </a>
-        <a href="#features" className="has-text-dark nav-item">
+        <a href="/#features" className="has-text-dark nav-item">
           Features
         </a>
-        <a href="#security" className="has-text-dark nav-item">
+        <a href="/#security" className="has-text-dark nav-item">
           Security
         </a>
-        <a href="#support" className="has-text-dark nav-item">
+        <a href="/#support" className="has-text-dark nav-item">
           Support
         </a>
-        <a href="#download" className="has-text-dark nav-item">
+        <a href="/#download" className="has-text-dark nav-item">
           Download
         </a>
       </nav>

@@ -28,32 +28,11 @@ var framer_motion_1 = require("framer-motion");
 var Navbar_1 = __importDefault(require("../../components/Navbar/Navbar"));
 var SideNav_1 = __importDefault(require("../../components/SideNav/SideNav"));
 var Footer_1 = __importDefault(require("../../components/Footer/Footer"));
+var home_1 = require("../home/home");
 function Terms() {
     var _a = react_1.useState(false), isSideOpen = _a[0], setIsSideOpen = _a[1];
-    var pageVariants = {
-        initial: {
-            opacity: 0,
-            x: "-100vw",
-            y: "100vh",
-        },
-        in: {
-            opacity: 1,
-            x: 0,
-            y: 0,
-        },
-        out: {
-            opacity: 0,
-            x: "100vw",
-            y: "-100vh",
-        },
-    };
-    var pageTransition = {
-        type: "tween",
-        ease: "anticipate",
-        duration: 0.8,
-    };
     var toggleOpen = function () { return setIsSideOpen(!isSideOpen); };
-    return (react_1.default.createElement(framer_motion_1.motion.div, { initial: "initial", animate: "in", exit: "out", variants: pageVariants, transition: pageTransition, style: { backgroundColor: "white", position: "absolute", width: "100%" } },
+    return (react_1.default.createElement(framer_motion_1.motion.div, { initial: "initial", animate: "in", exit: "out", variants: home_1.pageVariants, transition: home_1.pageTransition, style: { backgroundColor: "white", position: "absolute", width: "100%" } },
         react_1.default.createElement("div", { className: "container" },
             react_1.default.createElement(Navbar_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen }),
             react_1.default.createElement(SideNav_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen }),
