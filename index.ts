@@ -1,8 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
 import path from "path";
-const userRoutes = require("./routes/user.routes");
 import "./mongoose";
+const userRoutes = require("./routes/user.routes");
 
 const app = express();
 
