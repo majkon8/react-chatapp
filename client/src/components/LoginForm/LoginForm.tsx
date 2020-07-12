@@ -41,7 +41,7 @@ export default function LoginForm() {
         <input
           className={
             "input is-large is-black has-text-white" +
-            (errors.email ? " is-error" : "")
+            (isSubmitted && errors.email ? " is-error" : "")
           }
           name="email"
           type="email"
@@ -68,7 +68,7 @@ export default function LoginForm() {
         <input
           className={
             "input is-large is-black has-text-white" +
-            (errors.password ? " is-error" : "")
+            (isSubmitted && errors.password ? " is-error" : "")
           }
           name="password"
           type="password"
