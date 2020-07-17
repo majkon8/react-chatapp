@@ -74,19 +74,37 @@ var mongoose_1 = __importStar(require("mongoose"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var crypto_1 = __importDefault(require("crypto"));
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
-var jwtSecret = "2Z9M3M0YNxb770Gqog2ZzCqyXJXFkFCj5u1elOo509DGbO8fo5TQslzqTW9e2JYS";
+var jwtSecret = process.env.JWT_SECRET;
 var UserSchema = new mongoose_1.Schema({
     email: {
         type: String,
-        required: true,
+        required: [true, "Email is required"],
         minlength: 3,
         trim: true,
-        unique: true,
+        unique: [true, "Email already used"],
+        validate: {
+            validator: function (email) {
+                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+            },
+            message: "Email address incorrect",
+        },
+    },
+    username: {
+        type: String,
+        required: [true, "Username is required"],
+        minlength: 1,
+        trim: true,
     },
     password: {
         type: String,
-        required: true,
-        minlength: 8,
+        required: [true, "Password is required"],
+        minlength: [8, "Password too short"],
+        validate: {
+            validator: function (password) {
+                return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password);
+            },
+            message: "Password too weak",
+        },
     },
     sessions: [
         {
@@ -94,19 +112,11 @@ var UserSchema = new mongoose_1.Schema({
                 type: String,
                 required: true,
             },
-            expiresAt: {
-                type: Number,
-                required: true,
-            },
         },
     ],
     resetPasswordToken: {
-        token: {
-            type: String,
-        },
-        expiresAt: {
-            type: Number,
-        },
+        token: { type: String },
+        expiresAt: { type: Number },
     },
 });
 /*** Instance methods ***/
@@ -189,7 +199,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
                                     resolve(user);
                                 }
                                 else {
-                                    reject(error);
+                                    reject("Wrong password");
                                 }
                             });
                         })];
@@ -214,12 +224,11 @@ UserSchema.pre("save", function (next) {
 });
 /*** Helpers ***/
 var saveSessionToDatabase = function (user, refreshToken) { return __awaiter(void 0, void 0, void 0, function () {
-    var expiresAt, error_2;
+    var error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                expiresAt = generateRefreshTokenExpiryTime();
-                user.sessions.push({ token: refreshToken, expiresAt: expiresAt });
+                user.sessions.push({ token: refreshToken });
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
@@ -236,9 +245,4 @@ var saveSessionToDatabase = function (user, refreshToken) { return __awaiter(voi
         }
     });
 }); };
-var generateRefreshTokenExpiryTime = function () {
-    var daysUntilExpire = "10";
-    var secondsUntilExpire = +daysUntilExpire * 24 * 60 * 60;
-    return Date.now() / 1000 + secondsUntilExpire;
-};
 exports.User = mongoose_1.default.model("User", UserSchema);

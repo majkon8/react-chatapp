@@ -3,16 +3,16 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
 
-const jwtSecret =
-  "2Z9M3M0YNxb770Gqog2ZzCqyXJXFkFCj5u1elOo509DGbO8fo5TQslzqTW9e2JYS";
+const jwtSecret = process.env.JWT_SECRET!;
 
 export interface IToken {
   token: string;
-  expiresAt: number;
+  expiresAt?: number;
 }
 
 export interface IUserDocument extends Document {
   email: string;
+  username: string;
   password: string;
   sessions: IToken[];
   resetPasswordToken: IToken;
@@ -28,15 +28,31 @@ export interface IUserModel extends Model<IUserDocument> {
 const UserSchema: Schema = new Schema({
   email: {
     type: String,
-    required: true,
+    required: [true, "Email is required"],
     minlength: 3,
     trim: true,
-    unique: true,
+    unique: [true, "Email already used"],
+    validate: {
+      validator: (email: string) =>
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email),
+      message: "Email address incorrect",
+    },
+  },
+  username: {
+    type: String,
+    required: [true, "Username is required"],
+    minlength: 1,
+    trim: true,
   },
   password: {
     type: String,
-    required: true,
-    minlength: 8,
+    required: [true, "Password is required"],
+    minlength: [8, "Password too short"],
+    validate: {
+      validator: (password: string) =>
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password),
+      message: "Password too weak",
+    },
   },
   sessions: [
     {
@@ -44,19 +60,11 @@ const UserSchema: Schema = new Schema({
         type: String,
         required: true,
       },
-      expiresAt: {
-        type: Number,
-        required: true,
-      },
     },
   ],
   resetPasswordToken: {
-    token: {
-      type: String,
-    },
-    expiresAt: {
-      type: Number,
-    },
+    token: { type: String },
+    expiresAt: { type: Number },
   },
 });
 
@@ -128,7 +136,7 @@ UserSchema.statics.findByCredentials = async function (
       if (res) {
         resolve(user);
       } else {
-        reject(error);
+        reject("Wrong password");
       }
     });
   });
@@ -152,8 +160,7 @@ UserSchema.pre<IUserDocument>("save", function (next) {
 /*** Helpers ***/
 
 const saveSessionToDatabase = async (user: any, refreshToken: string) => {
-  const expiresAt = generateRefreshTokenExpiryTime();
-  user.sessions.push({ token: refreshToken, expiresAt });
+  user.sessions.push({ token: refreshToken });
   try {
     await user.save();
     // saved session successfully
@@ -161,12 +168,6 @@ const saveSessionToDatabase = async (user: any, refreshToken: string) => {
   } catch (error) {
     Promise.reject(error.toString());
   }
-};
-
-const generateRefreshTokenExpiryTime = () => {
-  const daysUntilExpire = "10";
-  const secondsUntilExpire = +daysUntilExpire * 24 * 60 * 60;
-  return Date.now() / 1000 + secondsUntilExpire;
 };
 
 export const User: IUserModel = mongoose.model<IUserDocument, IUserModel>(
