@@ -13,7 +13,7 @@ function LoginForm() {
         mode: "onChange",
     }), register = _c.register, handleSubmit = _c.handleSubmit, errors = _c.errors, formState = _c.formState;
     var dirtyFields = formState.dirtyFields, isSubmitted = formState.isSubmitted;
-    var onSubmit = function (data) { return console.log(); };
+    var onSubmit = function (data) { return console.log(data); };
     return (react_1.default.createElement("form", { className: "form", onSubmit: handleSubmit(onSubmit) },
         react_1.default.createElement("div", { className: "title" }, "Sign in to ChatApp"),
         react_1.default.createElement("div", { className: "social-sign-buttons-container" },

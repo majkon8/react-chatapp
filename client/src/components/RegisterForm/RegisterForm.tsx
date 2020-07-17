@@ -3,6 +3,18 @@ import { useForm } from "react-hook-form";
 import "./RegisterForm.scss";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
+// redux
+import { connect, ConnectedProps } from "react-redux";
+import { signup } from "../../redux/actions/userActions";
+import { IState } from "../../redux/store";
+
+const mapStateToPRops = (state: IState) => ({ UI: state.UI });
+const mapActionsToProps = { signup };
+const connector = connect(mapStateToPRops, mapActionsToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux;
 
 interface IFormInputs {
   email: string;
@@ -16,7 +28,7 @@ interface IFormInputs {
   terms: boolean;
 }
 
-export default function RegisterForm() {
+function RegisterForm({ signup, UI }: Props) {
   const {
     register,
     handleSubmit,
@@ -30,7 +42,13 @@ export default function RegisterForm() {
   });
   const { dirtyFields, isSubmitted } = formState;
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: IFormInputs) => {
+    const { email, username, password } = { ...data };
+    if (!(Object.keys(errors).length === 0)) return;
+    const birthDate = new Date(+data.year, +data.month, 1 + +data.day);
+    const userData = { email, username, password, birthDate };
+    signup(userData);
+  };
 
   const days = [];
   for (let i = 1; i <= 31; i++) {
@@ -57,21 +75,45 @@ export default function RegisterForm() {
     "December",
   ];
 
-  const validateDate = (date: { [key: string]: string }) => {
+  const formatDate = (date: { [key: string]: string }) => {
     let { day, month, year } = date;
+    +day < 9 ? (day = `0${+day + 1}`) : (day = `${+day + 1}`);
     +month < 9 ? (month = `0${+month + 1}`) : (month = `${+month + 1}`);
-    return moment(`${day}-${month}-${year}`, "DD-MM-YYY", true).isValid();
+    const formattedDate = `${day}-${month}-${year}`;
+    return formattedDate;
+  };
+
+  const validDate = (date: string) =>
+    moment(date, "DD-MM-YYYY", true).isValid();
+
+  const validAge = (date: string) => {
+    const today = moment();
+    const birthDay = moment(date, "DD-MM-YYYY");
+    const difference = today.diff(birthDay, "years", true);
+    if (difference <= 13) return false;
+    return true;
   };
 
   const validateBirthDateInput = () => {
     if (!dirtyFields.day || !dirtyFields.month || !dirtyFields.year)
       return true;
-    if (validateDate(getValues(["day", "month", "year"]))) {
-      clearErrors("date");
-      return true;
+    const formattedDate = formatDate(getValues(["day", "month", "year"]));
+    if (!validDate(formattedDate)) {
+      setError("date", {
+        type: "manual",
+        message: "Privided date is incorrect",
+      });
+      return false;
     }
-    setError("date", { type: "manual", message: "Privided date is incorrect" });
-    return false;
+    if (!validAge(formattedDate)) {
+      setError("date", {
+        type: "manual",
+        message: "You have to be at least 13 years old",
+      });
+      return false;
+    }
+    clearErrors("date");
+    return true;
   };
 
   return (
@@ -270,6 +312,20 @@ export default function RegisterForm() {
       <span className="is-pulled-left info">
         <NavLink to="/login">Already signed up?</NavLink>
       </span>
+
+      {UI.error && (
+        <p className="message error-message has-background-danger">
+          {UI.error}
+        </p>
+      )}
+
+      {UI.success && (
+        <p className="message error-message has-background-success">
+          {UI.success}
+        </p>
+      )}
     </form>
   );
 }
+
+export default connector(RegisterForm);

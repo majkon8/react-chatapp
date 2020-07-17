@@ -26,6 +26,10 @@ var react_1 = __importStar(require("react"));
 require("./App.scss");
 var react_router_dom_1 = require("react-router-dom");
 var framer_motion_1 = require("framer-motion");
+// redux
+var react_redux_1 = require("react-redux");
+var store_1 = __importDefault(require("./redux/store"));
+// pages and components
 var home_1 = __importDefault(require("./pages/home/home"));
 var Logo_1 = __importDefault(require("./components/Logo/Logo"));
 var login_1 = __importDefault(require("./pages/login/login"));
@@ -35,7 +39,7 @@ var Terms = react_1.lazy(function () { return Promise.resolve().then(function ()
 var PageNotFound = react_1.lazy(function () { return Promise.resolve().then(function () { return __importStar(require("./pages/page-not-found/pageNotFound")); }); });
 function App() {
     var location = react_router_dom_1.useLocation();
-    return (react_1.default.createElement(react_1.default.Fragment, null,
+    return (react_1.default.createElement(react_redux_1.Provider, { store: store_1.default },
         react_1.default.createElement("div", { className: "app-container" },
             react_1.default.createElement(Logo_1.default, null),
             react_1.default.createElement(react_1.Suspense, { fallback: react_1.default.createElement(react_1.default.Fragment, null) },

@@ -74,7 +74,8 @@ var mongoose_1 = __importStar(require("mongoose"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var crypto_1 = __importDefault(require("crypto"));
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
-var jwtSecret = process.env.JWT_SECRET;
+var moment_1 = __importDefault(require("moment/moment"));
+var jwtSecret = "2Z9M3M0YNxb770Gqog2ZzCqyXJXFkFCj5u1elOo509DGbO8fo5TQslzqTW9e2JYS";
 var UserSchema = new mongoose_1.Schema({
     email: {
         type: String,
@@ -104,6 +105,14 @@ var UserSchema = new mongoose_1.Schema({
                 return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password);
             },
             message: "Password too weak",
+        },
+    },
+    birthDate: {
+        type: Date,
+        required: [true, "Birth date is required"],
+        validate: {
+            validator: function (date) { return validAge(date); },
+            message: "Minimum age is 13",
         },
     },
     sessions: [
@@ -245,4 +254,12 @@ var saveSessionToDatabase = function (user, refreshToken) { return __awaiter(voi
         }
     });
 }); };
+var validAge = function (date) {
+    var today = moment_1.default();
+    var birthDay = moment_1.default(date, "DD-MM-YYYY");
+    var difference = today.diff(birthDay, "years", true);
+    if (difference <= 13)
+        return false;
+    return true;
+};
 exports.User = mongoose_1.default.model("User", UserSchema);

@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -8,13 +19,27 @@ var react_hook_form_1 = require("react-hook-form");
 require("./RegisterForm.scss");
 var moment_1 = __importDefault(require("moment"));
 var react_router_dom_1 = require("react-router-dom");
-function RegisterForm() {
-    var _a, _b, _c, _d, _e;
-    var _f = react_hook_form_1.useForm({
+// redux
+var react_redux_1 = require("react-redux");
+var userActions_1 = require("../../redux/actions/userActions");
+var mapStateToPRops = function (state) { return ({ UI: state.UI }); };
+var mapActionsToProps = { signup: userActions_1.signup };
+var connector = react_redux_1.connect(mapStateToPRops, mapActionsToProps);
+function RegisterForm(_a) {
+    var _b, _c, _d, _e, _f;
+    var signup = _a.signup, UI = _a.UI;
+    var _g = react_hook_form_1.useForm({
         mode: "onChange",
-    }), register = _f.register, handleSubmit = _f.handleSubmit, errors = _f.errors, formState = _f.formState, getValues = _f.getValues, setError = _f.setError, clearErrors = _f.clearErrors;
+    }), register = _g.register, handleSubmit = _g.handleSubmit, errors = _g.errors, formState = _g.formState, getValues = _g.getValues, setError = _g.setError, clearErrors = _g.clearErrors;
     var dirtyFields = formState.dirtyFields, isSubmitted = formState.isSubmitted;
-    var onSubmit = function (data) { return console.log(data); };
+    var onSubmit = function (data) {
+        var _a = __assign({}, data), email = _a.email, username = _a.username, password = _a.password;
+        if (!(Object.keys(errors).length === 0))
+            return;
+        var birthDate = new Date(+data.year, +data.month, 1 + +data.day);
+        var userData = { email: email, username: username, password: password, birthDate: birthDate };
+        signup(userData);
+    };
     var days = [];
     for (var i = 1; i <= 31; i++) {
         days.push(i);
@@ -37,24 +62,48 @@ function RegisterForm() {
         "November",
         "December",
     ];
-    var validateDate = function (date) {
+    var formatDate = function (date) {
         var day = date.day, month = date.month, year = date.year;
+        +day < 9 ? (day = "0" + (+day + 1)) : (day = "" + (+day + 1));
         +month < 9 ? (month = "0" + (+month + 1)) : (month = "" + (+month + 1));
-        return moment_1.default(day + "-" + month + "-" + year, "DD-MM-YYY", true).isValid();
+        var formattedDate = day + "-" + month + "-" + year;
+        return formattedDate;
+    };
+    var validDate = function (date) {
+        return moment_1.default(date, "DD-MM-YYYY", true).isValid();
+    };
+    var validAge = function (date) {
+        var today = moment_1.default();
+        var birthDay = moment_1.default(date, "DD-MM-YYYY");
+        var difference = today.diff(birthDay, "years", true);
+        if (difference <= 13)
+            return false;
+        return true;
     };
     var validateBirthDateInput = function () {
         if (!dirtyFields.day || !dirtyFields.month || !dirtyFields.year)
             return true;
-        if (validateDate(getValues(["day", "month", "year"]))) {
-            clearErrors("date");
-            return true;
+        var formattedDate = formatDate(getValues(["day", "month", "year"]));
+        if (!validDate(formattedDate)) {
+            setError("date", {
+                type: "manual",
+                message: "Privided date is incorrect",
+            });
+            return false;
         }
-        setError("date", { type: "manual", message: "Privided date is incorrect" });
-        return false;
+        if (!validAge(formattedDate)) {
+            setError("date", {
+                type: "manual",
+                message: "You have to be at least 13 years old",
+            });
+            return false;
+        }
+        clearErrors("date");
+        return true;
     };
     return (react_1.default.createElement("form", { className: "form register-form", onSubmit: handleSubmit(onSubmit) },
         react_1.default.createElement("div", { className: "title" }, "Sign up to ChatApp"),
-        isSubmitted && errors.email && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left" }, (_a = errors.email) === null || _a === void 0 ? void 0 : _a.message)),
+        isSubmitted && errors.email && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left" }, (_b = errors.email) === null || _b === void 0 ? void 0 : _b.message)),
         react_1.default.createElement("div", { className: "control has-icons-left" },
             react_1.default.createElement("input", { className: "input is-large is-black has-text-white" +
                     (isSubmitted && errors.email ? " is-error" : ""), name: "email", type: "email", placeholder: "Email", ref: register({
@@ -66,7 +115,7 @@ function RegisterForm() {
                 }) }),
             react_1.default.createElement("span", { className: "icon is-small is-left" },
                 react_1.default.createElement("i", { className: "fas fa-envelope" }))),
-        isSubmitted && errors.username && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left" }, (_b = errors.username) === null || _b === void 0 ? void 0 : _b.message)),
+        isSubmitted && errors.username && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left" }, (_c = errors.username) === null || _c === void 0 ? void 0 : _c.message)),
         react_1.default.createElement("div", { className: "control has-icons-left" },
             react_1.default.createElement("input", { className: "input is-large is-black has-text-white" +
                     (isSubmitted && errors.username ? " is-error" : ""), name: "username", type: "text", placeholder: "Username", ref: register({
@@ -75,7 +124,7 @@ function RegisterForm() {
                 }) }),
             react_1.default.createElement("span", { className: "icon is-small is-left" },
                 react_1.default.createElement("i", { className: "fas fa-user" }))),
-        isSubmitted && errors.password && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left error" }, (_c = errors.password) === null || _c === void 0 ? void 0 : _c.message)),
+        isSubmitted && errors.password && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left error" }, (_d = errors.password) === null || _d === void 0 ? void 0 : _d.message)),
         react_1.default.createElement("div", { className: "control has-icons-left" },
             react_1.default.createElement("input", { className: "input is-large is-black has-text-white" +
                     (isSubmitted && errors.password ? " is-error" : ""), name: "password", type: "password", placeholder: "Password", ref: register({
@@ -88,7 +137,7 @@ function RegisterForm() {
                 }) }),
             react_1.default.createElement("span", { className: "icon is-small is-left" },
                 react_1.default.createElement("i", { className: "fas fa-lock" }))),
-        isSubmitted && errors.confirm_password && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left error" }, (_d = errors.confirm_password) === null || _d === void 0 ? void 0 : _d.message)),
+        isSubmitted && errors.confirm_password && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left error" }, (_e = errors.confirm_password) === null || _e === void 0 ? void 0 : _e.message)),
         react_1.default.createElement("div", { className: "control has-icons-left" },
             react_1.default.createElement("input", { className: "input is-large is-black has-text-white" +
                     (isSubmitted && errors.confirm_password ? " is-error" : ""), name: "confirm_password", type: "password", placeholder: "Confirm password", ref: register({
@@ -119,7 +168,7 @@ function RegisterForm() {
                     }), defaultValue: "Year" },
                     react_1.default.createElement("option", { value: "Year", disabled: true, hidden: true }, "Year"),
                     years.map(function (year) { return (react_1.default.createElement("option", { value: year, key: year }, year)); })))),
-        isSubmitted && errors.date && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left error date-error" }, (_e = errors.date) === null || _e === void 0 ? void 0 : _e.message)),
+        isSubmitted && errors.date && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left error date-error" }, (_f = errors.date) === null || _f === void 0 ? void 0 : _f.message)),
         react_1.default.createElement("label", { className: "is-pulled-left checkbox-label info" },
             react_1.default.createElement("input", { ref: register({
                     required: true,
@@ -130,6 +179,8 @@ function RegisterForm() {
         react_1.default.createElement("input", { className: "button is-primary is-medium register-button", type: "submit", value: "Sign in", disabled: Object.keys(dirtyFields).length === 0 ||
                 Object.keys(dirtyFields).length !== Object.keys(getValues()).length }),
         react_1.default.createElement("span", { className: "is-pulled-left info" },
-            react_1.default.createElement(react_router_dom_1.NavLink, { to: "/login" }, "Already signed up?"))));
+            react_1.default.createElement(react_router_dom_1.NavLink, { to: "/login" }, "Already signed up?")),
+        UI.error && (react_1.default.createElement("p", { className: "message error-message has-background-danger" }, UI.error)),
+        UI.success && (react_1.default.createElement("p", { className: "message error-message has-background-success" }, UI.success))));
 }
-exports.default = RegisterForm;
+exports.default = connector(RegisterForm);

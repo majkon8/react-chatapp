@@ -2,6 +2,10 @@ import React, { lazy, Suspense } from "react";
 import "./App.scss";
 import { Switch, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+// redux
+import { Provider } from "react-redux";
+import store from "./redux/store";
+// pages and components
 import Home from "./pages/home/home";
 import Logo from "./components/Logo/Logo";
 import Login from "./pages/login/login";
@@ -14,7 +18,7 @@ function App() {
   const location = useLocation();
 
   return (
-    <>
+    <Provider store={store}>
       <div className="app-container">
         <Logo />
         <Suspense fallback={<></>}>
@@ -30,7 +34,7 @@ function App() {
           </AnimatePresence>
         </Suspense>
       </div>
-    </>
+    </Provider>
   );
 }
 

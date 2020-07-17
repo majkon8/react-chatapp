@@ -14,7 +14,7 @@ export default function LoginForm() {
   });
   const { dirtyFields, isSubmitted } = formState;
 
-  const onSubmit = (data: any) => console.log();
+  const onSubmit = (data: any) => console.log(data);
 
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>

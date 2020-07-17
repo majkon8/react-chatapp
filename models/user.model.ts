@@ -2,8 +2,10 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
+import moment from "moment/moment";
 
-const jwtSecret = process.env.JWT_SECRET!;
+const jwtSecret =
+  "2Z9M3M0YNxb770Gqog2ZzCqyXJXFkFCj5u1elOo509DGbO8fo5TQslzqTW9e2JYS";
 
 export interface IToken {
   token: string;
@@ -14,6 +16,7 @@ export interface IUserDocument extends Document {
   email: string;
   username: string;
   password: string;
+  birthDate: Date;
   sessions: IToken[];
   resetPasswordToken: IToken;
   generateAccessAuthToken(): Promise<string>;
@@ -52,6 +55,14 @@ const UserSchema: Schema = new Schema({
       validator: (password: string) =>
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password),
       message: "Password too weak",
+    },
+  },
+  birthDate: {
+    type: Date,
+    required: [true, "Birth date is required"],
+    validate: {
+      validator: (date: Date) => validAge(date),
+      message: "Minimum age is 13",
     },
   },
   sessions: [
@@ -168,6 +179,14 @@ const saveSessionToDatabase = async (user: any, refreshToken: string) => {
   } catch (error) {
     Promise.reject(error.toString());
   }
+};
+
+const validAge = (date: Date) => {
+  const today = moment();
+  const birthDay = moment(date, "DD-MM-YYYY");
+  const difference = today.diff(birthDay, "years", true);
+  if (difference <= 13) return false;
+  return true;
 };
 
 export const User: IUserModel = mongoose.model<IUserDocument, IUserModel>(
