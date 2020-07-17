@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import FormInput from "../../common/FormInput/FormInput";
 
 interface IFormInputs {
   password: string;
@@ -19,62 +20,35 @@ export default function RegisterForm() {
   return (
     <form className="form register-form" onSubmit={handleSubmit(onSubmit)}>
       <div className="title">Reset password</div>
-
-      {isSubmitted && errors.password && (
-        <span className="has-text-danger is-pulled-left error">
-          {errors.password?.message}
-        </span>
-      )}
-      <div className="control has-icons-left">
-        <input
-          className={
-            "input is-large is-black has-text-white" +
-            (isSubmitted && errors.password ? " is-error" : "")
-          }
-          name="password"
-          type="password"
-          placeholder="New password"
-          ref={register({
-            required: { value: true, message: "This field is required" },
-            minLength: { value: 8, message: "Password too short" },
-            pattern: {
-              value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
-              message: "Password too weak",
-            },
-          })}
-        />
-        <span className="icon is-small is-left">
-          <i className="fas fa-lock"></i>
-        </span>
-      </div>
-
-      {isSubmitted && errors.confirm_password && (
-        <span className="has-text-danger is-pulled-left error">
-          {errors.confirm_password?.message}
-        </span>
-      )}
-      <div className="control has-icons-left">
-        <input
-          className={
-            "input is-large is-black has-text-white" +
-            (isSubmitted && errors.confirm_password ? " is-error" : "")
-          }
-          name="confirm_password"
-          type="password"
-          placeholder="Confirm new password"
-          ref={register({
-            required: { value: true, message: "This field is required" },
-            validate: (value: string) =>
-              value === getValues("password") ? true : "Passwords must match",
-          })}
-        />
-        <span className="icon is-small is-left">
-          <i className="fas fa-lock"></i>
-        </span>
-      </div>
-
+      <FormInput
+        isSubmitted={isSubmitted}
+        error={errors.password}
+        name="password"
+        type="password"
+        placeholder="Password"
+        ref={register({
+          required: { value: true, message: "This field is required" },
+          minLength: { value: 8, message: "Password too short" },
+          pattern: {
+            value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+            message: "Password too weak",
+          },
+        })}
+      />
+      <FormInput
+        isSubmitted={isSubmitted}
+        error={errors.confirm_password}
+        name="confirm_password"
+        type="password"
+        placeholder="Confirm password"
+        ref={register({
+          required: { value: true, message: "This field is required" },
+          validate: (value: string) =>
+            value === getValues("password") ? true : "Passwords must match",
+        })}
+      />
       <input
-        className="button is-primary is-medium register-button"
+        className="button form-button is-primary is-medium register-button"
         type="submit"
         value="Sign in"
         disabled={!dirtyFields.password || !dirtyFields.confirm_password}

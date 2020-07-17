@@ -19,6 +19,9 @@ var react_hook_form_1 = require("react-hook-form");
 require("./RegisterForm.scss");
 var moment_1 = __importDefault(require("moment"));
 var react_router_dom_1 = require("react-router-dom");
+var FormInput_1 = __importDefault(require("../../common/FormInput/FormInput"));
+var DateSelect_1 = __importDefault(require("../../common/DateSelect/DateSelect"));
+var ErrorSuccessInfo_1 = __importDefault(require("../../common/ErrorSuccessInfo/ErrorSuccessInfo"));
 // redux
 var react_redux_1 = require("react-redux");
 var userActions_1 = require("../../redux/actions/userActions");
@@ -26,11 +29,11 @@ var mapStateToPRops = function (state) { return ({ UI: state.UI }); };
 var mapActionsToProps = { signup: userActions_1.signup };
 var connector = react_redux_1.connect(mapStateToPRops, mapActionsToProps);
 function RegisterForm(_a) {
-    var _b, _c, _d, _e, _f;
+    var _b;
     var signup = _a.signup, UI = _a.UI;
-    var _g = react_hook_form_1.useForm({
+    var _c = react_hook_form_1.useForm({
         mode: "onChange",
-    }), register = _g.register, handleSubmit = _g.handleSubmit, errors = _g.errors, formState = _g.formState, getValues = _g.getValues, setError = _g.setError, clearErrors = _g.clearErrors;
+    }), register = _c.register, handleSubmit = _c.handleSubmit, errors = _c.errors, formState = _c.formState, getValues = _c.getValues, setError = _c.setError, clearErrors = _c.clearErrors;
     var dirtyFields = formState.dirtyFields, isSubmitted = formState.isSubmitted;
     var onSubmit = function (data) {
         var _a = __assign({}, data), email = _a.email, username = _a.username, password = _a.password;
@@ -103,72 +106,43 @@ function RegisterForm(_a) {
     };
     return (react_1.default.createElement("form", { className: "form register-form", onSubmit: handleSubmit(onSubmit) },
         react_1.default.createElement("div", { className: "title" }, "Sign up to ChatApp"),
-        isSubmitted && errors.email && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left" }, (_b = errors.email) === null || _b === void 0 ? void 0 : _b.message)),
-        react_1.default.createElement("div", { className: "control has-icons-left" },
-            react_1.default.createElement("input", { className: "input is-large is-black has-text-white" +
-                    (isSubmitted && errors.email ? " is-error" : ""), name: "email", type: "email", placeholder: "Email", ref: register({
-                    required: { value: true, message: "This field is required" },
-                    pattern: {
-                        value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                        message: "Email address incorrect",
-                    },
-                }) }),
-            react_1.default.createElement("span", { className: "icon is-small is-left" },
-                react_1.default.createElement("i", { className: "fas fa-envelope" }))),
-        isSubmitted && errors.username && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left" }, (_c = errors.username) === null || _c === void 0 ? void 0 : _c.message)),
-        react_1.default.createElement("div", { className: "control has-icons-left" },
-            react_1.default.createElement("input", { className: "input is-large is-black has-text-white" +
-                    (isSubmitted && errors.username ? " is-error" : ""), name: "username", type: "text", placeholder: "Username", ref: register({
-                    required: { value: true, message: "This field is required" },
-                    maxLength: { value: 30, message: "Maximum 30 characters" },
-                }) }),
-            react_1.default.createElement("span", { className: "icon is-small is-left" },
-                react_1.default.createElement("i", { className: "fas fa-user" }))),
-        isSubmitted && errors.password && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left error" }, (_d = errors.password) === null || _d === void 0 ? void 0 : _d.message)),
-        react_1.default.createElement("div", { className: "control has-icons-left" },
-            react_1.default.createElement("input", { className: "input is-large is-black has-text-white" +
-                    (isSubmitted && errors.password ? " is-error" : ""), name: "password", type: "password", placeholder: "Password", ref: register({
-                    required: { value: true, message: "This field is required" },
-                    minLength: { value: 8, message: "Password too short" },
-                    pattern: {
-                        value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
-                        message: "Password too weak",
-                    },
-                }) }),
-            react_1.default.createElement("span", { className: "icon is-small is-left" },
-                react_1.default.createElement("i", { className: "fas fa-lock" }))),
-        isSubmitted && errors.confirm_password && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left error" }, (_e = errors.confirm_password) === null || _e === void 0 ? void 0 : _e.message)),
-        react_1.default.createElement("div", { className: "control has-icons-left" },
-            react_1.default.createElement("input", { className: "input is-large is-black has-text-white" +
-                    (isSubmitted && errors.confirm_password ? " is-error" : ""), name: "confirm_password", type: "password", placeholder: "Confirm password", ref: register({
-                    required: { value: true, message: "This field is required" },
-                    validate: function (value) {
-                        return value === getValues("password") ? true : "Passwords must match";
-                    },
-                }) }),
-            react_1.default.createElement("span", { className: "icon is-small is-left" },
-                react_1.default.createElement("i", { className: "fas fa-lock" }))),
+        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.email, name: "email", type: "email", placeholder: "Email", ref: register({
+                required: { value: true, message: "This field is required" },
+                pattern: {
+                    value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                    message: "Email address incorrect",
+                },
+            }) }),
+        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.username, name: "username", type: "text", placeholder: "Username", ref: register({
+                required: { value: true, message: "This field is required" },
+                maxLength: { value: 30, message: "Maximum 30 characters" },
+            }) }),
+        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.password, name: "password", type: "password", placeholder: "Password", ref: register({
+                required: { value: true, message: "This field is required" },
+                minLength: { value: 8, message: "Password too short" },
+                pattern: {
+                    value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+                    message: "Password too weak",
+                },
+            }) }),
+        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.confirm_password, name: "confirm_password", type: "password", placeholder: "Confirm password", ref: register({
+                required: { value: true, message: "This field is required" },
+                validate: function (value) {
+                    return value === getValues("password") ? true : "Passwords must match";
+                },
+            }) }),
         react_1.default.createElement("span", { className: "birth-date-label" }, "Date of birth"),
         react_1.default.createElement("div", { className: "date-selects" },
-            react_1.default.createElement("div", { className: "select" },
-                react_1.default.createElement("select", { name: "day", ref: register({
-                        validate: validateBirthDateInput,
-                    }), defaultValue: "Day" },
-                    react_1.default.createElement("option", { value: "Day", disabled: true, hidden: true }, "Day"),
-                    days.map(function (day) { return (react_1.default.createElement("option", { value: day, key: day }, day)); }))),
-            react_1.default.createElement("div", { className: "select" },
-                react_1.default.createElement("select", { name: "month", ref: register({
-                        validate: validateBirthDateInput,
-                    }), defaultValue: "Month" },
-                    react_1.default.createElement("option", { value: "Month", disabled: true, hidden: true }, "Month"),
-                    months.map(function (month, index) { return (react_1.default.createElement("option", { value: index, key: index }, month)); }))),
-            react_1.default.createElement("div", { className: "select" },
-                react_1.default.createElement("select", { name: "year", ref: register({
-                        validate: validateBirthDateInput,
-                    }), defaultValue: "Year" },
-                    react_1.default.createElement("option", { value: "Year", disabled: true, hidden: true }, "Year"),
-                    years.map(function (year) { return (react_1.default.createElement("option", { value: year, key: year }, year)); })))),
-        isSubmitted && errors.date && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left error date-error" }, (_f = errors.date) === null || _f === void 0 ? void 0 : _f.message)),
+            react_1.default.createElement(DateSelect_1.default, { name: "day", defaultValue: "Day", options: days, ref: register({
+                    validate: validateBirthDateInput,
+                }) }),
+            react_1.default.createElement(DateSelect_1.default, { name: "month", defaultValue: "Month", options: months, ref: register({
+                    validate: validateBirthDateInput,
+                }), optionsAreMonths: true }),
+            react_1.default.createElement(DateSelect_1.default, { name: "year", defaultValue: "Year", options: years, ref: register({
+                    validate: validateBirthDateInput,
+                }) })),
+        isSubmitted && errors.date && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left error date-error" }, (_b = errors.date) === null || _b === void 0 ? void 0 : _b.message)),
         react_1.default.createElement("label", { className: "is-pulled-left checkbox-label info" },
             react_1.default.createElement("input", { ref: register({
                     required: true,
@@ -176,11 +150,10 @@ function RegisterForm(_a) {
             " ",
             "I agree to the ",
             react_1.default.createElement("a", { href: "/terms" }, "terms and conditions")),
-        react_1.default.createElement("input", { className: "button is-primary is-medium register-button", type: "submit", value: "Sign in", disabled: Object.keys(dirtyFields).length === 0 ||
+        react_1.default.createElement("input", { className: "button form-button is-primary is-medium register-button", type: "submit", value: "Sign in", disabled: Object.keys(dirtyFields).length === 0 ||
                 Object.keys(dirtyFields).length !== Object.keys(getValues()).length }),
         react_1.default.createElement("span", { className: "is-pulled-left info" },
             react_1.default.createElement(react_router_dom_1.NavLink, { to: "/login" }, "Already signed up?")),
-        UI.error && (react_1.default.createElement("p", { className: "message error-message has-background-danger" }, UI.error)),
-        UI.success && (react_1.default.createElement("p", { className: "message error-message has-background-success" }, UI.success))));
+        react_1.default.createElement(ErrorSuccessInfo_1.default, { error: UI.error, success: UI.success })));
 }
 exports.default = connector(RegisterForm);
