@@ -116,13 +116,13 @@ var UserSchema = new mongoose_1.Schema({
         },
     },
     refreshToken: { type: String, required: true },
-    resetPasswordToken: { type: String },
+    temporaryToken: String,
 });
 /*** Instance methods ***/
 UserSchema.methods.toJSON = function () {
     var user = this;
-    var _a = user.toObject(), password = _a.password, sessions = _a.sessions, resetPasswordToken = _a.resetPasswordToken, userObject = __rest(_a, ["password", "sessions", "resetPasswordToken"]);
-    // return the document except the password and sessions (these shouldn't be made available)
+    var _a = user.toObject(), password = _a.password, refreshToken = _a.refreshToken, temporaryToken = _a.temporaryToken, userObject = __rest(_a, ["password", "refreshToken", "temporaryToken"]);
+    // return the document except the password and tokens (these shouldn't be made available)
     return userObject;
 };
 UserSchema.methods.generateAccessAuthToken = function () {
@@ -134,31 +134,6 @@ UserSchema.methods.generateAccessAuthToken = function () {
                 resolve(token);
             else
                 reject(error);
-        });
-    });
-};
-UserSchema.methods.createSession = function () {
-    return __awaiter(this, void 0, void 0, function () {
-        var user, refreshToken, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    user = this;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, user.generateToken()];
-                case 2:
-                    refreshToken = _a.sent();
-                    return [4 /*yield*/, saveSessionToDatabase(user, refreshToken)];
-                case 3:
-                    _a.sent();
-                    return [2 /*return*/, refreshToken];
-                case 4:
-                    error_1 = _a.sent();
-                    throw new Error("Failed to save session to database.\n" + error_1.toString());
-                case 5: return [2 /*return*/];
-            }
         });
     });
 };
@@ -224,28 +199,6 @@ UserSchema.pre("save", function (next) {
         next();
 });
 /*** Helpers ***/
-var saveSessionToDatabase = function (user, refreshToken) { return __awaiter(void 0, void 0, void 0, function () {
-    var error_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                user.sessions.push({ token: refreshToken });
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, user.save()];
-            case 2:
-                _a.sent();
-                // saved session successfully
-                return [2 /*return*/, refreshToken];
-            case 3:
-                error_2 = _a.sent();
-                Promise.reject(error_2.toString());
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
 var validAge = function (date) {
     var today = moment_1.default();
     var birthDay = moment_1.default(date, "DD-MM-YYYY");

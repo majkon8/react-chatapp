@@ -122,26 +122,24 @@ exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 password = req.body.password;
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 5, , 6]);
+                _a.trys.push([1, 4, , 5]);
                 return [4 /*yield*/, user_model_1.User.findByCredentials(email, password)];
             case 2:
                 user = _a.sent();
-                return [4 /*yield*/, user.createSession()];
-            case 3:
-                refreshToken = _a.sent();
+                refreshToken = user.refreshToken;
                 return [4 /*yield*/, user.generateAccessAuthToken()];
-            case 4:
+            case 3:
                 accessToken = _a.sent();
                 res.header("x-refresh-token", refreshToken);
                 res.header("x-access-token", accessToken);
                 res.send(user);
-                return [3 /*break*/, 6];
-            case 5:
+                return [3 /*break*/, 5];
+            case 4:
                 error_4 = _a.sent();
                 console.error(error_4);
                 res.status(400).send(error_4);
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
