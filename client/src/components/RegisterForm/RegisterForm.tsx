@@ -11,9 +11,9 @@ import { connect, ConnectedProps } from "react-redux";
 import { signup } from "../../redux/actions/userActions";
 import { IState } from "../../redux/store";
 
-const mapStateToPRops = (state: IState) => ({ UI: state.UI });
+const mapStateToProps = (state: IState) => ({ UI: state.UI });
 const mapActionsToProps = { signup };
-const connector = connect(mapStateToPRops, mapActionsToProps);
+const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 

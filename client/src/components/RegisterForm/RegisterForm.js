@@ -25,9 +25,9 @@ var ErrorSuccessInfo_1 = __importDefault(require("../../common/ErrorSuccessInfo/
 // redux
 var react_redux_1 = require("react-redux");
 var userActions_1 = require("../../redux/actions/userActions");
-var mapStateToPRops = function (state) { return ({ UI: state.UI }); };
+var mapStateToProps = function (state) { return ({ UI: state.UI }); };
 var mapActionsToProps = { signup: userActions_1.signup };
-var connector = react_redux_1.connect(mapStateToPRops, mapActionsToProps);
+var connector = react_redux_1.connect(mapStateToProps, mapActionsToProps);
 function RegisterForm(_a) {
     var _b;
     var signup = _a.signup, UI = _a.UI;

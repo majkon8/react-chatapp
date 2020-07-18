@@ -16,11 +16,11 @@ export type UserActionTypes = ISetAuthenticatedAction;
 // UI interfaces
 interface ISetErrorAction {
   type: typeof SET_ERROR;
-  payload: string;
+  payload: string | null;
 }
 interface ISetSuccessAction {
   type: typeof SET_SUCCESS;
-  payload: string;
+  payload: string | null;
 }
 interface ISetLoadingUIAction {
   type: typeof SET_LOADING_UI;

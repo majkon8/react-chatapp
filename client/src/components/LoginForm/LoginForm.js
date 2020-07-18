@@ -8,10 +8,17 @@ var react_hook_form_1 = require("react-hook-form");
 require("./LoginForm.scss");
 var react_router_dom_1 = require("react-router-dom");
 var FormInput_1 = __importDefault(require("../../common/FormInput/FormInput"));
-function LoginForm() {
-    var _a = react_hook_form_1.useForm({
+var ErrorSuccessInfo_1 = __importDefault(require("../../common/ErrorSuccessInfo/ErrorSuccessInfo"));
+// redux
+var react_redux_1 = require("react-redux");
+var mapStateToProps = function (state) { return ({ UI: state.UI }); };
+var mapActionsToProps = {};
+var connector = react_redux_1.connect(mapStateToProps, mapActionsToProps);
+function LoginForm(_a) {
+    var UI = _a.UI;
+    var _b = react_hook_form_1.useForm({
         mode: "onChange",
-    }), register = _a.register, handleSubmit = _a.handleSubmit, errors = _a.errors, formState = _a.formState;
+    }), register = _b.register, handleSubmit = _b.handleSubmit, errors = _b.errors, formState = _b.formState;
     var dirtyFields = formState.dirtyFields, isSubmitted = formState.isSubmitted;
     var onSubmit = function (data) { return console.log(data); };
     return (react_1.default.createElement("form", { className: "form", onSubmit: handleSubmit(onSubmit) },
@@ -43,6 +50,7 @@ function LoginForm() {
         react_1.default.createElement("input", { className: "button form-button is-primary is-medium", type: "submit", value: "Sign in", disabled: !dirtyFields.email || !dirtyFields.password }),
         react_1.default.createElement("span", { className: "is-pulled-left info" },
             "Don't have an account? ",
-            react_1.default.createElement(react_router_dom_1.NavLink, { to: "/register" }, "Sign up"))));
+            react_1.default.createElement(react_router_dom_1.NavLink, { to: "/register" }, "Sign up")),
+        react_1.default.createElement(ErrorSuccessInfo_1.default, { error: UI.error, success: UI.success })));
 }
-exports.default = LoginForm;
+exports.default = connector(LoginForm);

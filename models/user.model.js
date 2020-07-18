@@ -72,7 +72,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 var mongoose_1 = __importStar(require("mongoose"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var crypto_1 = __importDefault(require("crypto"));
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var moment_1 = __importDefault(require("moment/moment"));
 var jwtSecret = "2Z9M3M0YNxb770Gqog2ZzCqyXJXFkFCj5u1elOo509DGbO8fo5TQslzqTW9e2JYS";
@@ -115,8 +114,9 @@ var UserSchema = new mongoose_1.Schema({
             message: "Minimum age is 13",
         },
     },
-    refreshToken: { type: String, required: true },
+    refreshToken: String,
     temporaryToken: String,
+    confirmed: { type: Boolean, required: true, default: false },
 });
 /*** Instance methods ***/
 UserSchema.methods.toJSON = function () {
@@ -125,11 +125,12 @@ UserSchema.methods.toJSON = function () {
     // return the document except the password and tokens (these shouldn't be made available)
     return userObject;
 };
-UserSchema.methods.generateAccessAuthToken = function () {
+UserSchema.methods.generateToken = function (temporary) {
+    if (temporary === void 0) { temporary = false; }
     var user = this;
     return new Promise(function (resolve, reject) {
         // Create the JSON Web Token and return that
-        jsonwebtoken_1.default.sign({ _id: user._id.toHexString() }, jwtSecret, { expiresIn: "10m" }, function (error, token) {
+        jsonwebtoken_1.default.sign({ _id: user._id.toHexString() }, jwtSecret, { expiresIn: temporary ? "10m" : "9999 year" }, function (error, token) {
             if (!error)
                 resolve(token);
             else
@@ -137,8 +138,18 @@ UserSchema.methods.generateAccessAuthToken = function () {
         });
     });
 };
-UserSchema.methods;
+UserSchema.methods.createConfirmationEmail = function () {
+    var user = this;
+    var mailOptions = {
+        from: "majkonserver@gmail.com",
+        to: user.email,
+        subject: "Confirm your ChatApp account",
+        text: "Hello, visit the link below to confirm your account. \nlocalhost:3001/confirm/" + user.temporaryToken,
+    };
+    return mailOptions;
+};
 /*** Model methods (static methods) ***/
+UserSchema.statics.getJWTSecret = function () { return jwtSecret; };
 UserSchema.statics.findByCredentials = function (email, password) {
     return __awaiter(this, void 0, void 0, function () {
         var User, user;
@@ -162,23 +173,6 @@ UserSchema.statics.findByCredentials = function (email, password) {
                             });
                         })];
             }
-        });
-    });
-};
-UserSchema.statics.generateToken = function () {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/, new Promise(function (resolve, reject) {
-                    crypto_1.default.randomBytes(64, function (error, buf) {
-                        if (!error) {
-                            var token = buf.toString("hex");
-                            return resolve(token);
-                        }
-                        else {
-                            reject(error);
-                        }
-                    });
-                })];
         });
     });
 };

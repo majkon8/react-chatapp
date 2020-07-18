@@ -3,13 +3,26 @@ import { useForm } from "react-hook-form";
 import "./LoginForm.scss";
 import { NavLink } from "react-router-dom";
 import FormInput from "../../common/FormInput/FormInput";
+import ErrorSuccessInfo from "../../common/ErrorSuccessInfo/ErrorSuccessInfo";
+// redux
+import { connect, ConnectedProps } from "react-redux";
+import {} from "../../redux/actions/userActions";
+import { IState } from "../../redux/store";
+
+const mapStateToProps = (state: IState) => ({ UI: state.UI });
+const mapActionsToProps = {};
+const connector = connect(mapStateToProps, mapActionsToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux;
 
 interface IFormInputs {
   email: string;
   password: string;
 }
 
-export default function LoginForm() {
+function LoginForm({ UI }: Props) {
   const { register, handleSubmit, errors, formState } = useForm<IFormInputs>({
     mode: "onChange",
   });
@@ -71,6 +84,9 @@ export default function LoginForm() {
       <span className="is-pulled-left info">
         Don't have an account? <NavLink to="/register">Sign up</NavLink>
       </span>
+      <ErrorSuccessInfo error={UI.error} success={UI.success} />
     </form>
   );
 }
+
+export default connector(LoginForm);

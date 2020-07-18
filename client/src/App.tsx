@@ -13,6 +13,9 @@ import Register from "./pages/register/register";
 import ResetPassword from "./pages/reset-password/resetPassword";
 const Terms = lazy(() => import("./pages/terms/terms"));
 const PageNotFound = lazy(() => import("./pages/page-not-found/pageNotFound"));
+const ConfirmAccount = lazy(() =>
+  import("./pages/confirmAccount/confirmAccount")
+);
 
 function App() {
   const location = useLocation();
@@ -28,6 +31,7 @@ function App() {
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
               <Route path="/reset" component={ResetPassword} />
+              <Route path="/confirm/:token" component={ConfirmAccount} />
               <Route path="/terms" component={Terms} />
               <Route component={PageNotFound} />
             </Switch>

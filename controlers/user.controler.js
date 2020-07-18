@@ -35,9 +35,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.signup = exports.update = exports.findUser = void 0;
+exports.confirmAccount = exports.login = exports.signup = exports.update = exports.findUser = void 0;
 var user_model_1 = require("../models/user.model");
+var nodemailer_1 = __importDefault(require("nodemailer"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // GET ONE USER
 exports.findUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userId, user, error_1;
@@ -85,30 +90,39 @@ exports.update = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 // CREATE USER (SIGN UP)
 exports.signup = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var body, refreshToken, newUser, error_3;
+    var body, newUser, refreshToken, temporaryToken, mailOptions, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 body = req.body;
-                return [4 /*yield*/, user_model_1.User.generateToken()];
+                _a.label = 1;
             case 1:
-                refreshToken = _a.sent();
-                body.refreshToken = refreshToken;
+                _a.trys.push([1, 5, , 6]);
                 newUser = new user_model_1.User(body);
-                _a.label = 2;
+                return [4 /*yield*/, newUser.generateToken()];
             case 2:
-                _a.trys.push([2, 4, , 5]);
-                return [4 /*yield*/, newUser.save()];
+                refreshToken = _a.sent();
+                return [4 /*yield*/, newUser.generateToken()];
             case 3:
-                _a.sent();
-                res.send();
-                return [3 /*break*/, 5];
+                temporaryToken = _a.sent();
+                newUser.refreshToken = refreshToken;
+                newUser.temporaryToken = temporaryToken;
+                return [4 /*yield*/, newUser.save()];
             case 4:
+                _a.sent();
+                mailOptions = newUser.createConfirmationEmail();
+                transporter.sendMail(mailOptions, function (error) {
+                    if (error)
+                        return res.status(400).send(error);
+                    return res.send("success");
+                });
+                return [3 /*break*/, 6];
+            case 5:
                 error_3 = _a.sent();
                 console.error(error_3);
                 res.status(400).send(error_3);
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
         }
     });
 }); };
@@ -127,7 +141,7 @@ exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, f
             case 2:
                 user = _a.sent();
                 refreshToken = user.refreshToken;
-                return [4 /*yield*/, user.generateAccessAuthToken()];
+                return [4 /*yield*/, user.generateToken(true)];
             case 3:
                 accessToken = _a.sent();
                 res.header("x-refresh-token", refreshToken);
@@ -143,3 +157,39 @@ exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, f
         }
     });
 }); };
+// CONFIRM AN ACCOUNT
+exports.confirmAccount = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var temporaryToken, decodedToken, user;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                temporaryToken = req.params.token;
+                jsonwebtoken_1.default.verify(temporaryToken, user_model_1.User.getJWTSecret(), function (error, decoded) {
+                    if (error)
+                        return res.status(400).send(error);
+                    decodedToken = decoded;
+                });
+                return [4 /*yield*/, user_model_1.User.findOne({
+                        _id: decodedToken._id,
+                        temporaryToken: temporaryToken,
+                    }).exec()];
+            case 1:
+                user = _a.sent();
+                if (!user)
+                    res.status(400).send({ error: "User not found" });
+                user.confirmed = true;
+                return [4 /*yield*/, (user === null || user === void 0 ? void 0 : user.save())];
+            case 2:
+                _a.sent();
+                return [2 /*return*/, res.send("success")];
+        }
+    });
+}); };
+// HELPERS
+var transporter = nodemailer_1.default.createTransport({
+    service: "gmail",
+    auth: {
+        user: "majkonserver@gmail.com",
+        pass: "hp l1706",
+    },
+});

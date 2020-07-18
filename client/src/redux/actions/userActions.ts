@@ -35,3 +35,19 @@ export const signup = (userData: IUserData) => async (dispatch: Dispatch) => {
     dispatch({ type: SET_LOADING_UI, payload: false });
   }
 };
+
+export const confirmAccount = (token: string) => async (dispatch: Dispatch) => {
+  try {
+    await axios.get(`/users/confirm/${token}`);
+    dispatch({
+      type: SET_SUCCESS,
+      payload: "You can now log in",
+    });
+  } catch (error) {
+    console.error(error);
+    dispatch({
+      type: SET_ERROR,
+      payload: "Something went wrong. Try again later",
+    });
+  }
+};

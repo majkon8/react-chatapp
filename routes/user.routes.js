@@ -30,4 +30,6 @@ router.patch("/:id", users.update);
 router.post("/", users.signup);
 /* POST /users/login */
 router.post("/login", users.login);
+/* GET /users/confirm/:token */
+router.get("/confirm/:token", users.confirmAccount);
 module.exports = router;

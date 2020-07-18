@@ -7,19 +7,28 @@ import moment from "moment/moment";
 const jwtSecret =
   "2Z9M3M0YNxb770Gqog2ZzCqyXJXFkFCj5u1elOo509DGbO8fo5TQslzqTW9e2JYS";
 
-export interface IUserDocument extends Document {
+interface IMailOptions {
+  from: string;
+  to: string;
+  subject: string;
+  text: string;
+}
+
+interface IUserDocument extends Document {
   email: string;
   username: string;
   password: string;
   birthDate: Date;
   refreshToken: string;
   temporaryToken: string;
-  generateAccessAuthToken(): Promise<string>;
+  confirmed: boolean;
+  generateToken(temporary?: boolean): Promise<string>;
+  createConfirmationEmail(): IMailOptions;
 }
 
-export interface IUserModel extends Model<IUserDocument> {
+interface IUserModel extends Model<IUserDocument> {
   findByCredentials(email: string, password: string): Promise<IUserDocument>;
-  generateToken(): Promise<string>;
+  getJWTSecret(): string;
 }
 
 const UserSchema: Schema = new Schema({
@@ -59,8 +68,9 @@ const UserSchema: Schema = new Schema({
       message: "Minimum age is 13",
     },
   },
-  refreshToken: { type: String, required: true },
+  refreshToken: String,
   temporaryToken: String, // used for reseting password and cofirming user account
+  confirmed: { type: Boolean, required: true, default: false },
 });
 
 /*** Instance methods ***/
@@ -77,14 +87,16 @@ UserSchema.methods.toJSON = function (): Object {
   return userObject;
 };
 
-UserSchema.methods.generateAccessAuthToken = function (): Promise<string> {
+UserSchema.methods.generateToken = function (
+  temporary = false
+): Promise<string> {
   const user = this;
   return new Promise((resolve, reject) => {
     // Create the JSON Web Token and return that
     jwt.sign(
       { _id: user._id.toHexString() },
       jwtSecret,
-      { expiresIn: "10m" },
+      { expiresIn: temporary ? "10m" : "9999 year" },
       (error, token) => {
         if (!error) resolve(token);
         else reject(error);
@@ -93,9 +105,21 @@ UserSchema.methods.generateAccessAuthToken = function (): Promise<string> {
   });
 };
 
-UserSchema.methods;
+UserSchema.methods.createConfirmationEmail = function () {
+  const user = this;
+  const mailOptions = {
+    from: "majkonserver@gmail.com",
+    to: user.email,
+    subject: "Confirm your ChatApp account",
+    text: `Hello, visit the link below to confirm your account. 
+localhost:3001/confirm/${user.temporaryToken}`,
+  };
+  return mailOptions;
+};
 
 /*** Model methods (static methods) ***/
+
+UserSchema.statics.getJWTSecret = () => jwtSecret;
 
 UserSchema.statics.findByCredentials = async function (
   email: string,
@@ -110,19 +134,6 @@ UserSchema.statics.findByCredentials = async function (
         resolve(user);
       } else {
         reject("Wrong password");
-      }
-    });
-  });
-};
-
-UserSchema.statics.generateToken = async function (): Promise<string> {
-  return new Promise((resolve, reject) => {
-    crypto.randomBytes(64, (error, buf) => {
-      if (!error) {
-        const token = buf.toString("hex");
-        return resolve(token);
-      } else {
-        reject(error);
       }
     });
   });
