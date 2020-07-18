@@ -7,25 +7,19 @@ import moment from "moment/moment";
 const jwtSecret =
   "2Z9M3M0YNxb770Gqog2ZzCqyXJXFkFCj5u1elOo509DGbO8fo5TQslzqTW9e2JYS";
 
-export interface IToken {
-  token: string;
-  expiresAt?: number;
-}
-
 export interface IUserDocument extends Document {
   email: string;
   username: string;
   password: string;
   birthDate: Date;
-  sessions: IToken[];
-  resetPasswordToken: IToken;
+  refreshToken: string;
+  temporaryToken: string;
   generateAccessAuthToken(): Promise<string>;
-  generateToken(): Promise<void>;
-  createSession(): Promise<string>;
 }
 
 export interface IUserModel extends Model<IUserDocument> {
   findByCredentials(email: string, password: string): Promise<IUserDocument>;
+  generateToken(): Promise<string>;
 }
 
 const UserSchema: Schema = new Schema({
@@ -65,18 +59,8 @@ const UserSchema: Schema = new Schema({
       message: "Minimum age is 13",
     },
   },
-  sessions: [
-    {
-      token: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
-  resetPasswordToken: {
-    token: { type: String },
-    expiresAt: { type: Number },
-  },
+  refreshToken: { type: String, required: true },
+  temporaryToken: String, // used for reseting password and cofirming user account
 });
 
 /*** Instance methods ***/
@@ -85,11 +69,11 @@ UserSchema.methods.toJSON = function (): Object {
   const user = this;
   const {
     password,
-    sessions,
-    resetPasswordToken,
+    refreshToken,
+    temporaryToken,
     ...userObject
   } = user.toObject();
-  // return the document except the password and sessions (these shouldn't be made available)
+  // return the document except the password and tokens (these shouldn't be made available)
   return userObject;
 };
 
@@ -109,29 +93,7 @@ UserSchema.methods.generateAccessAuthToken = function (): Promise<string> {
   });
 };
 
-UserSchema.methods.generateToken = async function (): Promise<string> {
-  return new Promise((resolve, reject) => {
-    crypto.randomBytes(64, (error, buf) => {
-      if (!error) {
-        const token = buf.toString("hex");
-        return resolve(token);
-      } else {
-        reject(error);
-      }
-    });
-  });
-};
-
-UserSchema.methods.createSession = async function (): Promise<string> {
-  const user = this;
-  try {
-    const refreshToken = await user.generateToken();
-    await saveSessionToDatabase(user, refreshToken);
-    return refreshToken;
-  } catch (error) {
-    throw new Error("Failed to save session to database.\n" + error.toString());
-  }
-};
+UserSchema.methods;
 
 /*** Model methods (static methods) ***/
 
@@ -153,8 +115,22 @@ UserSchema.statics.findByCredentials = async function (
   });
 };
 
+UserSchema.statics.generateToken = async function (): Promise<string> {
+  return new Promise((resolve, reject) => {
+    crypto.randomBytes(64, (error, buf) => {
+      if (!error) {
+        const token = buf.toString("hex");
+        return resolve(token);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
 /*** Middleware ***/
 
+// hash password
 UserSchema.pre<IUserDocument>("save", function (next) {
   const user = this;
   const costFactor = 10;
@@ -169,17 +145,6 @@ UserSchema.pre<IUserDocument>("save", function (next) {
 });
 
 /*** Helpers ***/
-
-const saveSessionToDatabase = async (user: any, refreshToken: string) => {
-  user.sessions.push({ token: refreshToken });
-  try {
-    await user.save();
-    // saved session successfully
-    return refreshToken;
-  } catch (error) {
-    Promise.reject(error.toString());
-  }
-};
 
 const validAge = (date: Date) => {
   const today = moment();

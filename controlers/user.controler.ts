@@ -31,14 +31,12 @@ export const update = async (req: Request, res: Response) => {
 // CREATE USER (SIGN UP)
 export const signup = async (req: Request, res: Response) => {
   const body = req.body;
+  const refreshToken = await User.generateToken();
+  body.refreshToken = refreshToken;
   const newUser = new User(body);
   try {
     await newUser.save();
-    const refreshToken = await newUser.createSession();
-    const accessToken = await newUser.generateAccessAuthToken();
-    res.header("x-refresh-token", refreshToken);
-    res.header("x-access-token", accessToken);
-    res.send(newUser);
+    res.send();
   } catch (error) {
     console.error(error);
     res.status(400).send(error);
@@ -51,9 +49,7 @@ export const login = async (req: Request, res: Response) => {
   const password: string = req.body.password;
   try {
     const user = await User.findByCredentials(email, password);
-    const refreshToken = await user.createSession();
-    // Session created successfully - refreshToken returned.
-    // now we generate an access auth token for the user
+    const refreshToken = user.refreshToken;
     const accessToken = await user.generateAccessAuthToken();
     res.header("x-refresh-token", refreshToken);
     res.header("x-access-token", accessToken);

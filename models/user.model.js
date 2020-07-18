@@ -115,18 +115,8 @@ var UserSchema = new mongoose_1.Schema({
             message: "Minimum age is 13",
         },
     },
-    sessions: [
-        {
-            token: {
-                type: String,
-                required: true,
-            },
-        },
-    ],
-    resetPasswordToken: {
-        token: { type: String },
-        expiresAt: { type: Number },
-    },
+    refreshToken: { type: String, required: true },
+    resetPasswordToken: { type: String },
 });
 /*** Instance methods ***/
 UserSchema.methods.toJSON = function () {
@@ -144,23 +134,6 @@ UserSchema.methods.generateAccessAuthToken = function () {
                 resolve(token);
             else
                 reject(error);
-        });
-    });
-};
-UserSchema.methods.generateToken = function () {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/, new Promise(function (resolve, reject) {
-                    crypto_1.default.randomBytes(64, function (error, buf) {
-                        if (!error) {
-                            var token = buf.toString("hex");
-                            return resolve(token);
-                        }
-                        else {
-                            reject(error);
-                        }
-                    });
-                })];
         });
     });
 };
@@ -189,6 +162,7 @@ UserSchema.methods.createSession = function () {
         });
     });
 };
+UserSchema.methods;
 /*** Model methods (static methods) ***/
 UserSchema.statics.findByCredentials = function (email, password) {
     return __awaiter(this, void 0, void 0, function () {
@@ -216,7 +190,25 @@ UserSchema.statics.findByCredentials = function (email, password) {
         });
     });
 };
+UserSchema.statics.generateToken = function () {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, new Promise(function (resolve, reject) {
+                    crypto_1.default.randomBytes(64, function (error, buf) {
+                        if (!error) {
+                            var token = buf.toString("hex");
+                            return resolve(token);
+                        }
+                        else {
+                            reject(error);
+                        }
+                    });
+                })];
+        });
+    });
+};
 /*** Middleware ***/
+// hash password
 UserSchema.pre("save", function (next) {
     var user = this;
     var costFactor = 10;
