@@ -43,6 +43,8 @@ exports.externalLogin = exports.resetPassword = exports.forgotPassword = exports
 var user_model_1 = require("../models/user.model");
 var nodemailer_1 = __importDefault(require("nodemailer"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var google = require("googleapis").google;
+var OAuth2 = google.auth.OAuth2;
 // GET ONE USER
 exports.findUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userId, user, error_1;
@@ -123,7 +125,7 @@ exports.signup = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 // LOG IN
 exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password, user, refreshToken, accessToken, error_4;
+    var email, password, user, refreshToken, accessToken_1, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -140,9 +142,9 @@ exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 refreshToken = user.refreshToken;
                 return [4 /*yield*/, user.generateToken(true)];
             case 3:
-                accessToken = _a.sent();
+                accessToken_1 = _a.sent();
                 res.header("x-refresh-token", refreshToken);
-                res.header("x-access-token", accessToken);
+                res.header("x-access-token", accessToken_1);
                 return [2 /*return*/, res.send("success")];
             case 4:
                 error_4 = _a.sent();
@@ -271,7 +273,7 @@ exports.resetPassword = function (req, res) { return __awaiter(void 0, void 0, v
 }); };
 // LOG IN WITH FACEBOOK/GOOGLE
 exports.externalLogin = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var body, user, newUser, refreshToken, temporaryToken, accessToken, refreshToken, accessToken, error_8;
+    var body, user, newUser, refreshToken, temporaryToken, accessToken_2, refreshToken, accessToken_3, error_8;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -302,9 +304,9 @@ exports.externalLogin = function (req, res) { return __awaiter(void 0, void 0, v
                 _a.sent();
                 return [4 /*yield*/, newUser.generateToken(true)];
             case 6:
-                accessToken = _a.sent();
+                accessToken_2 = _a.sent();
                 res.header("x-refresh-token", refreshToken);
-                res.header("x-access-token", accessToken);
+                res.header("x-access-token", accessToken_2);
                 res.send("success");
                 _a.label = 7;
             case 7:
@@ -312,9 +314,9 @@ exports.externalLogin = function (req, res) { return __awaiter(void 0, void 0, v
                 refreshToken = user.refreshToken;
                 return [4 /*yield*/, user.generateToken(true)];
             case 8:
-                accessToken = _a.sent();
+                accessToken_3 = _a.sent();
                 res.header("x-refresh-token", refreshToken);
-                res.header("x-access-token", accessToken);
+                res.header("x-access-token", accessToken_3);
                 return [2 /*return*/, res.send("success")];
             case 9: return [3 /*break*/, 11];
             case 10:
@@ -327,10 +329,22 @@ exports.externalLogin = function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); };
 /*** Helpers ***/
+var oauth2Client = new OAuth2("394253008834-vbi64sr39onfv5gnolcpjibg5mv4h3gd.apps.googleusercontent.com", // ClientID
+"C9erMfqtobWCu28MdIXEutSc", // Client Secret
+"https://developers.google.com/oauthplayground" // Redirect URL
+);
+oauth2Client.setCredentials({
+    refresh_token: "1//04q7hvBT8OMJICgYIARAAGAQSNwF-L9Ir9PMa8PR9MezqTbWD6k6RnMuSnvuFzFCvT_gDoChGAH6wcUNeJ1th_NozcTOuc5Zs0Ik",
+});
+var accessToken = oauth2Client.getAccessToken();
 var transporter = nodemailer_1.default.createTransport({
     service: "gmail",
     auth: {
+        type: "OAuth2",
         user: "majkonserver@gmail.com",
-        pass: "hp l1706",
+        clientId: "394253008834-vbi64sr39onfv5gnolcpjibg5mv4h3gd.apps.googleusercontent.com",
+        clientSecret: "C9erMfqtobWCu28MdIXEutSc",
+        refreshToken: "1//04q7hvBT8OMJICgYIARAAGAQSNwF-L9Ir9PMa8PR9MezqTbWD6k6RnMuSnvuFzFCvT_gDoChGAH6wcUNeJ1th_NozcTOuc5Zs0Ik",
+        accessToken: accessToken,
     },
 });
