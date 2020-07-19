@@ -3,6 +3,13 @@ import { Request, Response } from "express";
 import nodeMailer from "nodemailer";
 import jwt from "jsonwebtoken";
 
+interface ISignupBody {
+  email: string;
+  username: string;
+  password: string;
+  birthDate: string;
+}
+
 // GET ONE USER
 export const findUser = async (req: Request, res: Response) => {
   const userId = req.params.id;
@@ -31,13 +38,6 @@ export const update = async (req: Request, res: Response) => {
 };
 
 // CREATE USER (SIGN UP)
-interface ISignupBody {
-  email: string;
-  username: string;
-  password: string;
-  birthDate: string;
-}
-
 export const signup = async (req: Request, res: Response) => {
   const body: ISignupBody = req.body;
   try {
@@ -70,7 +70,7 @@ export const login = async (req: Request, res: Response) => {
     const accessToken = await user.generateToken(true);
     res.header("x-refresh-token", refreshToken);
     res.header("x-access-token", accessToken);
-    return res.send(user);
+    return res.send("success");
   } catch (error) {
     console.error(error);
     if (error.error === "User not found") res.status(404);
@@ -143,6 +143,43 @@ export const resetPassword = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     return res.status(400).send(error);
+  }
+};
+
+// LOG IN WITH FACEBOOK/GOOGLE
+export const externalLogin = async (req: Request, res: Response) => {
+  const body: ISignupBody = req.body;
+  try {
+    const user = await User.findOne({ email: body.email });
+    // user already created an account with that email address internally
+    if (user && !user.createdExternally)
+      res.status(400).send({ error: "Email already registered" });
+    // create new account with user's facebook/google data and log him in
+    if (!user) {
+      const newUser = new User(body);
+      const refreshToken = await newUser.generateToken();
+      const temporaryToken = await newUser.generateToken();
+      newUser.refreshToken = refreshToken;
+      newUser.temporaryToken = temporaryToken;
+      newUser.createdExternally = true;
+      newUser.confirmed = true;
+      await newUser.save();
+      const accessToken = await newUser.generateToken(true);
+      res.header("x-refresh-token", refreshToken);
+      res.header("x-access-token", accessToken);
+      res.send("success");
+    }
+    // log in with facebook/google data
+    if (user && user.createdExternally) {
+      const refreshToken = user.refreshToken;
+      const accessToken = await user.generateToken(true);
+      res.header("x-refresh-token", refreshToken);
+      res.header("x-access-token", accessToken);
+      return res.send("success");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).send(error);
   }
 };
 

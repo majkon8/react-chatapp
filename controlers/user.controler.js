@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPassword = exports.forgotPassword = exports.confirmAccount = exports.login = exports.signup = exports.update = exports.findUser = void 0;
+exports.externalLogin = exports.resetPassword = exports.forgotPassword = exports.confirmAccount = exports.login = exports.signup = exports.update = exports.findUser = void 0;
 var user_model_1 = require("../models/user.model");
 var nodemailer_1 = __importDefault(require("nodemailer"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -84,6 +84,7 @@ exports.update = function (req, res) { return __awaiter(void 0, void 0, void 0, 
         }
     });
 }); };
+// CREATE USER (SIGN UP)
 exports.signup = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var body, newUser, refreshToken, temporaryToken, mailOptions, error_3;
     return __generator(this, function (_a) {
@@ -142,7 +143,7 @@ exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 accessToken = _a.sent();
                 res.header("x-refresh-token", refreshToken);
                 res.header("x-access-token", accessToken);
-                return [2 /*return*/, res.send(user)];
+                return [2 /*return*/, res.send("success")];
             case 4:
                 error_4 = _a.sent();
                 console.error(error_4);
@@ -265,6 +266,63 @@ exports.resetPassword = function (req, res) { return __awaiter(void 0, void 0, v
                 console.error(error_7);
                 return [2 /*return*/, res.status(400).send(error_7)];
             case 5: return [2 /*return*/];
+        }
+    });
+}); };
+// LOG IN WITH FACEBOOK/GOOGLE
+exports.externalLogin = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var body, user, newUser, refreshToken, temporaryToken, accessToken, refreshToken, accessToken, error_8;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                body = req.body;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 10, , 11]);
+                return [4 /*yield*/, user_model_1.User.findOne({ email: body.email })];
+            case 2:
+                user = _a.sent();
+                // user already created an account with that email address internally
+                if (user && !user.createdExternally)
+                    res.status(400).send({ error: "Email already registered" });
+                if (!!user) return [3 /*break*/, 7];
+                newUser = new user_model_1.User(body);
+                return [4 /*yield*/, newUser.generateToken()];
+            case 3:
+                refreshToken = _a.sent();
+                return [4 /*yield*/, newUser.generateToken()];
+            case 4:
+                temporaryToken = _a.sent();
+                newUser.refreshToken = refreshToken;
+                newUser.temporaryToken = temporaryToken;
+                newUser.createdExternally = true;
+                newUser.confirmed = true;
+                return [4 /*yield*/, newUser.save()];
+            case 5:
+                _a.sent();
+                return [4 /*yield*/, newUser.generateToken(true)];
+            case 6:
+                accessToken = _a.sent();
+                res.header("x-refresh-token", refreshToken);
+                res.header("x-access-token", accessToken);
+                res.send("success");
+                _a.label = 7;
+            case 7:
+                if (!(user && user.createdExternally)) return [3 /*break*/, 9];
+                refreshToken = user.refreshToken;
+                return [4 /*yield*/, user.generateToken(true)];
+            case 8:
+                accessToken = _a.sent();
+                res.header("x-refresh-token", refreshToken);
+                res.header("x-access-token", accessToken);
+                return [2 /*return*/, res.send("success")];
+            case 9: return [3 /*break*/, 11];
+            case 10:
+                error_8 = _a.sent();
+                console.error(error_8);
+                res.status(400).send(error_8);
+                return [3 /*break*/, 11];
+            case 11: return [2 /*return*/];
         }
     });
 }); };

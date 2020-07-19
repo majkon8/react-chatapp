@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPassword = exports.forgotPassword = exports.login = exports.confirmAccount = exports.signup = void 0;
+exports.externalLogin = exports.resetPassword = exports.forgotPassword = exports.login = exports.confirmAccount = exports.signup = void 0;
 var types_1 = require("../types");
 var axios_1 = __importDefault(require("axios"));
 exports.signup = function (userData) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
@@ -195,6 +195,41 @@ exports.resetPassword = function (data) { return function (dispatch) { return __
                     type: types_1.SET_ERROR,
                     payload: "Something went wrong. Try again later",
                 });
+                return [3 /*break*/, 5];
+            case 4:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                return [7 /*endfinally*/];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); }; };
+// source is 'facebook' or 'google'
+exports.externalLogin = function (data) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
+    var response, error_6;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, 4, 5]);
+                return [4 /*yield*/, axios_1.default.post("/users/login/external", data)];
+            case 2:
+                response = _a.sent();
+                dispatch({ type: types_1.SET_ERROR, payload: null });
+                dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
+                console.log(response);
+                return [3 /*break*/, 5];
+            case 3:
+                error_6 = _a.sent();
+                console.error(error_6);
+                if (error_6.response.data.error)
+                    dispatch({ type: types_1.SET_ERROR, payload: error_6.response.data.error });
+                else
+                    dispatch({
+                        type: types_1.SET_ERROR,
+                        payload: "Something went wrong. Try again later",
+                    });
                 return [3 /*break*/, 5];
             case 4:
                 dispatch({ type: types_1.SET_LOADING_UI, payload: false });

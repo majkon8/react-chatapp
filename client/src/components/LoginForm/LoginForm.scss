@@ -8,18 +8,9 @@
   .social-sign-buttons-container {
     display: flex;
 
-    .facebook-button {
-      background-color: #3b5998;
-      border-color: #3b5998;
-      color: white;
-      margin-right: 10px;
-    }
-
-    .google-button {
-      background-color: #db3236;
-      border-color: #db3236;
-      color: white;
-      margin-left: 10px;
+    // facebook button wrapper is a span element
+    span {
+      width: 100%;
     }
   }
 

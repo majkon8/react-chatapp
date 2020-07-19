@@ -29,6 +29,8 @@ var react_router_dom_1 = require("react-router-dom");
 var FormInput_1 = __importDefault(require("../../common/FormInput/FormInput"));
 var ErrorSuccessInfo_1 = __importDefault(require("../../common/ErrorSuccessInfo/ErrorSuccessInfo"));
 var SubmitButton_1 = __importDefault(require("../../common/SubmitButton/SubmitButton"));
+var FacebookLogin_1 = __importDefault(require("../FacebookLogin/FacebookLogin"));
+var GoogleLogin_1 = __importDefault(require("../GoogleLogin/GoogleLogin"));
 // redux
 var react_redux_1 = require("react-redux");
 var userActions_1 = require("../../redux/actions/userActions");
@@ -65,10 +67,8 @@ function LoginForm(_a) {
     return (react_1.default.createElement("form", { className: "form", onSubmit: handleSubmit(onSubmit) },
         react_1.default.createElement("div", { className: "title" }, "Sign in to ChatApp"),
         react_1.default.createElement("div", { className: "social-sign-buttons-container" },
-            react_1.default.createElement("button", { className: "button form-button facebook-button" },
-                react_1.default.createElement("i", { className: "fab fa-facebook-f", "aria-hidden": "true" })),
-            react_1.default.createElement("button", { className: "button form-button google-button" },
-                react_1.default.createElement("i", { className: "fab fa-google", "aria-hidden": "true" }))),
+            react_1.default.createElement(FacebookLogin_1.default, null),
+            react_1.default.createElement(GoogleLogin_1.default, null)),
         react_1.default.createElement("div", { className: "line-text" }, "OR"),
         react_1.default.createElement("div", { className: "line" }),
         react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.email, showEmailError: showEmailError, name: "email", type: "email", placeholder: "Email", ref: register({

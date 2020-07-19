@@ -1,0 +1,16 @@
+.facebook-button {
+  background-color: #3b5998;
+  border-color: #3b5998;
+  color: inherit;
+  margin-right: 10px;
+  width: 100%;
+
+  &:hover {
+    color: inherit;
+    border-color: #3b5998;
+  }
+
+  &:focus {
+    color: inherit;
+  }
+}

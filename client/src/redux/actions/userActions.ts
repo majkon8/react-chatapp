@@ -11,7 +11,12 @@ interface IUserData {
   username?: string;
   email: string;
   birthDate?: Date;
-  password: string;
+  password?: string;
+}
+
+interface IResetPasswordData {
+  newPassword: string;
+  token: string;
 }
 
 export const signup = (userData: IUserData) => async (dispatch: Dispatch) => {
@@ -94,11 +99,6 @@ export const forgotPassword = (email: string) => async (dispatch: Dispatch) => {
   }
 };
 
-interface IResetPasswordData {
-  newPassword: string;
-  token: string;
-}
-
 export const resetPassword = (data: IResetPasswordData) => async (
   dispatch: Dispatch
 ) => {
@@ -115,6 +115,29 @@ export const resetPassword = (data: IResetPasswordData) => async (
       type: SET_ERROR,
       payload: "Something went wrong. Try again later",
     });
+  } finally {
+    dispatch({ type: SET_LOADING_UI, payload: false });
+  }
+};
+
+// source is 'facebook' or 'google'
+export const externalLogin = (data: IUserData) => async (
+  dispatch: Dispatch
+) => {
+  dispatch({ type: SET_LOADING_UI, payload: true });
+  try {
+    await axios.post("/users/login/external", data);
+    dispatch({ type: SET_ERROR, payload: null });
+    dispatch({ type: SET_AUTHENTICATED, payload: true });
+  } catch (error) {
+    console.error(error);
+    if (error.response.data.error)
+      dispatch({ type: SET_ERROR, payload: error.response.data.error });
+    else
+      dispatch({
+        type: SET_ERROR,
+        payload: "Something went wrong. Try again later",
+      });
   } finally {
     dispatch({ type: SET_LOADING_UI, payload: false });
   }

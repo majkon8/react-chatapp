@@ -22,6 +22,7 @@ interface IUserDocument extends Document {
   refreshToken: string;
   temporaryToken: string;
   confirmed: boolean;
+  createdExternally: boolean;
   generateToken(temporary?: boolean): Promise<string>;
   createEmail(isConfirmationEmail: boolean): IMailOptions;
 }
@@ -51,8 +52,8 @@ const UserSchema: Schema = new Schema({
     trim: true,
   },
   password: {
+    // not required for facebook/google signed up users
     type: String,
-    required: [true, "Password is required"],
     minlength: [8, "Password too short"],
     validate: {
       validator: (password: string) =>
@@ -62,15 +63,15 @@ const UserSchema: Schema = new Schema({
   },
   birthDate: {
     type: Date,
-    required: [true, "Birth date is required"],
     validate: {
       validator: (date: Date) => validAge(date),
       message: "Minimum age is 13",
     },
   },
   refreshToken: String,
-  temporaryToken: String, // used for reseting password and cofirming user account
+  temporaryToken: String, // used for reseting password and confirming user account
   confirmed: { type: Boolean, required: true, default: false },
+  createdExternally: { type: Boolean, required: true, default: false },
 });
 
 /*** Instance methods ***/

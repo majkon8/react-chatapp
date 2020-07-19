@@ -36,4 +36,6 @@ router.get("/confirm/:token", users.confirmAccount);
 router.post("/forgot/", users.forgotPassword);
 /* POST /users/reset */
 router.post("/reset", users.resetPassword);
+/* POST /users/login/external */
+router.post("/login/external", users.externalLogin);
 module.exports = router;

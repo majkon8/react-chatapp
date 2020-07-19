@@ -97,8 +97,8 @@ var UserSchema = new mongoose_1.Schema({
         trim: true,
     },
     password: {
+        // not required for facebook/google signed up users
         type: String,
-        required: [true, "Password is required"],
         minlength: [8, "Password too short"],
         validate: {
             validator: function (password) {
@@ -109,7 +109,6 @@ var UserSchema = new mongoose_1.Schema({
     },
     birthDate: {
         type: Date,
-        required: [true, "Birth date is required"],
         validate: {
             validator: function (date) { return validAge(date); },
             message: "Minimum age is 13",
@@ -118,6 +117,7 @@ var UserSchema = new mongoose_1.Schema({
     refreshToken: String,
     temporaryToken: String,
     confirmed: { type: Boolean, required: true, default: false },
+    createdExternally: { type: Boolean, required: true, default: false },
 });
 /*** Instance methods ***/
 UserSchema.methods.toJSON = function () {

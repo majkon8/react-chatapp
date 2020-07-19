@@ -5,6 +5,8 @@ import { NavLink } from "react-router-dom";
 import FormInput from "../../common/FormInput/FormInput";
 import ErrorSuccessInfo from "../../common/ErrorSuccessInfo/ErrorSuccessInfo";
 import SubmitButton from "../../common/SubmitButton/SubmitButton";
+import FacebookLogin from "../FacebookLogin/FacebookLogin";
+import GoogleLogin from "../GoogleLogin/GoogleLogin";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { login, forgotPassword } from "../../redux/actions/userActions";
@@ -62,12 +64,8 @@ function LoginForm({ login, forgotPassword, UI }: Props) {
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
       <div className="title">Sign in to ChatApp</div>
       <div className="social-sign-buttons-container">
-        <button className="button form-button facebook-button">
-          <i className="fab fa-facebook-f" aria-hidden="true"></i>
-        </button>
-        <button className="button form-button google-button">
-          <i className="fab fa-google" aria-hidden="true"></i>
-        </button>
+        <FacebookLogin />
+        <GoogleLogin />
       </div>
       <div className="line-text">OR</div>
       <div className="line"></div>

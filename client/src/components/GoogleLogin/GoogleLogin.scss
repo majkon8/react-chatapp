@@ -1,0 +1,15 @@
+.google-button {
+  background-color: #db3236 !important;
+  border-color: #db3236 !important;
+  color: white;
+  margin-left: 10px;
+
+  &:hover {
+    color: inherit;
+    border-color: #db3236;
+  }
+
+  &:focus {
+    color: inherit;
+  }
+}
