@@ -1,8 +1,8 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import jwt from "jsonwebtoken";
-import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import moment from "moment/moment";
+import process from "process";
 
 const jwtSecret =
   "2Z9M3M0YNxb770Gqog2ZzCqyXJXFkFCj5u1elOo509DGbO8fo5TQslzqTW9e2JYS";
@@ -107,12 +107,16 @@ UserSchema.methods.generateToken = function (
 
 UserSchema.methods.createEmail = function (isConfirmationEmail: boolean) {
   const user = this;
+  const baseUrl =
+    !process.env.NODE_ENV || process.env.NODE_ENV === "development"
+      ? "localhost:3001"
+      : `https://safe-falls-82651.herokuapp.com`;
   const text = isConfirmationEmail
     ? `Hello, visit the page below to confirm your account. 
-localhost:3001/confirm/${user.temporaryToken}`
+${baseUrl}/confirm/${user.temporaryToken}`
     : `Hello, visit the page below to reset your password. 
 The link will expire in 10 minutes of sending the email.
-localhost:3001/reset/${user.temporaryToken}`;
+${baseUrl}/reset/${user.temporaryToken}`;
   const mailOptions = {
     from: "majkonserver@gmail.com",
     to: user.email,
