@@ -205,7 +205,7 @@ exports.resetPassword = function (data) { return function (dispatch) { return __
 }); }; };
 // source is 'facebook' or 'google'
 exports.externalLogin = function (data) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-    var response, error_6;
+    var error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -215,10 +215,9 @@ exports.externalLogin = function (data) { return function (dispatch) { return __
                 _a.trys.push([1, 3, 4, 5]);
                 return [4 /*yield*/, axios_1.default.post("/users/login/external", data)];
             case 2:
-                response = _a.sent();
+                _a.sent();
                 dispatch({ type: types_1.SET_ERROR, payload: null });
                 dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
-                console.log(response);
                 return [3 /*break*/, 5];
             case 3:
                 error_6 = _a.sent();
