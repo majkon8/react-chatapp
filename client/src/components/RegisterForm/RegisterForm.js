@@ -22,6 +22,7 @@ var react_router_dom_1 = require("react-router-dom");
 var FormInput_1 = __importDefault(require("../../common/FormInput/FormInput"));
 var DateSelect_1 = __importDefault(require("../../common/DateSelect/DateSelect"));
 var ErrorSuccessInfo_1 = __importDefault(require("../../common/ErrorSuccessInfo/ErrorSuccessInfo"));
+var SubmitButton_1 = __importDefault(require("../../common/SubmitButton/SubmitButton"));
 // redux
 var react_redux_1 = require("react-redux");
 var userActions_1 = require("../../redux/actions/userActions");
@@ -39,6 +40,11 @@ function RegisterForm(_a) {
         var _a = __assign({}, data), email = _a.email, username = _a.username, password = _a.password;
         if (!(Object.keys(errors).length === 0))
             return;
+        if (username !== username.trim())
+            setError("username", {
+                type: "manual",
+                message: "Cannot start or end with space",
+            });
         var birthDate = new Date(+data.year, +data.month, 1 + +data.day);
         var userData = { email: email, username: username, password: password, birthDate: birthDate };
         signup(userData);
@@ -150,8 +156,8 @@ function RegisterForm(_a) {
             " ",
             "I agree to the ",
             react_1.default.createElement("a", { href: "/terms" }, "terms and conditions")),
-        react_1.default.createElement("input", { className: "button form-button is-primary is-medium register-button", type: "submit", value: "Sign in", disabled: Object.keys(dirtyFields).length === 0 ||
-                Object.keys(dirtyFields).length !== Object.keys(getValues()).length }),
+        react_1.default.createElement(SubmitButton_1.default, { hasMarginTop: false, text: "Sign up", disabled: Object.keys(dirtyFields).length === 0 ||
+                Object.keys(dirtyFields).length !== Object.keys(getValues()).length, loading: UI.loading }),
         react_1.default.createElement("span", { className: "is-pulled-left info" },
             react_1.default.createElement(react_router_dom_1.NavLink, { to: "/login" }, "Already signed up?")),
         react_1.default.createElement(ErrorSuccessInfo_1.default, { error: UI.error, success: UI.success })));

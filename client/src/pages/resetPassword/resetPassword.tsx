@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import ResetPasswordForm from "../../components/ResetPasswordForm/ResetPasswordForm";
 import { pageVariants, pageTransition } from "../login/login";
 
-export default function Login() {
+export default function Login({ match }: any) {
   return (
     <motion.div
       initial="initial"
@@ -13,7 +13,7 @@ export default function Login() {
       transition={pageTransition}
       className="login-page-container"
     >
-      <ResetPasswordForm />
+      <ResetPasswordForm token={match.params.token} />
     </motion.div>
   );
 }

@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./LoginForm.scss";
 import { NavLink } from "react-router-dom";
 import FormInput from "../../common/FormInput/FormInput";
 import ErrorSuccessInfo from "../../common/ErrorSuccessInfo/ErrorSuccessInfo";
+import SubmitButton from "../../common/SubmitButton/SubmitButton";
 // redux
 import { connect, ConnectedProps } from "react-redux";
-import {} from "../../redux/actions/userActions";
+import { login, forgotPassword } from "../../redux/actions/userActions";
 import { IState } from "../../redux/store";
 
 const mapStateToProps = (state: IState) => ({ UI: state.UI });
-const mapActionsToProps = {};
+const mapActionsToProps = { login, forgotPassword };
 const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -22,13 +23,40 @@ interface IFormInputs {
   password: string;
 }
 
-function LoginForm({ UI }: Props) {
-  const { register, handleSubmit, errors, formState } = useForm<IFormInputs>({
+function LoginForm({ login, forgotPassword, UI }: Props) {
+  const [showEmailError, setShowEmailError] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    errors,
+    formState,
+    getValues,
+    setError,
+  } = useForm<IFormInputs>({
     mode: "onChange",
   });
-  const { dirtyFields, isSubmitted } = formState;
+  const { dirtyFields } = formState;
+  let { isSubmitted } = formState;
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: IFormInputs) => {
+    const userData = { email: data.email, password: data.password };
+    if (!(Object.keys(errors).length === 0)) return;
+    login(userData);
+  };
+
+  const handleForgotPassword = () => {
+    const email = getValues("email");
+    if (!email)
+      setError("email", {
+        type: "manual",
+        message: "This field is required",
+      });
+    if (errors.email) {
+      setShowEmailError(true);
+      return;
+    }
+    forgotPassword(email);
+  };
 
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
@@ -46,6 +74,7 @@ function LoginForm({ UI }: Props) {
       <FormInput
         isSubmitted={isSubmitted}
         error={errors.email}
+        showEmailError={showEmailError}
         name="email"
         type="email"
         placeholder="Email"
@@ -73,13 +102,13 @@ function LoginForm({ UI }: Props) {
         })}
       />
       <span className="is-pulled-left forgot info">
-        <a>Forgot password?</a>
+        <a onClick={handleForgotPassword}>Forgot password?</a>
       </span>
-      <input
-        className="button form-button is-primary is-medium"
-        type="submit"
-        value="Sign in"
+      <SubmitButton
+        hasMarginTop={true}
+        text="Sign in"
         disabled={!dirtyFields.email || !dirtyFields.password}
+        loading={UI.loading}
       />
       <span className="is-pulled-left info">
         Don't have an account? <NavLink to="/register">Sign up</NavLink>

@@ -139,14 +139,19 @@ function Home() {
             .to(welcomeMessageSmall.current, 0.5, { opacity: 1 });
     }, []);
     var toggleOpen = function () { return setIsSideOpen(!isSideOpen); };
-    return (react_1.default.createElement(framer_motion_1.motion.div, { ref: wrapper, initial: "initial", animate: "in", exit: "out", variants: exports.pageVariants, transition: exports.pageTransition, style: { backgroundColor: "white", position: "absolute", width: "100%" } },
+    return (react_1.default.createElement(framer_motion_1.motion.div, { ref: wrapper, initial: "initial", animate: "in", exit: "out", variants: exports.pageVariants, transition: exports.pageTransition, style: {
+            backgroundColor: "white",
+            position: "absolute",
+            width: "100%",
+            overflowX: "hidden",
+        } },
         react_1.default.createElement("div", { className: "container" },
             react_1.default.createElement(Navbar_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen }),
             react_1.default.createElement(SideNav_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen })),
         react_1.default.createElement("div", { className: "welcome-message" },
             react_1.default.createElement("div", { ref: welcomeMessageBig, className: "big" }, "Your place for chatting"),
             react_1.default.createElement("div", { ref: welcomeMessageSmall, className: "small" }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut dictum sapien. Maecenas elementum enim et ullamcorper iaculis. Sed maximus velit et quam ullamcorper, non malesuada purus aliquam.")),
-        react_1.default.createElement(react_lottie_1.default, { style: { position: "relative", top: width > 1024 ? -80 : 0 }, width: "100%", options: {
+        react_1.default.createElement(react_lottie_1.default, { style: { position: "relative", top: 0 }, width: "100%", options: {
                 loop: true,
                 autoplay: true,
                 animationData: homeAnimation_json_1.default,

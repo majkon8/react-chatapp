@@ -51,9 +51,6 @@ function Navbar(_a) {
             react_1.default.createElement("a", { href: "/#support", className: "has-text-dark nav-item" }, "Support"),
             react_1.default.createElement("a", { href: "/#download", className: "has-text-dark nav-item" }, "Download")),
         react_1.default.createElement(react_router_dom_1.NavLink, { to: "/login", className: "login" },
-            react_1.default.createElement("button", { ref: loginButton, className: "button is-primary is-rounded is-pulled-right navbar-login-button" }, "Sign in")),
-        react_1.default.createElement("button", { onClick: toggleOpen, className: "hamburger hamburger--squeeze" + (isOpen && " is-active"), type: "button" },
-            react_1.default.createElement("span", { className: "hamburger-box" },
-                react_1.default.createElement("span", { className: "hamburger-inner" })))));
+            react_1.default.createElement("button", { ref: loginButton, className: "button is-primary is-rounded is-pulled-right navbar-login-button" }, "Sign in"))));
 }
 exports.default = Navbar;

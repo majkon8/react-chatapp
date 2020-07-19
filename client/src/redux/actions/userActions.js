@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.confirmAccount = exports.signup = void 0;
+exports.resetPassword = exports.forgotPassword = exports.login = exports.confirmAccount = exports.signup = void 0;
 var types_1 = require("../types");
 var axios_1 = __importDefault(require("axios"));
 exports.signup = function (userData) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
@@ -100,6 +100,106 @@ exports.confirmAccount = function (token) { return function (dispatch) { return 
                 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
+        }
+    });
+}); }; };
+exports.login = function (userData) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
+    var error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, 4, 5]);
+                return [4 /*yield*/, axios_1.default.post("/users/login", userData)];
+            case 2:
+                _a.sent();
+                dispatch({ type: types_1.SET_ERROR, payload: null });
+                dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
+                return [3 /*break*/, 5];
+            case 3:
+                error_3 = _a.sent();
+                console.error(error_3);
+                if (error_3.response.data.error)
+                    dispatch({ type: types_1.SET_ERROR, payload: error_3.response.data.error });
+                else
+                    dispatch({
+                        type: types_1.SET_ERROR,
+                        payload: "Something went wrong. Try again later",
+                    });
+                return [3 /*break*/, 5];
+            case 4:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                return [7 /*endfinally*/];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); }; };
+exports.forgotPassword = function (email) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
+    var error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, 4, 5]);
+                return [4 /*yield*/, axios_1.default.post("/users/forgot", { email: email })];
+            case 2:
+                _a.sent();
+                dispatch({
+                    type: types_1.SET_SUCCESS,
+                    payload: "Reset password email sent",
+                });
+                return [3 /*break*/, 5];
+            case 3:
+                error_4 = _a.sent();
+                console.error(error_4);
+                if (error_4.response.data.error)
+                    dispatch({ type: types_1.SET_ERROR, payload: error_4.response.data.error });
+                else
+                    dispatch({
+                        type: types_1.SET_ERROR,
+                        payload: "Something went wrong. Try again later",
+                    });
+                return [3 /*break*/, 5];
+            case 4:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                return [7 /*endfinally*/];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); }; };
+exports.resetPassword = function (data) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
+    var error_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, 4, 5]);
+                return [4 /*yield*/, axios_1.default.post("/users/reset", data)];
+            case 2:
+                _a.sent();
+                dispatch({
+                    type: types_1.SET_SUCCESS,
+                    payload: "Password changed",
+                });
+                return [3 /*break*/, 5];
+            case 3:
+                error_5 = _a.sent();
+                console.error(error_5);
+                dispatch({
+                    type: types_1.SET_ERROR,
+                    payload: "Something went wrong. Try again later",
+                });
+                return [3 /*break*/, 5];
+            case 4:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                return [7 /*endfinally*/];
+            case 5: return [2 /*return*/];
         }
     });
 }); }; };

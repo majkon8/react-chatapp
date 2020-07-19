@@ -1,13 +1,28 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import FormInput from "../../common/FormInput/FormInput";
+import SubmitButton from "../../common/SubmitButton/SubmitButton";
+import { NavLink } from "react-router-dom";
+import ErrorSuccessInfo from "../../common/ErrorSuccessInfo/ErrorSuccessInfo";
+// redux
+import { connect, ConnectedProps } from "react-redux";
+import { resetPassword } from "../../redux/actions/userActions";
+import { IState } from "../../redux/store";
+
+const mapStateToProps = (state: IState) => ({ UI: state.UI });
+const mapActionsToProps = { resetPassword };
+const connector = connect(mapStateToProps, mapActionsToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & { token: string };
 
 interface IFormInputs {
   password: string;
   confirm_password: string;
 }
 
-export default function RegisterForm() {
+function ResetPasswordForm({ token, resetPassword, UI }: Props) {
   const { register, handleSubmit, errors, formState, getValues } = useForm<
     IFormInputs
   >({
@@ -15,7 +30,11 @@ export default function RegisterForm() {
   });
   const { dirtyFields, isSubmitted } = formState;
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: IFormInputs) => {
+    const requestData = { newPassword: data.password, token };
+    if (!(Object.keys(errors).length === 0)) return;
+    resetPassword(requestData);
+  };
 
   return (
     <form className="form register-form" onSubmit={handleSubmit(onSubmit)}>
@@ -47,12 +66,18 @@ export default function RegisterForm() {
             value === getValues("password") ? true : "Passwords must match",
         })}
       />
-      <input
-        className="button form-button is-primary is-medium register-button"
-        type="submit"
-        value="Sign in"
+      <SubmitButton
+        hasMarginTop={false}
+        text="Reset password"
         disabled={!dirtyFields.password || !dirtyFields.confirm_password}
+        loading={UI.loading}
       />
+      <span className="is-pulled-left info">
+        <NavLink to="/login">Sign in</NavLink>
+      </span>
+      <ErrorSuccessInfo error={UI.error} success={UI.success} />
     </form>
   );
 }
+
+export default connector(ResetPasswordForm);

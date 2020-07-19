@@ -22,12 +22,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
 require("./FormInput.scss");
 function FormInput(props, ref) {
-    var isSubmitted = props.isSubmitted, error = props.error, name = props.name, type = props.type, placeholder = props.placeholder;
+    var _a = props.showEmailError, showEmailError = _a === void 0 ? false : _a, isSubmitted = props.isSubmitted, error = props.error, name = props.name, type = props.type, placeholder = props.placeholder;
     return (react_1.default.createElement(react_1.default.Fragment, null,
-        isSubmitted && error && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left" }, error.message)),
+        ((isSubmitted && error) || (error && showEmailError)) && (react_1.default.createElement("span", { className: "has-text-danger is-pulled-left" }, error.message)),
         react_1.default.createElement("div", { className: "control has-icons-left" },
-            react_1.default.createElement("input", { className: "input is-large is-black has-text-white" +
-                    (isSubmitted && error ? " is-error" : ""), name: name, type: type, placeholder: placeholder, ref: ref }),
+            react_1.default.createElement("input", { className: "input is-large is-black has-text-white\n            " + (((isSubmitted && error) || (error && showEmailError)) &&
+                    "is-error"), name: name, type: type, placeholder: placeholder, ref: ref }),
             react_1.default.createElement("span", { className: "icon is-small is-left" },
                 react_1.default.createElement("i", { className: "fas fa-envelope" })))));
 }

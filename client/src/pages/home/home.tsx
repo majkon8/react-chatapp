@@ -137,7 +137,12 @@ export default function Home() {
       exit="out"
       variants={pageVariants}
       transition={pageTransition}
-      style={{ backgroundColor: "white", position: "absolute", width: "100%" }}
+      style={{
+        backgroundColor: "white",
+        position: "absolute",
+        width: "100%",
+        overflowX: "hidden",
+      }}
     >
       <div className="container">
         <Navbar toggleOpen={toggleOpen} isOpen={isSideOpen} />
@@ -155,7 +160,7 @@ export default function Home() {
         </div>
       </div>
       <Lottie
-        style={{ position: "relative", top: width > 1024 ? -80 : 0 }}
+        style={{ position: "relative", top: 0 }}
         width="100%"
         options={{
           loop: true,

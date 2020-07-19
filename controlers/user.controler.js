@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.confirmAccount = exports.login = exports.signup = exports.update = exports.findUser = void 0;
+exports.resetPassword = exports.forgotPassword = exports.confirmAccount = exports.login = exports.signup = exports.update = exports.findUser = void 0;
 var user_model_1 = require("../models/user.model");
 var nodemailer_1 = __importDefault(require("nodemailer"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -56,13 +56,11 @@ exports.findUser = function (req, res) { return __awaiter(void 0, void 0, void 0
                 return [4 /*yield*/, user_model_1.User.findById(userId)];
             case 2:
                 user = _a.sent();
-                res.send(user);
-                return [3 /*break*/, 4];
+                return [2 /*return*/, res.send(user)];
             case 3:
                 error_1 = _a.sent();
                 console.error(error_1);
-                res.status(400).send(error_1);
-                return [3 /*break*/, 4];
+                return [2 /*return*/, res.status(400).send(error_1)];
             case 4: return [2 /*return*/];
         }
     });
@@ -77,18 +75,15 @@ exports.update = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, user_model_1.User.findByIdAndUpdate(req.params.id, { $set: req.body.result }, { new: true })];
             case 1:
                 user = _a.sent();
-                res.send(user);
-                return [3 /*break*/, 3];
+                return [2 /*return*/, res.send(user)];
             case 2:
                 error_2 = _a.sent();
                 console.error(error_2);
-                res.status(400).send(error_2);
-                return [3 /*break*/, 3];
+                return [2 /*return*/, res.status(400).send(error_2)];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-// CREATE USER (SIGN UP)
 exports.signup = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var body, newUser, refreshToken, temporaryToken, mailOptions, error_3;
     return __generator(this, function (_a) {
@@ -110,7 +105,7 @@ exports.signup = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, newUser.save()];
             case 4:
                 _a.sent();
-                mailOptions = newUser.createConfirmationEmail();
+                mailOptions = newUser.createEmail(true);
                 transporter.sendMail(mailOptions, function (error) {
                     if (error)
                         return res.status(400).send(error);
@@ -120,8 +115,7 @@ exports.signup = function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 5:
                 error_3 = _a.sent();
                 console.error(error_3);
-                res.status(400).send(error_3);
-                return [3 /*break*/, 6];
+                return [2 /*return*/, res.status(400).send(error_3)];
             case 6: return [2 /*return*/];
         }
     });
@@ -140,30 +134,37 @@ exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 return [4 /*yield*/, user_model_1.User.findByCredentials(email, password)];
             case 2:
                 user = _a.sent();
+                if (!user.confirmed)
+                    return [2 /*return*/, res.status(400).send({ error: "Account not confirmed" })];
                 refreshToken = user.refreshToken;
                 return [4 /*yield*/, user.generateToken(true)];
             case 3:
                 accessToken = _a.sent();
                 res.header("x-refresh-token", refreshToken);
                 res.header("x-access-token", accessToken);
-                res.send(user);
-                return [3 /*break*/, 5];
+                return [2 /*return*/, res.send(user)];
             case 4:
                 error_4 = _a.sent();
                 console.error(error_4);
-                res.status(400).send(error_4);
-                return [3 /*break*/, 5];
+                if (error_4.error === "User not found")
+                    res.status(404);
+                else
+                    res.status(400);
+                return [2 /*return*/, res.send(error_4)];
             case 5: return [2 /*return*/];
         }
     });
 }); };
 // CONFIRM AN ACCOUNT
 exports.confirmAccount = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var temporaryToken, decodedToken, user;
+    var temporaryToken, decodedToken, user, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 temporaryToken = req.params.token;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 4, , 5]);
                 jsonwebtoken_1.default.verify(temporaryToken, user_model_1.User.getJWTSecret(), function (error, decoded) {
                     if (error)
                         return res.status(400).send(error);
@@ -172,20 +173,102 @@ exports.confirmAccount = function (req, res) { return __awaiter(void 0, void 0, 
                 return [4 /*yield*/, user_model_1.User.findOne({
                         _id: decodedToken._id,
                         temporaryToken: temporaryToken,
-                    }).exec()];
-            case 1:
+                    })];
+            case 2:
                 user = _a.sent();
                 if (!user)
-                    res.status(400).send({ error: "User not found" });
+                    res.status(404).send({ error: "User not found" });
                 user.confirmed = true;
                 return [4 /*yield*/, (user === null || user === void 0 ? void 0 : user.save())];
-            case 2:
+            case 3:
                 _a.sent();
                 return [2 /*return*/, res.send("success")];
+            case 4:
+                error_5 = _a.sent();
+                console.error(error_5);
+                res.status(400).send(error_5);
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
-// HELPERS
+// SEND FORGOT PASSWORD EMAIL
+exports.forgotPassword = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var email, user, temporaryToken, mailOptions, error_6;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                email = req.body.email;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 5, , 6]);
+                return [4 /*yield*/, user_model_1.User.findOne({ email: email })];
+            case 2:
+                user = _a.sent();
+                if (!user)
+                    return [2 /*return*/, res.status(404).send({ error: "User not found" })];
+                return [4 /*yield*/, user.generateToken(true)];
+            case 3:
+                temporaryToken = _a.sent();
+                user.temporaryToken = temporaryToken;
+                return [4 /*yield*/, user.save()];
+            case 4:
+                _a.sent();
+                mailOptions = user.createEmail(false);
+                transporter.sendMail(mailOptions, function (error) {
+                    if (error)
+                        return res.status(400).send(error);
+                    return res.send("success");
+                });
+                return [3 /*break*/, 6];
+            case 5:
+                error_6 = _a.sent();
+                console.error(error_6);
+                res.status(400).send(error_6);
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
+// RESET PASSWORD
+exports.resetPassword = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var newPassword, temporaryToken, decodedToken, user, error_7;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                newPassword = req.body.newPassword;
+                temporaryToken = req.body.token;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 4, , 5]);
+                jsonwebtoken_1.default.verify(temporaryToken, user_model_1.User.getJWTSecret(), function (error, decoded) {
+                    if (error)
+                        return res.status(400).send(error);
+                    decodedToken = decoded;
+                });
+                return [4 /*yield*/, user_model_1.User.findOne({
+                        _id: decodedToken._id,
+                        temporaryToken: temporaryToken,
+                    })];
+            case 2:
+                user = _a.sent();
+                if (!user)
+                    return [2 /*return*/, res.status(404).send({ error: "User not found" })];
+                user.password = newPassword;
+                return [4 /*yield*/, user.save()];
+            case 3:
+                _a.sent();
+                res.send("success");
+                return [3 /*break*/, 5];
+            case 4:
+                error_7 = _a.sent();
+                console.error(error_7);
+                return [2 /*return*/, res.status(400).send(error_7)];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); };
+/*** Helpers ***/
 var transporter = nodemailer_1.default.createTransport({
     service: "gmail",
     auth: {

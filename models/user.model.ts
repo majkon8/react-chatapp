@@ -23,7 +23,7 @@ interface IUserDocument extends Document {
   temporaryToken: string;
   confirmed: boolean;
   generateToken(temporary?: boolean): Promise<string>;
-  createConfirmationEmail(): IMailOptions;
+  createEmail(isConfirmationEmail: boolean): IMailOptions;
 }
 
 interface IUserModel extends Model<IUserDocument> {
@@ -96,7 +96,7 @@ UserSchema.methods.generateToken = function (
     jwt.sign(
       { _id: user._id.toHexString() },
       jwtSecret,
-      { expiresIn: temporary ? "10m" : "9999 year" },
+      { expiresIn: temporary ? "10m" : "9999 years" },
       (error, token) => {
         if (!error) resolve(token);
         else reject(error);
@@ -105,14 +105,19 @@ UserSchema.methods.generateToken = function (
   });
 };
 
-UserSchema.methods.createConfirmationEmail = function () {
+UserSchema.methods.createEmail = function (isConfirmationEmail: boolean) {
   const user = this;
+  const text = isConfirmationEmail
+    ? `Hello, visit the page below to confirm your account. 
+localhost:3001/confirm/${user.temporaryToken}`
+    : `Hello, visit the page below to reset your password. 
+The link will expire in 10 minutes of sending the email.
+localhost:3001/reset/${user.temporaryToken}`;
   const mailOptions = {
     from: "majkonserver@gmail.com",
     to: user.email,
     subject: "Confirm your ChatApp account",
-    text: `Hello, visit the link below to confirm your account. 
-localhost:3001/confirm/${user.temporaryToken}`,
+    text,
   };
   return mailOptions;
 };
@@ -127,13 +132,13 @@ UserSchema.statics.findByCredentials = async function (
 ): Promise<IUserDocument> {
   const User = this;
   const user: IUserDocument = await User.findOne({ email });
-  if (!user) return Promise.reject("User not found");
+  if (!user) return Promise.reject({ error: "User not found" });
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, user.password, (error, res) => {
       if (res) {
         resolve(user);
       } else {
-        reject("Wrong password");
+        reject({ error: "Wrong password" });
       }
     });
   });

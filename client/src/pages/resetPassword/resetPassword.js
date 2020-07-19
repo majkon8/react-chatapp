@@ -7,8 +7,9 @@ var react_1 = __importDefault(require("react"));
 var framer_motion_1 = require("framer-motion");
 var ResetPasswordForm_1 = __importDefault(require("../../components/ResetPasswordForm/ResetPasswordForm"));
 var login_1 = require("../login/login");
-function Login() {
+function Login(_a) {
+    var match = _a.match;
     return (react_1.default.createElement(framer_motion_1.motion.div, { initial: "initial", animate: "in", exit: "out", variants: login_1.pageVariants, transition: login_1.pageTransition, className: "login-page-container" },
-        react_1.default.createElement(ResetPasswordForm_1.default, null)));
+        react_1.default.createElement(ResetPasswordForm_1.default, { token: match.params.token })));
 }
 exports.default = Login;

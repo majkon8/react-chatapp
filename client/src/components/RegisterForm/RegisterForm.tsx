@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import FormInput from "../../common/FormInput/FormInput";
 import DateSelect from "../../common/DateSelect/DateSelect";
 import ErrorSuccessInfo from "../../common/ErrorSuccessInfo/ErrorSuccessInfo";
+import SubmitButton from "../../common/SubmitButton/SubmitButton";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { signup } from "../../redux/actions/userActions";
@@ -48,6 +49,11 @@ function RegisterForm({ signup, UI }: Props) {
   const onSubmit = (data: IFormInputs) => {
     const { email, username, password } = { ...data };
     if (!(Object.keys(errors).length === 0)) return;
+    if (username !== username.trim())
+      setError("username", {
+        type: "manual",
+        message: "Cannot start or end with space",
+      });
     const birthDate = new Date(+data.year, +data.month, 1 + +data.day);
     const userData = { email, username, password, birthDate };
     signup(userData);
@@ -218,14 +224,14 @@ function RegisterForm({ signup, UI }: Props) {
         />{" "}
         I agree to the <a href="/terms">terms and conditions</a>
       </label>
-      <input
-        className="button form-button is-primary is-medium register-button"
-        type="submit"
-        value="Sign in"
+      <SubmitButton
+        hasMarginTop={false}
+        text="Sign up"
         disabled={
           Object.keys(dirtyFields).length === 0 ||
           Object.keys(dirtyFields).length !== Object.keys(getValues()).length
         }
+        loading={UI.loading}
       />
       <span className="is-pulled-left info">
         <NavLink to="/login">Already signed up?</NavLink>

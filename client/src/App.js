@@ -34,9 +34,9 @@ var home_1 = __importDefault(require("./pages/home/home"));
 var Logo_1 = __importDefault(require("./components/Logo/Logo"));
 var login_1 = __importDefault(require("./pages/login/login"));
 var register_1 = __importDefault(require("./pages/register/register"));
-var resetPassword_1 = __importDefault(require("./pages/reset-password/resetPassword"));
+var resetPassword_1 = __importDefault(require("./pages/resetPassword/resetPassword"));
 var Terms = react_1.lazy(function () { return Promise.resolve().then(function () { return __importStar(require("./pages/terms/terms")); }); });
-var PageNotFound = react_1.lazy(function () { return Promise.resolve().then(function () { return __importStar(require("./pages/page-not-found/pageNotFound")); }); });
+var PageNotFound = react_1.lazy(function () { return Promise.resolve().then(function () { return __importStar(require("./pages/pageNotFound/pageNotFound")); }); });
 var ConfirmAccount = react_1.lazy(function () {
     return Promise.resolve().then(function () { return __importStar(require("./pages/confirmAccount/confirmAccount")); });
 });
@@ -51,7 +51,7 @@ function App() {
                         react_1.default.createElement(react_router_dom_1.Route, { exact: true, path: "/", component: home_1.default }),
                         react_1.default.createElement(react_router_dom_1.Route, { path: "/login", component: login_1.default }),
                         react_1.default.createElement(react_router_dom_1.Route, { path: "/register", component: register_1.default }),
-                        react_1.default.createElement(react_router_dom_1.Route, { path: "/reset", component: resetPassword_1.default }),
+                        react_1.default.createElement(react_router_dom_1.Route, { path: "/reset/:token", component: resetPassword_1.default }),
                         react_1.default.createElement(react_router_dom_1.Route, { path: "/confirm/:token", component: ConfirmAccount }),
                         react_1.default.createElement(react_router_dom_1.Route, { path: "/terms", component: Terms }),
                         react_1.default.createElement(react_router_dom_1.Route, { component: PageNotFound })))))));

@@ -18,4 +18,10 @@ router.post("/login", users.login);
 /* GET /users/confirm/:token */
 router.get("/confirm/:token", users.confirmAccount);
 
+/* POST /users/forgot/ */
+router.post("/forgot/", users.forgotPassword);
+
+/* POST /users/reset */
+router.post("/reset", users.resetPassword);
+
 module.exports = router;

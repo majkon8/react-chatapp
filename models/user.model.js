@@ -130,7 +130,7 @@ UserSchema.methods.generateToken = function (temporary) {
     var user = this;
     return new Promise(function (resolve, reject) {
         // Create the JSON Web Token and return that
-        jsonwebtoken_1.default.sign({ _id: user._id.toHexString() }, jwtSecret, { expiresIn: temporary ? "10m" : "9999 year" }, function (error, token) {
+        jsonwebtoken_1.default.sign({ _id: user._id.toHexString() }, jwtSecret, { expiresIn: temporary ? "10m" : "9999 years" }, function (error, token) {
             if (!error)
                 resolve(token);
             else
@@ -138,13 +138,16 @@ UserSchema.methods.generateToken = function (temporary) {
         });
     });
 };
-UserSchema.methods.createConfirmationEmail = function () {
+UserSchema.methods.createEmail = function (isConfirmationEmail) {
     var user = this;
+    var text = isConfirmationEmail
+        ? "Hello, visit the page below to confirm your account. \nlocalhost:3001/confirm/" + user.temporaryToken
+        : "Hello, visit the page below to reset your password. \nThe link will expire in 10 minutes of sending the email.\nlocalhost:3001/reset/" + user.temporaryToken;
     var mailOptions = {
         from: "majkonserver@gmail.com",
         to: user.email,
         subject: "Confirm your ChatApp account",
-        text: "Hello, visit the link below to confirm your account. \nlocalhost:3001/confirm/" + user.temporaryToken,
+        text: text,
     };
     return mailOptions;
 };
@@ -161,14 +164,14 @@ UserSchema.statics.findByCredentials = function (email, password) {
                 case 1:
                     user = _a.sent();
                     if (!user)
-                        return [2 /*return*/, Promise.reject("User not found")];
+                        return [2 /*return*/, Promise.reject({ error: "User not found" })];
                     return [2 /*return*/, new Promise(function (resolve, reject) {
                             bcryptjs_1.default.compare(password, user.password, function (error, res) {
                                 if (res) {
                                     resolve(user);
                                 }
                                 else {
-                                    reject("Wrong password");
+                                    reject({ error: "Wrong password" });
                                 }
                             });
                         })];

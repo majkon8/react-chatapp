@@ -10,9 +10,9 @@ import Home from "./pages/home/home";
 import Logo from "./components/Logo/Logo";
 import Login from "./pages/login/login";
 import Register from "./pages/register/register";
-import ResetPassword from "./pages/reset-password/resetPassword";
+import ResetPassword from "./pages/resetPassword/resetPassword";
 const Terms = lazy(() => import("./pages/terms/terms"));
-const PageNotFound = lazy(() => import("./pages/page-not-found/pageNotFound"));
+const PageNotFound = lazy(() => import("./pages/pageNotFound/pageNotFound"));
 const ConfirmAccount = lazy(() =>
   import("./pages/confirmAccount/confirmAccount")
 );
@@ -30,7 +30,7 @@ function App() {
               <Route exact path="/" component={Home} />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
-              <Route path="/reset" component={ResetPassword} />
+              <Route path="/reset/:token" component={ResetPassword} />
               <Route path="/confirm/:token" component={ConfirmAccount} />
               <Route path="/terms" component={Terms} />
               <Route component={PageNotFound} />
