@@ -23,7 +23,7 @@ function GoogleLogin({ externalLogin }: Props) {
 
   return (
     <ReactGoogleLogin
-      clientId="136364298838-pbp0va0pijleahs8aa64dihvvorvnshd.apps.googleusercontent.com"
+      clientId="394253008834-vbi64sr39onfv5gnolcpjibg5mv4h3gd.apps.googleusercontent.com"
       onSuccess={responseGoogle}
       className="button form-button google-button"
       buttonText=""
