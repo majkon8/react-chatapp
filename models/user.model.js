@@ -74,6 +74,7 @@ var mongoose_1 = __importStar(require("mongoose"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var moment_1 = __importDefault(require("moment/moment"));
+var process_1 = __importDefault(require("process"));
 var jwtSecret = "2Z9M3M0YNxb770Gqog2ZzCqyXJXFkFCj5u1elOo509DGbO8fo5TQslzqTW9e2JYS";
 var UserSchema = new mongoose_1.Schema({
     email: {
@@ -140,9 +141,12 @@ UserSchema.methods.generateToken = function (temporary) {
 };
 UserSchema.methods.createEmail = function (isConfirmationEmail) {
     var user = this;
+    var baseUrl = !process_1.default.env.NODE_ENV || process_1.default.env.NODE_ENV === "development"
+        ? "localhost:3001"
+        : "https://safe-falls-82651.herokuapp.com";
     var text = isConfirmationEmail
-        ? "Hello, visit the page below to confirm your account. \nlocalhost:3001/confirm/" + user.temporaryToken
-        : "Hello, visit the page below to reset your password. \nThe link will expire in 10 minutes of sending the email.\nlocalhost:3001/reset/" + user.temporaryToken;
+        ? "Hello, visit the page below to confirm your account. \n" + baseUrl + "/confirm/" + user.temporaryToken
+        : "Hello, visit the page below to reset your password. \nThe link will expire in 10 minutes of sending the email.\n" + baseUrl + "/reset/" + user.temporaryToken;
     var mailOptions = {
         from: "majkonserver@gmail.com",
         to: user.email,
