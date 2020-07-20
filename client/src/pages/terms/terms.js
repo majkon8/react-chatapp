@@ -32,9 +32,14 @@ var home_1 = require("../home/home");
 function Terms() {
     var _a = react_1.useState(false), isSideOpen = _a[0], setIsSideOpen = _a[1];
     var toggleOpen = function () { return setIsSideOpen(!isSideOpen); };
-    return (react_1.default.createElement(framer_motion_1.motion.div, { initial: "initial", animate: "in", exit: "out", variants: home_1.pageVariants, transition: home_1.pageTransition, style: { backgroundColor: "white", position: "absolute", width: "100%" } },
+    return (react_1.default.createElement(framer_motion_1.motion.div, { initial: "initial", animate: "in", exit: "out", variants: home_1.pageVariants, transition: home_1.pageTransition, style: {
+            backgroundColor: "white",
+            position: "absolute",
+            width: "100%",
+            overflowX: "hidden",
+        } },
         react_1.default.createElement("div", { className: "container" },
-            react_1.default.createElement(Navbar_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen }),
+            react_1.default.createElement(Navbar_1.default, null),
             react_1.default.createElement(SideNav_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen }),
             react_1.default.createElement("div", { className: "terms-container" },
                 react_1.default.createElement("h1", { className: "title main-title" }, "ChatApp terms of service"),

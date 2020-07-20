@@ -18,10 +18,15 @@ export default function Terms() {
       exit="out"
       variants={pageVariants}
       transition={pageTransition}
-      style={{ backgroundColor: "white", position: "absolute", width: "100%" }}
+      style={{
+        backgroundColor: "white",
+        position: "absolute",
+        width: "100%",
+        overflowX: "hidden",
+      }}
     >
       <div className="container">
-        <Navbar toggleOpen={toggleOpen} isOpen={isSideOpen} />
+        <Navbar />
         <SideNav toggleOpen={toggleOpen} isOpen={isSideOpen} />
         <div className="terms-container">
           <h1 className="title main-title">ChatApp terms of service</h1>

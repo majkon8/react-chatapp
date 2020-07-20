@@ -23,8 +23,7 @@ var react_1 = __importStar(require("react"));
 require("./Navbar.scss");
 var gsap_1 = require("gsap");
 var react_router_dom_1 = require("react-router-dom");
-function Navbar(_a) {
-    var isOpen = _a.isOpen, toggleOpen = _a.toggleOpen;
+function Navbar() {
     var nav = react_1.useRef(null);
     var loginButton = react_1.useRef(null);
     react_1.useEffect(function () {
@@ -45,11 +44,11 @@ function Navbar(_a) {
     }, []);
     return (react_1.default.createElement("div", { className: "navBar" },
         react_1.default.createElement("nav", { ref: nav, className: "main-nav" },
-            react_1.default.createElement("a", { href: "/#about_us", className: "has-text-dark nav-item" }, "About us"),
-            react_1.default.createElement("a", { href: "/#features", className: "has-text-dark nav-item" }, "Features"),
-            react_1.default.createElement("a", { href: "/#security", className: "has-text-dark nav-item" }, "Security"),
-            react_1.default.createElement("a", { href: "/#support", className: "has-text-dark nav-item" }, "Support"),
-            react_1.default.createElement("a", { href: "/#download", className: "has-text-dark nav-item" }, "Download")),
+            react_1.default.createElement("a", { href: "home/#about_us", className: "has-text-dark nav-item" }, "About us"),
+            react_1.default.createElement("a", { href: "home/#features", className: "has-text-dark nav-item" }, "Features"),
+            react_1.default.createElement("a", { href: "home/#security", className: "has-text-dark nav-item" }, "Security"),
+            react_1.default.createElement("a", { href: "home/#support", className: "has-text-dark nav-item" }, "Support"),
+            react_1.default.createElement("a", { href: "home/#download", className: "has-text-dark nav-item" }, "Download")),
         react_1.default.createElement(react_router_dom_1.NavLink, { to: "/login", className: "login" },
             react_1.default.createElement("button", { ref: loginButton, className: "button is-primary is-rounded is-pulled-right navbar-login-button" }, "Sign in"))));
 }

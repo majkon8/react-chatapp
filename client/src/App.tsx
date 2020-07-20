@@ -6,11 +6,14 @@ import { AnimatePresence } from "framer-motion";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 // pages and components
+import Main from "./pages/main/main";
 import Home from "./pages/home/home";
 import Logo from "./components/Logo/Logo";
 import Login from "./pages/login/login";
 import Register from "./pages/register/register";
 import ResetPassword from "./pages/resetPassword/resetPassword";
+import AuthRoute from "./components/AuthRoute/AuthRoute";
+import UnauthRoute from "./components/UnauthRoute/UnauthRoute";
 const Terms = lazy(() => import("./pages/terms/terms"));
 const PageNotFound = lazy(() => import("./pages/pageNotFound/pageNotFound"));
 const ConfirmAccount = lazy(() =>
@@ -27,11 +30,12 @@ function App() {
         <Suspense fallback={<></>}>
           <AnimatePresence>
             <Switch location={location} key={location.pathname}>
-              <Route exact path="/" component={Home} />
-              <Route path="/login" component={Login} />
-              <Route path="/register" component={Register} />
-              <Route path="/reset/:token" component={ResetPassword} />
-              <Route path="/confirm/:token" component={ConfirmAccount} />
+              <AuthRoute exact path="/" component={Main} />
+              <UnauthRoute path="/home" component={Home} />
+              <UnauthRoute path="/login" component={Login} />
+              <UnauthRoute path="/register" component={Register} />
+              <UnauthRoute path="/reset/:token" component={ResetPassword} />
+              <UnauthRoute path="/confirm/:token" component={ConfirmAccount} />
               <Route path="/terms" component={Terms} />
               <Route component={PageNotFound} />
             </Switch>

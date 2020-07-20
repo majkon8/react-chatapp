@@ -59,26 +59,8 @@ exports.pageTransition = {
     ease: "anticipate",
     duration: 0.8,
 };
-function getWindowWidth() {
-    var width = window.innerWidth;
-    return width;
-}
-function useWindowWidth() {
-    var _a = react_1.useState(getWindowWidth()), windowWidth = _a[0], setWindowWidth = _a[1];
-    react_1.useEffect(function () {
-        function handleResize() {
-            setWindowWidth(getWindowWidth());
-        }
-        window.addEventListener("resize", handleResize);
-        return function () {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []);
-    return windowWidth;
-}
 function Home() {
     var _a = react_1.useState(false), isSideOpen = _a[0], setIsSideOpen = _a[1];
-    var width = useWindowWidth();
     var wrapper = react_1.useRef(null);
     var welcomeMessageBig = react_1.useRef(null);
     var welcomeMessageSmall = react_1.useRef(null);
@@ -146,7 +128,7 @@ function Home() {
             overflowX: "hidden",
         } },
         react_1.default.createElement("div", { className: "container" },
-            react_1.default.createElement(Navbar_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen }),
+            react_1.default.createElement(Navbar_1.default, null),
             react_1.default.createElement(SideNav_1.default, { toggleOpen: toggleOpen, isOpen: isSideOpen })),
         react_1.default.createElement("div", { className: "welcome-message" },
             react_1.default.createElement("div", { ref: welcomeMessageBig, className: "big" }, "Your place for chatting"),

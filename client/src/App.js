@@ -30,11 +30,14 @@ var framer_motion_1 = require("framer-motion");
 var react_redux_1 = require("react-redux");
 var store_1 = __importDefault(require("./redux/store"));
 // pages and components
+var main_1 = __importDefault(require("./pages/main/main"));
 var home_1 = __importDefault(require("./pages/home/home"));
 var Logo_1 = __importDefault(require("./components/Logo/Logo"));
 var login_1 = __importDefault(require("./pages/login/login"));
 var register_1 = __importDefault(require("./pages/register/register"));
 var resetPassword_1 = __importDefault(require("./pages/resetPassword/resetPassword"));
+var AuthRoute_1 = __importDefault(require("./components/AuthRoute/AuthRoute"));
+var UnauthRoute_1 = __importDefault(require("./components/UnauthRoute/UnauthRoute"));
 var Terms = react_1.lazy(function () { return Promise.resolve().then(function () { return __importStar(require("./pages/terms/terms")); }); });
 var PageNotFound = react_1.lazy(function () { return Promise.resolve().then(function () { return __importStar(require("./pages/pageNotFound/pageNotFound")); }); });
 var ConfirmAccount = react_1.lazy(function () {
@@ -48,11 +51,12 @@ function App() {
             react_1.default.createElement(react_1.Suspense, { fallback: react_1.default.createElement(react_1.default.Fragment, null) },
                 react_1.default.createElement(framer_motion_1.AnimatePresence, null,
                     react_1.default.createElement(react_router_dom_1.Switch, { location: location, key: location.pathname },
-                        react_1.default.createElement(react_router_dom_1.Route, { exact: true, path: "/", component: home_1.default }),
-                        react_1.default.createElement(react_router_dom_1.Route, { path: "/login", component: login_1.default }),
-                        react_1.default.createElement(react_router_dom_1.Route, { path: "/register", component: register_1.default }),
-                        react_1.default.createElement(react_router_dom_1.Route, { path: "/reset/:token", component: resetPassword_1.default }),
-                        react_1.default.createElement(react_router_dom_1.Route, { path: "/confirm/:token", component: ConfirmAccount }),
+                        react_1.default.createElement(AuthRoute_1.default, { exact: true, path: "/", component: main_1.default }),
+                        react_1.default.createElement(UnauthRoute_1.default, { path: "/home", component: home_1.default }),
+                        react_1.default.createElement(UnauthRoute_1.default, { path: "/login", component: login_1.default }),
+                        react_1.default.createElement(UnauthRoute_1.default, { path: "/register", component: register_1.default }),
+                        react_1.default.createElement(UnauthRoute_1.default, { path: "/reset/:token", component: resetPassword_1.default }),
+                        react_1.default.createElement(UnauthRoute_1.default, { path: "/confirm/:token", component: ConfirmAccount }),
                         react_1.default.createElement(react_router_dom_1.Route, { path: "/terms", component: Terms }),
                         react_1.default.createElement(react_router_dom_1.Route, { component: PageNotFound })))))));
 }

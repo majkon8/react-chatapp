@@ -37,29 +37,8 @@ export const pageTransition = {
   duration: 0.8,
 };
 
-function getWindowWidth() {
-  const { innerWidth: width } = window;
-  return width;
-}
-
-function useWindowWidth() {
-  const [windowWidth, setWindowWidth] = useState(getWindowWidth());
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowWidth(getWindowWidth());
-    }
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-  return windowWidth;
-}
-
 export default function Home() {
   const [isSideOpen, setIsSideOpen] = useState(false);
-  const width = useWindowWidth();
   let wrapper = useRef<HTMLDivElement>(null);
   let welcomeMessageBig = useRef(null);
   let welcomeMessageSmall = useRef(null);
@@ -145,7 +124,7 @@ export default function Home() {
       }}
     >
       <div className="container">
-        <Navbar toggleOpen={toggleOpen} isOpen={isSideOpen} />
+        <Navbar />
         <SideNav toggleOpen={toggleOpen} isOpen={isSideOpen} />
       </div>
 
