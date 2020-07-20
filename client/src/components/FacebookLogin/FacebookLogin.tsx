@@ -27,6 +27,7 @@ function FacebookLogin({ externalLogin }: Props) {
       cssClass="button form-button facebook-button"
       icon="fab fa-facebook-f"
       textButton=""
+      disableMobileRedirect={true}
     />
   );
 }
