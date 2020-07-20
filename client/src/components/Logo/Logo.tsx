@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Logo.scss";
 import { NavLink } from "react-router-dom";
 
-export default function Logo() {
+export default function Logo({ location }: any) {
+  const [displayLogo, setDisplayLogo] = useState(location.pathname !== "/");
+
+  useEffect(() => {
+    if (location.pathname === "/") setDisplayLogo(false);
+    else setDisplayLogo(true);
+  }, [location]);
+
   return (
-    <div className="logo-container">
-      <NavLink to="/home" className="main-logo">
-        <span className="logo-chat">CHAT</span>
-        <span className="has-text-primary">APP</span>
-      </NavLink>
-    </div>
+    <>
+      {displayLogo && (
+        <div className="logo-container">
+          <NavLink to="/home" className="main-logo">
+            <span className="logo-chat">CHAT</span>
+            <span className="has-text-primary">APP</span>
+          </NavLink>
+        </div>
+      )}
+    </>
   );
 }

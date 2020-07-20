@@ -26,7 +26,7 @@ function App() {
   return (
     <Provider store={store}>
       <div className="app-container">
-        <Logo />
+        <Logo location={location} />
         <Suspense fallback={<></>}>
           <AnimatePresence>
             <Switch location={location} key={location.pathname}>
