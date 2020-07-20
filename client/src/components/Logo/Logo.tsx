@@ -3,7 +3,7 @@ import "./Logo.scss";
 import { NavLink } from "react-router-dom";
 
 export default function Logo({ location }: any) {
-  const [displayLogo, setDisplayLogo] = useState(location.pathname !== "/");
+  const [displayLogo, setDisplayLogo] = useState(false);
 
   useEffect(() => {
     if (location.pathname === "/") setDisplayLogo(false);

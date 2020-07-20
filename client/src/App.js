@@ -29,6 +29,7 @@ var framer_motion_1 = require("framer-motion");
 // redux
 var react_redux_1 = require("react-redux");
 var store_1 = __importDefault(require("./redux/store"));
+var types_1 = require("./redux/types");
 // pages and components
 var main_1 = __importDefault(require("./pages/main/main"));
 var home_1 = __importDefault(require("./pages/home/home"));
@@ -43,6 +44,9 @@ var PageNotFound = react_1.lazy(function () { return Promise.resolve().then(func
 var ConfirmAccount = react_1.lazy(function () {
     return Promise.resolve().then(function () { return __importStar(require("./pages/confirmAccount/confirmAccount")); });
 });
+var refreshToken = localStorage.refreshToken;
+if (refreshToken)
+    store_1.default.dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
 function App() {
     var location = react_router_dom_1.useLocation();
     return (react_1.default.createElement(react_redux_1.Provider, { store: store_1.default },

@@ -34,6 +34,7 @@ function GoogleLogin({ externalLogin }: Props) {
           className="button form-button google-button"
           onClick={renderProps.onClick}
           disabled={renderProps.disabled}
+          type="button"
         >
           <i className="fab fa-google" aria-hidden="true"></i>
         </button>

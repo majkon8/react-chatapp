@@ -5,6 +5,7 @@ import { AnimatePresence } from "framer-motion";
 // redux
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import { SET_AUTHENTICATED } from "./redux/types";
 // pages and components
 import Main from "./pages/main/main";
 import Home from "./pages/home/home";
@@ -19,6 +20,9 @@ const PageNotFound = lazy(() => import("./pages/pageNotFound/pageNotFound"));
 const ConfirmAccount = lazy(() =>
   import("./pages/confirmAccount/confirmAccount")
 );
+
+const refreshToken = localStorage.refreshToken;
+if (refreshToken) store.dispatch({ type: SET_AUTHENTICATED, payload: true });
 
 function App() {
   const location = useLocation();

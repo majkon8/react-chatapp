@@ -20,7 +20,7 @@ function GoogleLogin(_a) {
         };
         externalLogin(userData);
     };
-    return (react_1.default.createElement(react_google_login_1.default, { clientId: "394253008834-vbi64sr39onfv5gnolcpjibg5mv4h3gd.apps.googleusercontent.com", onSuccess: responseGoogle, className: "button form-button google-button", buttonText: "", icon: false, cookiePolicy: "single_host_origin", render: function (renderProps) { return (react_1.default.createElement("button", { className: "button form-button google-button", onClick: renderProps.onClick, disabled: renderProps.disabled },
+    return (react_1.default.createElement(react_google_login_1.default, { clientId: "394253008834-vbi64sr39onfv5gnolcpjibg5mv4h3gd.apps.googleusercontent.com", onSuccess: responseGoogle, className: "button form-button google-button", buttonText: "", icon: false, cookiePolicy: "single_host_origin", render: function (renderProps) { return (react_1.default.createElement("button", { className: "button form-button google-button", onClick: renderProps.onClick, disabled: renderProps.disabled, type: "button" },
             react_1.default.createElement("i", { className: "fab fa-google", "aria-hidden": "true" }))); } }));
 }
 exports.default = connector(GoogleLogin);

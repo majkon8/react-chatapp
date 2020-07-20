@@ -104,7 +104,7 @@ exports.confirmAccount = function (token) { return function (dispatch) { return 
     });
 }); }; };
 exports.login = function (userData) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-    var error_3;
+    var response, accessToken, refreshToken, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -114,9 +114,12 @@ exports.login = function (userData) { return function (dispatch) { return __awai
                 _a.trys.push([1, 3, 4, 5]);
                 return [4 /*yield*/, axios_1.default.post("/users/login", userData)];
             case 2:
-                _a.sent();
+                response = _a.sent();
                 dispatch({ type: types_1.SET_ERROR, payload: null });
                 dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
+                accessToken = response.headers["x-access-token"];
+                refreshToken = response.headers["x-refresh-token"];
+                setAuthorization({ accessToken: accessToken, refreshToken: refreshToken });
                 return [3 /*break*/, 5];
             case 3:
                 error_3 = _a.sent();
@@ -205,7 +208,7 @@ exports.resetPassword = function (data) { return function (dispatch) { return __
 }); }; };
 // source is 'facebook' or 'google'
 exports.externalLogin = function (data) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-    var error_6;
+    var response, accessToken, refreshToken, error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -215,9 +218,12 @@ exports.externalLogin = function (data) { return function (dispatch) { return __
                 _a.trys.push([1, 3, 4, 5]);
                 return [4 /*yield*/, axios_1.default.post("/users/login/external", data)];
             case 2:
-                _a.sent();
+                response = _a.sent();
                 dispatch({ type: types_1.SET_ERROR, payload: null });
                 dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
+                accessToken = response.headers["x-access-token"];
+                refreshToken = response.headers["x-refresh-token"];
+                setAuthorization({ accessToken: accessToken, refreshToken: refreshToken });
                 return [3 /*break*/, 5];
             case 3:
                 error_6 = _a.sent();
@@ -237,3 +243,10 @@ exports.externalLogin = function (data) { return function (dispatch) { return __
         }
     });
 }); }; };
+// HELPERS
+var setAuthorization = function (tokens) {
+    var accessToken = tokens.accessToken;
+    var refreshToken = tokens.refreshToken;
+    axios_1.default.defaults.headers.common["x-access-token"] = accessToken;
+    localStorage.setItem("refreshToken", refreshToken);
+};

@@ -24,7 +24,7 @@ require("./Logo.scss");
 var react_router_dom_1 = require("react-router-dom");
 function Logo(_a) {
     var location = _a.location;
-    var _b = react_1.useState(location.pathname !== "/"), displayLogo = _b[0], setDisplayLogo = _b[1];
+    var _b = react_1.useState(false), displayLogo = _b[0], setDisplayLogo = _b[1];
     react_1.useEffect(function () {
         if (location.pathname === "/")
             setDisplayLogo(false);

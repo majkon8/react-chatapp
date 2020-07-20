@@ -19,6 +19,11 @@ interface IResetPasswordData {
   token: string;
 }
 
+interface ITokens {
+  refreshToken: string;
+  accessToken: string;
+}
+
 export const signup = (userData: IUserData) => async (dispatch: Dispatch) => {
   dispatch({ type: SET_LOADING_UI, payload: true });
   try {
@@ -60,9 +65,12 @@ export const confirmAccount = (token: string) => async (dispatch: Dispatch) => {
 export const login = (userData: IUserData) => async (dispatch: Dispatch) => {
   dispatch({ type: SET_LOADING_UI, payload: true });
   try {
-    await axios.post("/users/login", userData);
+    const response = await axios.post("/users/login", userData);
     dispatch({ type: SET_ERROR, payload: null });
     dispatch({ type: SET_AUTHENTICATED, payload: true });
+    const accessToken: string = response.headers["x-access-token"];
+    const refreshToken: string = response.headers["x-refresh-token"];
+    setAuthorization({ accessToken, refreshToken });
   } catch (error) {
     console.error(error);
     if (error.response.data.error)
@@ -126,9 +134,12 @@ export const externalLogin = (data: IUserData) => async (
 ) => {
   dispatch({ type: SET_LOADING_UI, payload: true });
   try {
-    await axios.post("/users/login/external", data);
+    const response = await axios.post("/users/login/external", data);
     dispatch({ type: SET_ERROR, payload: null });
     dispatch({ type: SET_AUTHENTICATED, payload: true });
+    const accessToken: string = response.headers["x-access-token"];
+    const refreshToken: string = response.headers["x-refresh-token"];
+    setAuthorization({ accessToken, refreshToken });
   } catch (error) {
     console.error(error);
     if (error.response.data.error)
@@ -141,4 +152,12 @@ export const externalLogin = (data: IUserData) => async (
   } finally {
     dispatch({ type: SET_LOADING_UI, payload: false });
   }
+};
+
+// HELPERS
+const setAuthorization = (tokens: ITokens) => {
+  const accessToken = tokens.accessToken;
+  const refreshToken = tokens.refreshToken;
+  axios.defaults.headers.common["x-access-token"] = accessToken;
+  localStorage.setItem("refreshToken", refreshToken);
 };
