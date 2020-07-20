@@ -17,6 +17,6 @@ function FacebookLogin(_a) {
         var userData = { email: response.email, username: response.name };
         externalLogin(userData);
     };
-    return (react_1.default.createElement(react_facebook_login_1.default, { appId: "563972124299753", autoLoad: false, fields: "name,email,picture", callback: responseFacebook, cssClass: "button form-button facebook-button", icon: "fab fa-facebook-f", textButton: "" }));
+    return (react_1.default.createElement(react_facebook_login_1.default, { appId: "563972124299753", autoLoad: false, fields: "name,email,picture", callback: responseFacebook, cssClass: "button form-button facebook-button", icon: "fab fa-facebook-f", textButton: "", disableMobileRedirect: true }));
 }
 exports.default = connector(FacebookLogin);
