@@ -9,6 +9,7 @@ interface IProps {
   name: string;
   type: string;
   placeholder: string;
+  iconClass: string;
 }
 
 function FormInput(props: IProps, ref: any) {
@@ -19,6 +20,7 @@ function FormInput(props: IProps, ref: any) {
     name,
     type,
     placeholder,
+    iconClass,
   } = props;
 
   return (
@@ -39,7 +41,7 @@ function FormInput(props: IProps, ref: any) {
           ref={ref}
         />
         <span className="icon is-small is-left">
-          <i className="fas fa-envelope"></i>
+          <i className={iconClass}></i>
         </span>
       </div>
     </>

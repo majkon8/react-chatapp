@@ -71,14 +71,14 @@ function LoginForm(_a) {
             react_1.default.createElement(GoogleLogin_1.default, null)),
         react_1.default.createElement("div", { className: "line-text" }, "OR"),
         react_1.default.createElement("div", { className: "line" }),
-        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.email, showEmailError: showEmailError, name: "email", type: "email", placeholder: "Email", ref: register({
+        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.email, showEmailError: showEmailError, name: "email", type: "email", placeholder: "Email", iconClass: "fas fa-envelope", ref: register({
                 required: { value: true, message: "This field is required" },
                 pattern: {
                     value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                     message: "Email address incorrect",
                 },
             }) }),
-        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.password, name: "password", type: "password", placeholder: "Password", ref: register({
+        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.password, name: "password", type: "password", placeholder: "Password", iconClass: "fas fa-lock", ref: register({
                 required: { value: true, message: "This field is required" },
                 minLength: { value: 8, message: "Password too short" },
                 pattern: {

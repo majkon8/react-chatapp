@@ -45,6 +45,7 @@ function ResetPasswordForm({ token, resetPassword, UI }: Props) {
         name="password"
         type="password"
         placeholder="Password"
+        iconClass="fas fa-lock"
         ref={register({
           required: { value: true, message: "This field is required" },
           minLength: { value: 8, message: "Password too short" },
@@ -60,6 +61,7 @@ function ResetPasswordForm({ token, resetPassword, UI }: Props) {
         name="confirm_password"
         type="password"
         placeholder="Confirm password"
+        iconClass="fas fa-lock"
         ref={register({
           required: { value: true, message: "This field is required" },
           validate: (value: string) =>

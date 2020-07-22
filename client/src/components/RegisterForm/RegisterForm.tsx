@@ -134,6 +134,7 @@ function RegisterForm({ signup, UI }: Props) {
         name="email"
         type="email"
         placeholder="Email"
+        iconClass="fas fa-envelope"
         ref={register({
           required: { value: true, message: "This field is required" },
           pattern: {
@@ -148,6 +149,7 @@ function RegisterForm({ signup, UI }: Props) {
         name="username"
         type="text"
         placeholder="Username"
+        iconClass="fas fa-user"
         ref={register({
           required: { value: true, message: "This field is required" },
           maxLength: { value: 30, message: "Maximum 30 characters" },
@@ -159,6 +161,7 @@ function RegisterForm({ signup, UI }: Props) {
         name="password"
         type="password"
         placeholder="Password"
+        iconClass="fas fa-lock"
         ref={register({
           required: { value: true, message: "This field is required" },
           minLength: { value: 8, message: "Password too short" },
@@ -174,6 +177,7 @@ function RegisterForm({ signup, UI }: Props) {
         name="confirm_password"
         type="password"
         placeholder="Confirm password"
+        iconClass="fas fa-lock"
         ref={register({
           required: { value: true, message: "This field is required" },
           validate: (value: string) =>

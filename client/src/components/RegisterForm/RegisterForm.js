@@ -112,18 +112,18 @@ function RegisterForm(_a) {
     };
     return (react_1.default.createElement("form", { className: "form register-form", onSubmit: handleSubmit(onSubmit) },
         react_1.default.createElement("div", { className: "title" }, "Sign up to ChatApp"),
-        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.email, name: "email", type: "email", placeholder: "Email", ref: register({
+        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.email, name: "email", type: "email", placeholder: "Email", iconClass: "fas fa-envelope", ref: register({
                 required: { value: true, message: "This field is required" },
                 pattern: {
                     value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                     message: "Email address incorrect",
                 },
             }) }),
-        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.username, name: "username", type: "text", placeholder: "Username", ref: register({
+        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.username, name: "username", type: "text", placeholder: "Username", iconClass: "fas fa-user", ref: register({
                 required: { value: true, message: "This field is required" },
                 maxLength: { value: 30, message: "Maximum 30 characters" },
             }) }),
-        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.password, name: "password", type: "password", placeholder: "Password", ref: register({
+        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.password, name: "password", type: "password", placeholder: "Password", iconClass: "fas fa-lock", ref: register({
                 required: { value: true, message: "This field is required" },
                 minLength: { value: 8, message: "Password too short" },
                 pattern: {
@@ -131,7 +131,7 @@ function RegisterForm(_a) {
                     message: "Password too weak",
                 },
             }) }),
-        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.confirm_password, name: "confirm_password", type: "password", placeholder: "Confirm password", ref: register({
+        react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.confirm_password, name: "confirm_password", type: "password", placeholder: "Confirm password", iconClass: "fas fa-lock", ref: register({
                 required: { value: true, message: "This field is required" },
                 validate: function (value) {
                     return value === getValues("password") ? true : "Passwords must match";

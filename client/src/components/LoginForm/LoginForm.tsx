@@ -76,6 +76,7 @@ function LoginForm({ login, forgotPassword, UI }: Props) {
         name="email"
         type="email"
         placeholder="Email"
+        iconClass="fas fa-envelope"
         ref={register({
           required: { value: true, message: "This field is required" },
           pattern: {
@@ -90,6 +91,7 @@ function LoginForm({ login, forgotPassword, UI }: Props) {
         name="password"
         type="password"
         placeholder="Password"
+        iconClass="fas fa-lock"
         ref={register({
           required: { value: true, message: "This field is required" },
           minLength: { value: 8, message: "Password too short" },
