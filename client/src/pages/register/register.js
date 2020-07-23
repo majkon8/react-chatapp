@@ -8,7 +8,7 @@ var framer_motion_1 = require("framer-motion");
 var RegisterForm_1 = __importDefault(require("../../components/RegisterForm/RegisterForm"));
 var login_1 = require("../login/login");
 function Login() {
-    return (react_1.default.createElement(framer_motion_1.motion.div, { initial: "initial", animate: "in", exit: "out", variants: login_1.pageVariants, transition: login_1.pageTransition, className: "login-page-container" },
+    return (react_1.default.createElement(framer_motion_1.motion.div, { initial: "initial", animate: "in", exit: "out", variants: login_1.pageVariants, transition: login_1.pageTransition, className: "login-page-container", style: { overflowX: "hidden" } },
         react_1.default.createElement(RegisterForm_1.default, null)));
 }
 exports.default = Login;

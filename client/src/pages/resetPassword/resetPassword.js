@@ -9,7 +9,7 @@ var ResetPasswordForm_1 = __importDefault(require("../../components/ResetPasswor
 var login_1 = require("../login/login");
 function Login(_a) {
     var match = _a.match;
-    return (react_1.default.createElement(framer_motion_1.motion.div, { initial: "initial", animate: "in", exit: "out", variants: login_1.pageVariants, transition: login_1.pageTransition, className: "login-page-container" },
+    return (react_1.default.createElement(framer_motion_1.motion.div, { initial: "initial", animate: "in", exit: "out", variants: login_1.pageVariants, transition: login_1.pageTransition, className: "login-page-container", style: { overflowX: "hidden" } },
         react_1.default.createElement(ResetPasswordForm_1.default, { token: match.params.token })));
 }
 exports.default = Login;

@@ -12,6 +12,7 @@ export default function Login({ match }: any) {
       variants={pageVariants}
       transition={pageTransition}
       className="login-page-container"
+      style={{ overflowX: "hidden" }}
     >
       <ResetPasswordForm token={match.params.token} />
     </motion.div>

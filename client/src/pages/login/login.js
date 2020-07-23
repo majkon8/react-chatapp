@@ -31,7 +31,7 @@ exports.pageTransition = {
     duration: 0.8,
 };
 function Login() {
-    return (react_1.default.createElement(framer_motion_1.motion.div, { initial: "initial", animate: "in", exit: "out", variants: exports.pageVariants, transition: exports.pageTransition, className: "login-page-container" },
+    return (react_1.default.createElement(framer_motion_1.motion.div, { initial: "initial", animate: "in", exit: "out", variants: exports.pageVariants, transition: exports.pageTransition, className: "login-page-container", style: { overflowX: "hidden" } },
         react_1.default.createElement(LoginForm_1.default, null)));
 }
 exports.default = Login;

@@ -1,0 +1,85 @@
+@import "../../App.scss";
+
+$text-dark: #333;
+$theme-light: #eee;
+
+.main-container {
+  display: grid;
+  grid-template-columns: 2fr 5fr;
+  grid-template-rows: 70px calc(100vh - 140px) 70px;
+  color: #eee;
+  background-color: $dark-color;
+  transition: background-color 0.5s, color 0.5s;
+}
+
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+  background-color: #666;
+}
+
+// LIGHT THEME STYLES
+
+.theme-light {
+  background-color: white;
+  color: $text-dark;
+  transition: background-color 0.5s, color 0.5s;
+
+  .chat-input-container {
+    .input {
+      background-color: $theme-light;
+      transition: background-color 0.5s;
+
+      &::placeholder {
+        color: $text-dark;
+        transition: color 0.5s;
+      }
+    }
+
+    .chat-input {
+      color: $text-dark;
+      transition: color 0.5s;
+    }
+  }
+
+  .active-conversation {
+    background-color: $theme-light;
+    transition: background-color 0.5s;
+  }
+
+  .other-chat-message {
+    .chat-message-text {
+      background-color: $theme-light;
+      border: 1px solid $theme-light;
+      transition: background-color 0.5s, border 0.5s;
+    }
+  }
+
+  .settings-container {
+    .settings-button {
+      background: $theme-light;
+      color: $text-dark;
+
+      &:focus,
+      &:hover {
+        color: $text-dark;
+      }
+    }
+
+    .dropdown-content {
+      background: $theme-light;
+
+      .dropdown-item {
+        color: $text-dark;
+      }
+    }
+
+    .break {
+      background-color: rgb(40, 40, 40);
+    }
+  }
+
+  .chat-bar-container {
+    .return-icon {
+      color: $text-dark;
+    }
+  }
+}

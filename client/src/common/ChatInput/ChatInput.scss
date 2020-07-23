@@ -1,0 +1,27 @@
+@import "../../App.scss";
+
+.chat-input-container {
+  padding: 0 20px;
+  margin: 15px 0;
+
+  .input {
+    background-color: rgb(40, 40, 40);
+    box-shadow: 0 0 0 0em $base-color;
+    transition: background-color 0.5s, box-shadow 0.4s;
+
+    &:focus {
+      box-shadow: 0 0 0 0.1em $base-color !important;
+    }
+
+    &::placeholder {
+      color: rgba(238, 238, 238, 0.5);
+      transition: color 0.5s;
+    }
+  }
+
+  .chat-input {
+    border: none;
+    color: #eee;
+    transition: color 0.5s;
+  }
+}

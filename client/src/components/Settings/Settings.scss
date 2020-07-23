@@ -1,0 +1,37 @@
+.settings-container {
+  justify-self: end;
+
+  .settings-button {
+    padding: 5px;
+    box-sizing: border-box;
+    width: 30px;
+    height: 30px;
+    background: rgb(40, 40, 40);
+    border: none;
+    color: #eee;
+
+    &:focus,
+    &:hover {
+      color: #eee;
+    }
+  }
+
+  .dropdown-content {
+    text-align: left;
+    background: rgb(40, 40, 40);
+
+    .dropdown-item {
+      color: #eee;
+    }
+
+    .select-theme {
+      margin-left: 20px;
+      cursor: pointer;
+    }
+  }
+
+  .break {
+    margin: 5px 0;
+    background-color: #eee;
+  }
+}

@@ -16,6 +16,10 @@ var initialState = {
     loading: false,
     error: null,
     success: null,
+    theme: localStorage.getItem("theme") || "dark",
+    color: localStorage.getItem("color") || "rgb(84, 89, 230)",
+    // Only usable for screen resolution <= 768px
+    isChatOpen: false,
 };
 function default_1(state, action) {
     if (state === void 0) { state = initialState; }
@@ -26,6 +30,12 @@ function default_1(state, action) {
             return __assign(__assign({}, state), { success: action.payload, error: null });
         case types_1.SET_LOADING_UI:
             return __assign(__assign({}, state), { loading: action.payload });
+        case types_1.SET_THEME:
+            return __assign(__assign({}, state), { theme: action.payload });
+        case types_1.SET_COLOR:
+            return __assign(__assign({}, state), { color: action.payload });
+        case types_1.SET_IS_CHAT_OPEN:
+            return __assign(__assign({}, state), { isChatOpen: action.payload });
         default:
             return state;
     }

@@ -1,0 +1,5 @@
+.chat-form-container {
+  @media screen and (max-width: 768px) {
+    grid-column: span 2;
+  }
+}

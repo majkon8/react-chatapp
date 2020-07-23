@@ -12,6 +12,7 @@ export default function Login() {
       variants={pageVariants}
       transition={pageTransition}
       className="login-page-container"
+      style={{ overflowX: "hidden" }}
     >
       <RegisterForm />
     </motion.div>

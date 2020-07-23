@@ -1,0 +1,15 @@
+.color-picker-container {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+  gap: 5px;
+  padding: 6px 0;
+
+  .color {
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    cursor: pointer;
+  }
+}

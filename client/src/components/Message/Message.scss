@@ -1,0 +1,63 @@
+@import "../../App.scss";
+
+.chat-message-container {
+  display: grid;
+  grid-template-columns: 70%;
+  margin-top: 5px;
+  margin-right: 20px;
+
+  .chat-message-content {
+    display: grid;
+  }
+
+  .chat-message-text {
+    padding: 9px 14px;
+    margin-bottom: 5px;
+    text-align: left;
+    transition: background-color 0.5s, border 0.5s, color 0.5s;
+  }
+
+  .chat-message-time {
+    opacity: 0.5;
+  }
+
+  .chat-message-user-image {
+    border-radius: 100%;
+    align-self: end;
+    margin-bottom: 5px;
+  }
+}
+
+.other-chat-message {
+  justify-items: start;
+
+  .chat-message-content {
+    grid-template-columns: 25px 1fr;
+    gap: 10px;
+  }
+}
+
+.mine-chat-message {
+  justify-content: end;
+  justify-items: end;
+}
+
+.mine-chat-message {
+  .chat-message-text {
+    border: 1px solid;
+    border-radius: 20px 20px 0 20px;
+  }
+}
+
+.other-chat-message {
+  .chat-message-text {
+    background-color: rgb(40, 40, 40);
+    border: 1px solid rgb(40, 40, 40);
+    border-radius: 20px 20px 20px 0;
+  }
+
+  .chat-message-time {
+    // margin of image width + gap between image and text
+    margin-left: 35px;
+  }
+}

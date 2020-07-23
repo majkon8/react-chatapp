@@ -1,0 +1,10 @@
+.chat-container {
+  display: flex;
+  flex-direction: column-reverse;
+  padding-left: 20px;
+  overflow-y: hidden;
+
+  @media screen and (max-width: 768px) {
+    grid-column: span 2;
+  }
+}

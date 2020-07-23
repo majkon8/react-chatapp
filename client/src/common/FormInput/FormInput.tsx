@@ -28,7 +28,7 @@ function FormInput(props: IProps, ref: any) {
       {((isSubmitted && error) || (error && showEmailError)) && (
         <span className="has-text-danger is-pulled-left">{error.message}</span>
       )}
-      <div className="control has-icons-left">
+      <div className="form-input-container control has-icons-left">
         <input
           className={`input is-large is-black has-text-white
             ${
