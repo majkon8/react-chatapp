@@ -9,7 +9,13 @@ const connector = connect(mapStateToProps, {});
 
 const AuthRoute = ({ component: Component, user }: any) => (
   <Route
-    render={() => (!user.isAuthenticated ? <Redirect to="/" /> : <Component />)}
+    render={() =>
+      !user.isAuthenticated ? (
+        <Redirect to={{ pathname: "/login" }} />
+      ) : (
+        <Component />
+      )
+    }
   />
 );
 

@@ -34,7 +34,7 @@ function default_1(state, action) {
             return __assign(__assign({}, state), { theme: action.payload });
         case types_1.SET_COLOR:
             return __assign(__assign({}, state), { color: action.payload });
-        case types_1.SET_IS_CHAT_OPEN:
+        case types_1.SET_CHAT_OPEN:
             return __assign(__assign({}, state), { isChatOpen: action.payload });
         default:
             return state;

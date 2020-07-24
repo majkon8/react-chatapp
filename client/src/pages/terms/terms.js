@@ -25,10 +25,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
 require("./terms.scss");
 var framer_motion_1 = require("framer-motion");
+var home_1 = require("../home/home");
 var Navbar_1 = __importDefault(require("../../components/Navbar/Navbar"));
 var SideNav_1 = __importDefault(require("../../components/SideNav/SideNav"));
 var Footer_1 = __importDefault(require("../../components/Footer/Footer"));
-var home_1 = require("../home/home");
 function Terms() {
     var _a = react_1.useState(false), isSideOpen = _a[0], setIsSideOpen = _a[1];
     var toggleOpen = function () { return setIsSideOpen(!isSideOpen); };

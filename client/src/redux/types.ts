@@ -6,7 +6,7 @@ export const SET_SUCCESS = "SET_SUCCESS";
 export const SET_LOADING_UI = "SET_LOADING_UI";
 export const SET_THEME = "SET_THEME";
 export const SET_COLOR = "SET_COLOR";
-export const SET_IS_CHAT_OPEN = "SET_IS_CHAT_OPEN";
+export const SET_CHAT_OPEN = "SET_IS_CHAT_OPEN";
 
 // user interfaces
 interface ISetAuthenticatedAction {
@@ -37,8 +37,8 @@ interface ISetColorAction {
   type: typeof SET_COLOR;
   payload: string;
 }
-interface ISetIsChatOpen {
-  type: typeof SET_IS_CHAT_OPEN;
+interface ISetChatOpen {
+  type: typeof SET_CHAT_OPEN;
   payload: boolean;
 }
 
@@ -48,4 +48,4 @@ export type UIActionTypes =
   | ISetLoadingUIAction
   | ISetThemeAction
   | ISetColorAction
-  | ISetIsChatOpen;
+  | ISetChatOpen;

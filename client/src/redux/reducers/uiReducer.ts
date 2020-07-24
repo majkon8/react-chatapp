@@ -5,7 +5,7 @@ import {
   SET_THEME,
   SET_COLOR,
   UIActionTypes,
-  SET_IS_CHAT_OPEN,
+  SET_CHAT_OPEN,
 } from "../types";
 
 export interface IUIState {
@@ -39,7 +39,7 @@ export default function (state = initialState, action: UIActionTypes) {
       return { ...state, theme: action.payload };
     case SET_COLOR:
       return { ...state, color: action.payload };
-    case SET_IS_CHAT_OPEN:
+    case SET_CHAT_OPEN:
       return { ...state, isChatOpen: action.payload };
     default:
       return state;

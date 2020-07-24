@@ -1,4 +1,4 @@
-import { SET_THEME, SET_COLOR, SET_IS_CHAT_OPEN } from "../types";
+import { SET_THEME, SET_COLOR, SET_CHAT_OPEN } from "../types";
 import { Dispatch } from "redux";
 
 export const setTheme = (theme: string) => (dispatch: Dispatch) => {
@@ -12,4 +12,4 @@ export const setColor = (color: string) => (dispatch: Dispatch) => {
 };
 
 export const setIsChatOpen = (isOpen: boolean) => (dispatch: Dispatch) =>
-  dispatch({ type: SET_IS_CHAT_OPEN, payload: isOpen });
+  dispatch({ type: SET_CHAT_OPEN, payload: isOpen });

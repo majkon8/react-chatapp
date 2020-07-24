@@ -36,6 +36,10 @@ function Settings(_a) {
     var toggleOpen = function () { return setIsOpen(!isOpen); };
     var setDarkTheme = function () { return setTheme("dark"); };
     var setLightTheme = function () { return setTheme("light"); };
+    var logout = function () {
+        localStorage.removeItem("refreshToken");
+        window.location.href = "/";
+    };
     return (react_1.default.createElement("div", { onClick: toggleOpen, className: "settings-container dropdown is-right " + (isOpen && "is-active") },
         react_1.default.createElement("div", { className: "dropdown-trigger" },
             react_1.default.createElement("button", { className: "button is-rounded settings-button", "aria-haspopup": "true", "aria-controls": "dropdown-menu" },
@@ -50,6 +54,6 @@ function Settings(_a) {
                 react_1.default.createElement("strong", { className: "dropdown-item" }, "Select color:"),
                 react_1.default.createElement(ColorPicker_1.default, null),
                 react_1.default.createElement("hr", { className: "break" }),
-                react_1.default.createElement("strong", { style: { cursor: "pointer" }, className: "dropdown-item" }, "Log out")))));
+                react_1.default.createElement("strong", { onClick: logout, style: { cursor: "pointer" }, className: "dropdown-item logout" }, "Log out")))));
 }
 exports.default = connector(Settings);

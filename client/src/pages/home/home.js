@@ -126,6 +126,7 @@ function Home() {
             position: "absolute",
             width: "100%",
             overflowX: "hidden",
+            zIndex: 100,
         } },
         react_1.default.createElement("div", { className: "container" },
             react_1.default.createElement(Navbar_1.default, null),

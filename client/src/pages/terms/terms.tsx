@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./terms.scss";
 import { motion } from "framer-motion";
+import { pageVariants, pageTransition } from "../home/home";
 import Navbar from "../../components/Navbar/Navbar";
 import SideNav from "../../components/SideNav/SideNav";
 import Footer from "../../components/Footer/Footer";
-import { pageVariants, pageTransition } from "../home/home";
 
 export default function Terms() {
   const [isSideOpen, setIsSideOpen] = useState(false);

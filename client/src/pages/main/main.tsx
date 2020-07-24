@@ -1,5 +1,7 @@
 import React from "react";
 import "./main.scss";
+import { motion } from "framer-motion";
+import { pageVariants, pageTransition } from "../home/home";
 import Chat from "../../components/Chat/Chat";
 import ConversationsList from "../../components/ConversationsList/ConversationsList";
 import ChatForm from "../../components/ChatForm/ChatForm";
@@ -18,13 +20,20 @@ type Props = PropsFromRedux;
 
 function Main({ UI }: Props) {
   return (
-    <div className={`main-container ${UI.theme === "light" && "theme-light"}`}>
+    <motion.div
+      className={`main-container ${UI.theme === "light" && "theme-light"}`}
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageVariants}
+      transition={pageTransition}
+    >
       <ChatSearch isChatOpen={UI.isChatOpen} />
       <ConversationsList isChatOpen={UI.isChatOpen} />
       <ChatBar />
       <Chat />
       <ChatForm />
-    </div>
+    </motion.div>
   );
 }
 

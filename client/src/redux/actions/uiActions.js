@@ -11,5 +11,5 @@ exports.setColor = function (color) { return function (dispatch) {
     dispatch({ type: types_1.SET_COLOR, payload: color });
 }; };
 exports.setIsChatOpen = function (isOpen) { return function (dispatch) {
-    return dispatch({ type: types_1.SET_IS_CHAT_OPEN, payload: isOpen });
+    return dispatch({ type: types_1.SET_CHAT_OPEN, payload: isOpen });
 }; };

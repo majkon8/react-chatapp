@@ -21,6 +21,11 @@ function Settings({ setTheme }: Props) {
 
   const setLightTheme = () => setTheme("light");
 
+  const logout = () => {
+    localStorage.removeItem("refreshToken");
+    window.location.href = "/";
+  };
+
   return (
     <div
       onClick={toggleOpen}
@@ -52,7 +57,11 @@ function Settings({ setTheme }: Props) {
           <strong className="dropdown-item">Select color:</strong>
           <ColorPicker />
           <hr className="break" />
-          <strong style={{ cursor: "pointer" }} className="dropdown-item">
+          <strong
+            onClick={logout}
+            style={{ cursor: "pointer" }}
+            className="dropdown-item logout"
+          >
             Log out
           </strong>
         </div>

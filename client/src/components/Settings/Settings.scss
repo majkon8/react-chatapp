@@ -34,4 +34,10 @@
     margin: 5px 0;
     background-color: #eee;
   }
+
+  .logout {
+    &:hover {
+      background-color: inherit;
+    }
+  }
 }
