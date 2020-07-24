@@ -9,7 +9,9 @@ const connector = connect(mapStateToProps, {});
 
 const UnauthRoute = ({ component: Component, user }: any) => (
   <Route
-    render={() => (user.isAuthenticated ? <Redirect to="/" /> : <Component />)}
+    render={() =>
+      user.isAuthenticated ? <Redirect to="/main" /> : <Component />
+    }
   />
 );
 

@@ -10,6 +10,7 @@ $theme-light: #eee;
   color: #eee;
   background-color: $dark-color;
   transition: background-color 0.5s, color 0.5s;
+  overflow-x: hidden;
 }
 
 .simplebar-track.simplebar-vertical .simplebar-scrollbar:before {

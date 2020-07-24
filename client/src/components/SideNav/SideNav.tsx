@@ -33,19 +33,19 @@ export default function SideNav({ isOpen, toggleOpen }: IProps) {
         </span>
       </button>
       <nav className="side-nav">
-        <a href="home/#about_us" className="has-text-dark nav-item">
+        <a href="#about_us" className="has-text-dark nav-item">
           About us
         </a>
-        <a href="home/#features" className="has-text-dark nav-item">
+        <a href="#features" className="has-text-dark nav-item">
           Features
         </a>
-        <a href="home/#security" className="has-text-dark nav-item">
+        <a href="#security" className="has-text-dark nav-item">
           Security
         </a>
-        <a href="home/#support" className="has-text-dark nav-item">
+        <a href="#support" className="has-text-dark nav-item">
           Support
         </a>
-        <a href="home/#download" className="has-text-dark nav-item">
+        <a href="#download" className="has-text-dark nav-item">
           Download
         </a>
       </nav>

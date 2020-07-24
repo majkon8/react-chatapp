@@ -26,13 +26,13 @@ function Logo(_a) {
     var location = _a.location;
     var _b = react_1.useState(false), displayLogo = _b[0], setDisplayLogo = _b[1];
     react_1.useEffect(function () {
-        if (location.pathname === "/")
+        if (location.pathname === "/main")
             setDisplayLogo(false);
         else
             setDisplayLogo(true);
     }, [location]);
     return (react_1.default.createElement(react_1.default.Fragment, null, displayLogo && (react_1.default.createElement("div", { className: "logo-container" },
-        react_1.default.createElement(react_router_dom_1.NavLink, { to: "/home", className: "main-logo" },
+        react_1.default.createElement(react_router_dom_1.NavLink, { to: "/", className: "main-logo" },
             react_1.default.createElement("span", { className: "logo-chat" }, "CHAT"),
             react_1.default.createElement("span", { className: "has-text-primary" }, "APP"))))));
 }

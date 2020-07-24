@@ -6,7 +6,7 @@ export default function Logo({ location }: any) {
   const [displayLogo, setDisplayLogo] = useState(false);
 
   useEffect(() => {
-    if (location.pathname === "/") setDisplayLogo(false);
+    if (location.pathname === "/main") setDisplayLogo(false);
     else setDisplayLogo(true);
   }, [location]);
 
@@ -14,7 +14,7 @@ export default function Logo({ location }: any) {
     <>
       {displayLogo && (
         <div className="logo-container">
-          <NavLink to="/home" className="main-logo">
+          <NavLink to="/" className="main-logo">
             <span className="logo-chat">CHAT</span>
             <span className="has-text-primary">APP</span>
           </NavLink>

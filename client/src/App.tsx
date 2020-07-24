@@ -34,8 +34,8 @@ function App() {
         <Suspense fallback={<></>}>
           <AnimatePresence>
             <Switch location={location} key={location.pathname}>
-              <AuthRoute exact path="/" component={Main} />
-              <UnauthRoute path="/home" component={Home} />
+              <UnauthRoute exact path="/" component={Home} />
+              <AuthRoute path="/main" component={Main} />
               <UnauthRoute path="/login" component={Login} />
               <UnauthRoute path="/register" component={Register} />
               <UnauthRoute path="/reset/:token" component={ResetPassword} />

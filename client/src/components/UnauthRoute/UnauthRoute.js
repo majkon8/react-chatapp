@@ -11,6 +11,8 @@ var mapStateToProps = function (state) { return ({ user: state.user }); };
 var connector = react_redux_1.connect(mapStateToProps, {});
 var UnauthRoute = function (_a) {
     var Component = _a.component, user = _a.user;
-    return (react_1.default.createElement(react_router_dom_1.Route, { render: function () { return (user.isAuthenticated ? react_1.default.createElement(react_router_dom_1.Redirect, { to: "/" }) : react_1.default.createElement(Component, null)); } }));
+    return (react_1.default.createElement(react_router_dom_1.Route, { render: function () {
+            return user.isAuthenticated ? react_1.default.createElement(react_router_dom_1.Redirect, { to: "/main" }) : react_1.default.createElement(Component, null);
+        } }));
 };
 exports.default = connector(UnauthRoute);
