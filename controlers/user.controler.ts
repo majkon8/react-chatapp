@@ -10,12 +10,16 @@ interface ISignupBody {
   birthDate: string;
 }
 
-// GET ONE USER
-export const findUser = async (req: Request, res: Response) => {
-  const userId = req.params.id;
+// SEARCH FOR USERS BY NAME
+export const searchForUsers = async (req: Request, res: Response) => {
   try {
-    const user = await User.findById(userId);
-    return res.send(user);
+    const username = req.params.username;
+    const usernameRegex = new RegExp(username);
+    const users = await User.find({
+      username: { $regex: usernameRegex, $options: "i" },
+    });
+    const confirmedUsers = users.filter((user) => user.confirmed);
+    return res.send(confirmedUsers);
   } catch (error) {
     console.error(error);
     return res.status(400).send(error);
@@ -39,8 +43,8 @@ export const update = async (req: Request, res: Response) => {
 
 // CREATE USER (SIGN UP)
 export const signup = async (req: Request, res: Response) => {
-  const body: ISignupBody = req.body;
   try {
+    const body: ISignupBody = req.body;
     const newUser = new User(body);
     const refreshToken = await newUser.generateToken();
     const temporaryToken = await newUser.generateToken();
@@ -60,9 +64,9 @@ export const signup = async (req: Request, res: Response) => {
 
 // LOG IN
 export const login = async (req: Request, res: Response) => {
-  const email: string = req.body.email;
-  const password: string = req.body.password;
   try {
+    const email: string = req.body.email;
+    const password: string = req.body.password;
     const user = await User.findByCredentials(email, password);
     if (!user.confirmed)
       return res.status(400).send({ error: "Account not confirmed" });
@@ -81,9 +85,9 @@ export const login = async (req: Request, res: Response) => {
 
 // CONFIRM AN ACCOUNT
 export const confirmAccount = async (req: Request, res: Response) => {
-  const temporaryToken = req.params.token;
-  let decodedToken: any;
   try {
+    const temporaryToken = req.params.token;
+    let decodedToken: any;
     jwt.verify(temporaryToken, User.getJWTSecret(), (error, decoded) => {
       if (error) return res.status(400).send(error);
       decodedToken = decoded;
@@ -104,8 +108,8 @@ export const confirmAccount = async (req: Request, res: Response) => {
 
 // SEND FORGOT PASSWORD EMAIL
 export const forgotPassword = async (req: Request, res: Response) => {
-  const email: string = req.body.email;
   try {
+    const email: string = req.body.email;
     const user = await User.findOne({ email });
     if (!user) return res.status(404).send({ error: "User not found" });
     const temporaryToken = await user.generateToken(true);
@@ -124,10 +128,10 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
 // RESET PASSWORD
 export const resetPassword = async (req: Request, res: Response) => {
-  const newPassword: string = req.body.newPassword;
-  const temporaryToken: string = req.body.token;
-  let decodedToken: any;
   try {
+    const newPassword: string = req.body.newPassword;
+    const temporaryToken: string = req.body.token;
+    let decodedToken: any;
     jwt.verify(temporaryToken, User.getJWTSecret(), (error, decoded) => {
       if (error) return res.status(400).send(error);
       decodedToken = decoded;
@@ -148,8 +152,8 @@ export const resetPassword = async (req: Request, res: Response) => {
 
 // LOG IN WITH FACEBOOK/GOOGLE
 export const externalLogin = async (req: Request, res: Response) => {
-  const body: ISignupBody = req.body;
   try {
+    const body: ISignupBody = req.body;
     const user = await User.findOne({ email: body.email });
     // user already created an account with that email address internally
     if (user && !user.createdExternally)

@@ -93,7 +93,7 @@ var UserSchema = new mongoose_1.Schema({
     username: {
         type: String,
         required: [true, "Username is required"],
-        minlength: 1,
+        minlength: [3, "Username too short"],
         trim: true,
     },
     password: {

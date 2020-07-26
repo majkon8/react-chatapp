@@ -1,3 +1,5 @@
+import { IUser } from "./reducers/userReducer";
+
 // user reducer types
 export const SET_AUTHENTICATED = "SET_AUTHENTICATED";
 // UI reducer types
@@ -7,6 +9,8 @@ export const SET_LOADING_UI = "SET_LOADING_UI";
 export const SET_THEME = "SET_THEME";
 export const SET_COLOR = "SET_COLOR";
 export const SET_CHAT_OPEN = "SET_IS_CHAT_OPEN";
+// data reducer types
+export const SET_SEARCHED_USERS = "SET_SEARCHED_USERS";
 
 // user interfaces
 interface ISetAuthenticatedAction {
@@ -49,3 +53,11 @@ export type UIActionTypes =
   | ISetThemeAction
   | ISetColorAction
   | ISetChatOpen;
+
+// data interfaces
+interface ISetSearchedUsers {
+  type: typeof SET_SEARCHED_USERS;
+  payload: IUser[];
+}
+
+export type DataActionTypes = ISetSearchedUsers;

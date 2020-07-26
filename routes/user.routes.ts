@@ -3,8 +3,8 @@ import * as users from "../controlers/user.controler";
 
 let router = express.Router();
 
-/* GET /users/:id */
-router.get("/:id", users.findUser);
+/* GET /users/:username */
+router.get("/:username", users.searchForUsers);
 
 /* PATCH /users/:id */
 router.patch("/:id", users.update);

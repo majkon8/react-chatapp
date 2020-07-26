@@ -1,21 +1,26 @@
 import React, { ChangeEvent } from "react";
 import "./ChatInput.scss";
+import { DebounceInput } from "react-debounce-input";
 
 interface IProps {
-  hasIcon: boolean;
-  value: string;
+  isSearchInput: boolean;
+  value?: string;
   handleChange(event: ChangeEvent<HTMLInputElement>): void;
 }
 
-export default function ChatInput({ hasIcon, value, handleChange }: IProps) {
-  const inputMarkup = hasIcon ? (
+export default function ChatInput({
+  isSearchInput,
+  value,
+  handleChange,
+}: IProps) {
+  const inputMarkup = isSearchInput ? (
     <div className="control has-icons-left">
-      <input
+      <DebounceInput
+        debounceTimeout={300}
         type="text"
         className="chat-input input is-rounded"
         placeholder="Search for users..."
         onChange={(e) => handleChange(e)}
-        value={value}
       />
       <span className="icon is-small is-left">
         <i className="fa fa-search"></i>

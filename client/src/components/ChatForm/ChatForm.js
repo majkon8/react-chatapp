@@ -37,7 +37,7 @@ function ChatForm(_a) {
         setMessageBody("");
     };
     return (react_1.default.createElement("form", { className: "chat-form-container", onSubmit: submitChatMessage },
-        react_1.default.createElement(ChatInput_1.default, { handleChange: handleChange, hasIcon: false, value: messageBody }),
+        react_1.default.createElement(ChatInput_1.default, { handleChange: handleChange, isSearchInput: false, value: messageBody }),
         react_1.default.createElement("button", { className: "button is-rounded submit-button", type: "submit", disabled: messageBody.length === 0 }, "Send")));
 }
 exports.default = ChatForm;

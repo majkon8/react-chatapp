@@ -22,7 +22,7 @@ export default function ChatForm({ socket }: IProps) {
     <form className="chat-form-container" onSubmit={submitChatMessage}>
       <ChatInput
         handleChange={handleChange}
-        hasIcon={false}
+        isSearchInput={false}
         value={messageBody}
       />
       <button

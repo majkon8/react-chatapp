@@ -3,9 +3,9 @@ import { Request, Response } from "express";
 
 // CREATE CONVERSATION
 export const create = async (req: Request, res: Response) => {
-  const body: string[] = req.body;
-  const newConversation = new Conversation(body);
   try {
+    const body: string[] = req.body;
+    const newConversation = new Conversation(body);
     await newConversation.save();
     return res.send("success");
   } catch (error) {

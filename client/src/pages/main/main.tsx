@@ -52,8 +52,8 @@ function Main({ UI }: Props) {
       variants={pageVariants}
       transition={pageTransition}
     >
-      <ChatSearch isChatOpen={UI.isChatOpen} />
-      <ConversationsList isChatOpen={UI.isChatOpen} />
+      <ChatSearch />
+      <ConversationsList />
       <ChatBar />
       <Chat socket={socket} />
       <ChatForm socket={socket} />

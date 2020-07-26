@@ -7,9 +7,14 @@ var redux_1 = require("redux");
 var redux_thunk_1 = __importDefault(require("redux-thunk"));
 var userReducer_1 = __importDefault(require("./reducers/userReducer"));
 var uiReducer_1 = __importDefault(require("./reducers/uiReducer"));
+var dataReducer_1 = __importDefault(require("./reducers/dataReducer"));
 var initialState = {};
 var middleware = [redux_thunk_1.default];
-var reducers = redux_1.combineReducers({ user: userReducer_1.default, UI: uiReducer_1.default });
+var reducers = redux_1.combineReducers({
+    user: userReducer_1.default,
+    UI: uiReducer_1.default,
+    data: dataReducer_1.default,
+});
 var composeEnhancers = typeof window === "object" &&
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})

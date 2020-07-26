@@ -3,11 +3,15 @@ import "./Conversation.scss";
 
 interface IProps {
   isActive?: boolean;
+  isNew: boolean;
+  username: string;
   handleChatOpen(): void;
 }
 
 export default function Conversation({
   isActive = false,
+  isNew,
+  username,
   handleChatOpen,
 }: IProps) {
   return (
@@ -20,10 +24,12 @@ export default function Conversation({
         alt="user"
       />
       <div className="title-message-container">
-        <span className="conversation-title">User Userski</span>
-        <span className="conversation-message">
-          Hello man<span> &middot; 13:43</span>
-        </span>
+        <span className="conversation-title">{username}</span>
+        {!isNew && (
+          <span className="conversation-message">
+            Hello man<span> &middot; 13:43</span>
+          </span>
+        )}
       </div>
     </div>
   );

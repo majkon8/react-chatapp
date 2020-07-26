@@ -152,6 +152,7 @@ function RegisterForm({ signup, UI }: Props) {
         iconClass="fas fa-user"
         ref={register({
           required: { value: true, message: "This field is required" },
+          minLength: { value: 3, message: "Minimum 3 characters" },
           maxLength: { value: 30, message: "Maximum 30 characters" },
         })}
       />

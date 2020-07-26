@@ -22,8 +22,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = __importStar(require("express"));
 var users = __importStar(require("../controlers/user.controler"));
 var router = express.Router();
-/* GET /users/:id */
-router.get("/:id", users.findUser);
+/* GET /users/:username */
+router.get("/:username", users.searchForUsers);
 /* PATCH /users/:id */
 router.patch("/:id", users.update);
 /* POST /users */

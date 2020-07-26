@@ -121,6 +121,7 @@ function RegisterForm(_a) {
             }) }),
         react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.username, name: "username", type: "text", placeholder: "Username", iconClass: "fas fa-user", ref: register({
                 required: { value: true, message: "This field is required" },
+                minLength: { value: 3, message: "Minimum 3 characters" },
                 maxLength: { value: 30, message: "Maximum 30 characters" },
             }) }),
         react_1.default.createElement(FormInput_1.default, { isSubmitted: isSubmitted, error: errors.password, name: "password", type: "password", placeholder: "Password", iconClass: "fas fa-lock", ref: register({
