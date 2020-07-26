@@ -248,5 +248,6 @@ var setAuthorization = function (tokens) {
     var accessToken = tokens.accessToken;
     var refreshToken = tokens.refreshToken;
     axios_1.default.defaults.headers.common["x-access-token"] = accessToken;
+    localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
 };

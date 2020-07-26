@@ -143,7 +143,7 @@ exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 accessToken = _a.sent();
                 res.header("x-refresh-token", refreshToken);
                 res.header("x-access-token", accessToken);
-                return [2 /*return*/, res.send("success")];
+                return [2 /*return*/, res.send(user)];
             case 4:
                 error_4 = _a.sent();
                 console.error(error_4);
@@ -284,7 +284,7 @@ exports.externalLogin = function (req, res) { return __awaiter(void 0, void 0, v
                 user = _a.sent();
                 // user already created an account with that email address internally
                 if (user && !user.createdExternally)
-                    res.status(400).send({ error: "Email already registered" });
+                    return [2 /*return*/, res.status(400).send({ error: "Email already registered" })];
                 if (!!user) return [3 /*break*/, 7];
                 newUser = new user_model_1.User(body);
                 return [4 /*yield*/, newUser.generateToken()];
@@ -305,8 +305,7 @@ exports.externalLogin = function (req, res) { return __awaiter(void 0, void 0, v
                 accessToken = _a.sent();
                 res.header("x-refresh-token", refreshToken);
                 res.header("x-access-token", accessToken);
-                res.send("success");
-                _a.label = 7;
+                return [2 /*return*/, res.send("success")];
             case 7:
                 if (!(user && user.createdExternally)) return [3 /*break*/, 9];
                 refreshToken = user.refreshToken;
@@ -315,7 +314,7 @@ exports.externalLogin = function (req, res) { return __awaiter(void 0, void 0, v
                 accessToken = _a.sent();
                 res.header("x-refresh-token", refreshToken);
                 res.header("x-access-token", accessToken);
-                return [2 /*return*/, res.send("success")];
+                return [2 /*return*/, res.send(user)];
             case 9: return [3 /*break*/, 11];
             case 10:
                 error_8 = _a.sent();

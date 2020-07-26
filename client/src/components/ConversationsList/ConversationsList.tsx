@@ -20,77 +20,7 @@ function ConversationsList({ isChatOpen, setIsChatOpen }: Props) {
   const handleChatOpen = () => setIsChatOpen(true);
   return (
     <ul className={`conversations-list-container ${isChatOpen && "is-closed"}`}>
-      <SimpleBar style={{ maxHeight: "calc(100vh - 70px)" }}>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} isActive={true} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-        <li>
-          <Conversation handleChatOpen={handleChatOpen} />
-        </li>
-      </SimpleBar>
+      <SimpleBar style={{ maxHeight: "calc(100vh - 70px)" }}></SimpleBar>
     </ul>
   );
 }

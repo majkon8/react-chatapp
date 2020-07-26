@@ -35,38 +35,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mongoose = void 0;
-var mongoose_1 = __importDefault(require("mongoose"));
-exports.mongoose = mongoose_1.default;
-mongoose_1.default.Promise = global.Promise;
-(function () {
-    return __awaiter(this, void 0, void 0, function () {
-        var error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, mongoose_1.default.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/chat", {
-                            useNewUrlParser: true,
-                            useUnifiedTopology: true,
-                        })];
-                case 1:
-                    _a.sent();
-                    console.log("Connected to MongoDB successfully");
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_1 = _a.sent();
-                    console.log("Error while attempting to connect to MongoDB");
-                    console.error(error_1);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
+exports.create = void 0;
+var message_model_1 = require("../models/message.model");
+// CREATE CONVERSATION
+exports.create = function (message) { return __awaiter(void 0, void 0, void 0, function () {
+    var newMessage, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                newMessage = new message_model_1.Message(message);
+                return [4 /*yield*/, newMessage.save()];
+            case 1:
+                _a.sent();
+                return [2 /*return*/, newMessage];
+            case 2:
+                error_1 = _a.sent();
+                console.error(error_1);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
     });
-})();
-mongoose_1.default.set("useCreateIndex", true);
-mongoose_1.default.set("useFindAndModify", false);
+}); };

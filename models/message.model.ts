@@ -8,19 +8,22 @@ export interface IMessageDocument extends Document {
 
 export interface IMessageModel extends Model<IMessageDocument> {}
 
-const messageSchema: Schema = new Schema({
-  conversationId: {
-    type: Schema.Types.ObjectId,
-    required: true,
+const messageSchema: Schema = new Schema(
+  {
+    conversationId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
+    authorId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
+    body: {
+      type: String,
+    },
   },
-  author: {
-    type: Schema.Types.ObjectId,
-    required: true,
-  },
-  body: {
-    type: String,
-  },
-});
+  { timestamps: true }
+);
 
 export const Message: IMessageModel = mongoose.model<
   IMessageDocument,

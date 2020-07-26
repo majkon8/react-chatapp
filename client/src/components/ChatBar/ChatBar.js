@@ -20,8 +20,8 @@ function ChatBar(_a) {
         react_1.default.createElement("div", { className: "user-info" },
             react_1.default.createElement("img", { src: "https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png", alt: "user" }),
             react_1.default.createElement("div", { className: "title-active-container" },
-                react_1.default.createElement("span", { className: "conversation-title" }, "User Userski"),
-                react_1.default.createElement("span", { className: "last-active" }, "Last active: 5 minutes ago"))),
+                react_1.default.createElement("span", { className: "conversation-title" }),
+                react_1.default.createElement("span", { className: "last-active" }))),
         react_1.default.createElement(Settings_1.default, null)));
 }
 exports.default = connector(ChatBar);

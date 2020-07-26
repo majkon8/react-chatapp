@@ -26,8 +26,8 @@ function ChatBar({ setIsChatOpen }: Props) {
           alt="user"
         />
         <div className="title-active-container">
-          <span className="conversation-title">User Userski</span>
-          <span className="last-active">Last active: 5 minutes ago</span>
+          <span className="conversation-title"></span>
+          <span className="last-active"></span>
         </div>
       </div>
       <Settings />

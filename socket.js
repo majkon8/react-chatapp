@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,38 +54,38 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mongoose = void 0;
-var mongoose_1 = __importDefault(require("mongoose"));
-exports.mongoose = mongoose_1.default;
-mongoose_1.default.Promise = global.Promise;
-(function () {
-    return __awaiter(this, void 0, void 0, function () {
-        var error_1;
+var index_1 = require("./index");
+var messages = __importStar(require("./controlers/message.controller"));
+var auth_1 = require("./middlewares/auth");
+var mongoose_1 = require("./mongoose");
+index_1.io.use(auth_1.tokenAuthSocket);
+index_1.io.on("connection", function (socket) {
+    console.log("Connected " + socket.userId);
+    socket.on("disconnect", function () { return console.log("Disconnected " + socket.userId); });
+    socket.on("sendMessage", function (messageBody) { return __awaiter(void 0, void 0, void 0, function () {
+        var newMessage, createdMessage, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, mongoose_1.default.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/chat", {
-                            useNewUrlParser: true,
-                            useUnifiedTopology: true,
-                        })];
+                    newMessage = {
+                        conversationId: mongoose_1.mongoose.Types.ObjectId("123456789123456789123456"),
+                        authorId: mongoose_1.mongoose.Types.ObjectId(socket.userId),
+                        body: messageBody,
+                    };
+                    return [4 /*yield*/, messages.create(newMessage)];
                 case 1:
-                    _a.sent();
-                    console.log("Connected to MongoDB successfully");
+                    createdMessage = _a.sent();
+                    if (createdMessage)
+                        return [2 /*return*/, index_1.io.emit("receiveMessage", createdMessage)];
                     return [3 /*break*/, 3];
                 case 2:
                     error_1 = _a.sent();
-                    console.log("Error while attempting to connect to MongoDB");
                     console.error(error_1);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
-    });
-})();
-mongoose_1.default.set("useCreateIndex", true);
-mongoose_1.default.set("useFindAndModify", false);
+    }); });
+});

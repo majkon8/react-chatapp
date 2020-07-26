@@ -8,7 +8,8 @@ require("./ChatSearch.scss");
 var ChatInput_1 = __importDefault(require("../../common/ChatInput/ChatInput"));
 function ChatSearch(_a) {
     var isChatOpen = _a.isChatOpen;
+    var handleChange = function (event) { };
     return (react_1.default.createElement("div", { className: "chat-search-container " + (isChatOpen && "is-closed") },
-        react_1.default.createElement(ChatInput_1.default, { hasIcon: true })));
+        react_1.default.createElement(ChatInput_1.default, { handleChange: handleChange, hasIcon: true, value: "" })));
 }
 exports.default = ChatSearch;

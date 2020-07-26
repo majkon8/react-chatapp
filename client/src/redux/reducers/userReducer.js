@@ -14,6 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = require("../types");
 var initialState = {
     isAuthenticated: false,
+    authenticatedUser: null,
 };
 function default_1(state, action) {
     if (state === void 0) { state = initialState; }

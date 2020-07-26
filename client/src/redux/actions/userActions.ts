@@ -159,5 +159,6 @@ const setAuthorization = (tokens: ITokens) => {
   const accessToken = tokens.accessToken;
   const refreshToken = tokens.refreshToken;
   axios.defaults.headers.common["x-access-token"] = accessToken;
+  localStorage.setItem("accessToken", accessToken);
   localStorage.setItem("refreshToken", refreshToken);
 };

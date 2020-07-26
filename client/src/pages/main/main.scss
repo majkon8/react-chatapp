@@ -83,4 +83,26 @@ $theme-light: #eee;
       color: $text-dark;
     }
   }
+
+  .chat-form-container {
+    .submit-button {
+      background-color: $theme-light;
+      color: $text-dark;
+      border-color: $theme-light;
+
+      &:hover {
+        color: $text-dark;
+        border-color: $theme-light;
+      }
+
+      &:disabled {
+        background-color: $theme-light;
+        border-color: $theme-light;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      grid-column: span 2;
+    }
+  }
 }

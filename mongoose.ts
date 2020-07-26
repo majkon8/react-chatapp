@@ -5,7 +5,7 @@ mongoose.Promise = global.Promise;
 (async function () {
   try {
     await mongoose.connect(
-      process.env.MONGODB_URI || "mongodb://localhost:27017/message",
+      process.env.MONGODB_URI || "mongodb://localhost:27017/chat",
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,

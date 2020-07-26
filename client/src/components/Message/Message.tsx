@@ -9,9 +9,9 @@ const connector = connect(mapStateToProps, {});
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = PropsFromRedux & { isMineMessage: boolean };
+type Props = PropsFromRedux & { isOwnMessage: boolean };
 
-function Message({ isMineMessage, UI }: Props) {
+function Message({ isOwnMessage, UI }: Props) {
   const textColor = [
     "rgb(127, 219, 255)",
     "rgb(1, 255, 112)",
@@ -24,11 +24,11 @@ function Message({ isMineMessage, UI }: Props) {
   return (
     <div
       className={`chat-message-container ${
-        isMineMessage ? "mine-chat-message" : "other-chat-message"
+        isOwnMessage ? "own-chat-message" : "other-chat-message"
       }`}
     >
       <div className="chat-message-content">
-        {!isMineMessage && (
+        {!isOwnMessage && (
           <img
             className="chat-message-user-image"
             src="https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
@@ -37,9 +37,9 @@ function Message({ isMineMessage, UI }: Props) {
         )}
         <span
           style={{
-            backgroundColor: isMineMessage ? UI.color : "",
-            borderColor: isMineMessage ? UI.color : "",
-            color: isMineMessage ? textColor : "",
+            backgroundColor: isOwnMessage ? UI.color : "",
+            borderColor: isOwnMessage ? UI.color : "",
+            color: isOwnMessage ? textColor : "",
           }}
           className="chat-message-text"
         >

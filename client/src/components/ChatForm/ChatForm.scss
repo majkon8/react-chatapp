@@ -1,4 +1,26 @@
 .chat-form-container {
+  display: flex;
+  justify-content: space-between;
+
+  .submit-button {
+    margin: 15px 0;
+    margin-right: 20px;
+    background-color: rgb(40, 40, 40);
+    color: white;
+    border-color: rgb(40, 40, 40);
+    transition: all 0.5s;
+
+    &:hover {
+      color: white;
+      border-color: rgb(40, 40, 40);
+    }
+
+    &:disabled {
+      background-color: rgb(40, 40, 40);
+      border-color: rgb(40, 40, 40);
+    }
+  }
+
   @media screen and (max-width: 768px) {
     grid-column: span 2;
   }
