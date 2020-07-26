@@ -1,7 +1,18 @@
 import { io } from "./index";
 import * as messages from "./controlers/message.controller";
+import * as conversations from "./controlers/conversation.controller";
 import { tokenAuthSocket } from "./middlewares/auth";
 import { mongoose } from "./mongoose";
+
+interface IConversation {
+  new: boolean;
+  id: string;
+}
+
+interface IMessage {
+  body: string;
+  conversation: IConversation;
+}
 
 export type Socket = SocketIO.Socket & { userId: string };
 
@@ -12,12 +23,18 @@ io.on("connection", (socket: Socket) => {
 
   socket.on("disconnect", () => console.log(`Disconnected ${socket.userId}`));
 
-  socket.on("sendMessage", async (messageBody: string) => {
+  socket.on("sendMessage", async (message: IMessage) => {
     try {
+      let conversationId;
+      if (message.conversation.new) {
+        const members = [socket.userId, message.conversation.id];
+        const newConversation = await conversations.create(members);
+        conversationId = newConversation?._id;
+      } else conversationId = message.conversation.id;
       const newMessage = {
-        conversationId: mongoose.Types.ObjectId("123456789123456789123456"),
+        conversationId: mongoose.Types.ObjectId(conversationId),
         authorId: mongoose.Types.ObjectId(socket.userId),
-        body: messageBody,
+        body: message.body,
       };
       const createdMessage = await messages.create(newMessage);
       if (createdMessage) return io.emit("receiveMessage", createdMessage);

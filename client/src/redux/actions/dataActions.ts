@@ -1,6 +1,11 @@
-import { SET_SEARCHED_USERS, SET_LOADING_UI } from "../types";
+import {
+  SET_SEARCHED_USERS,
+  SET_LOADING_UI,
+  SET_SELECTED_CONVERSATION,
+} from "../types";
 import { Dispatch } from "redux";
 import axios from "axios";
+import { ISelectedConversation } from "../reducers/dataReducer";
 
 export const searchForUsers = (username: string) => async (
   dispatch: Dispatch
@@ -19,4 +24,10 @@ export const searchForUsers = (username: string) => async (
   } finally {
     dispatch({ type: SET_LOADING_UI, payload: false });
   }
+};
+
+export const setSelectedConversation = (
+  conversation: ISelectedConversation
+) => (dispatch: Dispatch) => {
+  dispatch({ type: SET_SELECTED_CONVERSATION, payload: conversation });
 };

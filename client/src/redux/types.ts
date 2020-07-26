@@ -1,4 +1,5 @@
 import { IUser } from "./reducers/userReducer";
+import { ISelectedConversation } from "./reducers/dataReducer";
 
 // user reducer types
 export const SET_AUTHENTICATED = "SET_AUTHENTICATED";
@@ -11,6 +12,7 @@ export const SET_COLOR = "SET_COLOR";
 export const SET_CHAT_OPEN = "SET_IS_CHAT_OPEN";
 // data reducer types
 export const SET_SEARCHED_USERS = "SET_SEARCHED_USERS";
+export const SET_SELECTED_CONVERSATION = "SET_SELECTED_CONVERSATION";
 
 // user interfaces
 interface ISetAuthenticatedAction {
@@ -41,7 +43,7 @@ interface ISetColorAction {
   type: typeof SET_COLOR;
   payload: string;
 }
-interface ISetChatOpen {
+interface ISetChatOpenAction {
   type: typeof SET_CHAT_OPEN;
   payload: boolean;
 }
@@ -52,12 +54,18 @@ export type UIActionTypes =
   | ISetLoadingUIAction
   | ISetThemeAction
   | ISetColorAction
-  | ISetChatOpen;
+  | ISetChatOpenAction;
 
 // data interfaces
-interface ISetSearchedUsers {
+interface ISetSearchedUsersAction {
   type: typeof SET_SEARCHED_USERS;
   payload: IUser[];
 }
+interface ISetSelectedConversationAction {
+  type: typeof SET_SELECTED_CONVERSATION;
+  payload: ISelectedConversation;
+}
 
-export type DataActionTypes = ISetSearchedUsers;
+export type DataActionTypes =
+  | ISetSearchedUsersAction
+  | ISetSelectedConversationAction;

@@ -14,12 +14,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = require("../types");
 var initialState = {
     searchedUsers: [],
+    selectedConversation: null,
 };
 function default_1(state, action) {
     if (state === void 0) { state = initialState; }
     switch (action.type) {
         case types_1.SET_SEARCHED_USERS:
             return __assign(__assign({}, state), { searchedUsers: action.payload });
+        case types_1.SET_SELECTED_CONVERSATION:
+            return __assign(__assign({}, state), { selectedConversation: action.payload });
         default:
             return state;
     }

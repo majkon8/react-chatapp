@@ -39,22 +39,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = void 0;
 var conversation_model_1 = require("../models/conversation.model");
 // CREATE CONVERSATION
-exports.create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var body, newConversation, error_1;
+exports.create = function (members) { return __awaiter(void 0, void 0, void 0, function () {
+    var newConversation, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                body = req.body;
-                newConversation = new conversation_model_1.Conversation(body);
+                newConversation = new conversation_model_1.Conversation(members);
                 return [4 /*yield*/, newConversation.save()];
             case 1:
                 _a.sent();
-                return [2 /*return*/, res.send("success")];
+                return [2 /*return*/, newConversation];
             case 2:
                 error_1 = _a.sent();
                 console.error(error_1);
-                return [2 /*return*/, res.status(400).send(error_1)];
+                return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });

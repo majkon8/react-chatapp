@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchForUsers = void 0;
+exports.setSelectedConversation = exports.searchForUsers = void 0;
 var types_1 = require("../types");
 var axios_1 = __importDefault(require("axios"));
 exports.searchForUsers = function (username) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
@@ -73,3 +73,6 @@ exports.searchForUsers = function (username) { return function (dispatch) { retu
         }
     });
 }); }; };
+exports.setSelectedConversation = function (conversation) { return function (dispatch) {
+    dispatch({ type: types_1.SET_SELECTED_CONVERSATION, payload: conversation });
+}; };

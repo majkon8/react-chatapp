@@ -1,15 +1,12 @@
 import { Conversation } from "../models/conversation.model";
-import { Request, Response } from "express";
 
 // CREATE CONVERSATION
-export const create = async (req: Request, res: Response) => {
+export const create = async (members: string[]) => {
   try {
-    const body: string[] = req.body;
-    const newConversation = new Conversation(body);
+    const newConversation = new Conversation(members);
     await newConversation.save();
-    return res.send("success");
+    return newConversation;
   } catch (error) {
     console.error(error);
-    return res.status(400).send(error);
   }
 };

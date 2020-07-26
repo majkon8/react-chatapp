@@ -1,12 +1,20 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import "./ChatForm.scss";
 import ChatInput from "../../common/ChatInput/ChatInput";
+// redux
+import { connect, ConnectedProps } from "react-redux";
+import { IState } from "../../redux/store";
 
-interface IProps {
+const mapStateToProps = (state: IState) => ({ data: state.data });
+const connector = connect(mapStateToProps, {});
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
   socket: SocketIOClient.Socket | null;
-}
+};
 
-export default function ChatForm({ socket }: IProps) {
+function ChatForm({ data, socket }: Props) {
   const [messageBody, setMessageBody] = useState("");
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
@@ -14,7 +22,12 @@ export default function ChatForm({ socket }: IProps) {
 
   const submitChatMessage = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    socket?.emit("sendMessage", messageBody);
+    if (!data.selectedConversation) return;
+    const message = {
+      body: messageBody,
+      conversation: data.selectedConversation,
+    };
+    socket?.emit("sendMessage", message);
     setMessageBody("");
   };
 
@@ -35,3 +48,5 @@ export default function ChatForm({ socket }: IProps) {
     </form>
   );
 }
+
+export default connector(ChatForm);

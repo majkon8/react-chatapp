@@ -25,19 +25,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
 require("./ChatForm.scss");
 var ChatInput_1 = __importDefault(require("../../common/ChatInput/ChatInput"));
+// redux
+var react_redux_1 = require("react-redux");
+var mapStateToProps = function (state) { return ({ data: state.data }); };
+var connector = react_redux_1.connect(mapStateToProps, {});
 function ChatForm(_a) {
-    var socket = _a.socket;
+    var data = _a.data, socket = _a.socket;
     var _b = react_1.useState(""), messageBody = _b[0], setMessageBody = _b[1];
     var handleChange = function (event) {
         return setMessageBody(event.target.value);
     };
     var submitChatMessage = function (event) {
         event.preventDefault();
-        socket === null || socket === void 0 ? void 0 : socket.emit("sendMessage", messageBody);
+        if (!data.selectedConversation)
+            return;
+        var message = {
+            body: messageBody,
+            conversation: data.selectedConversation,
+        };
+        socket === null || socket === void 0 ? void 0 : socket.emit("sendMessage", message);
         setMessageBody("");
     };
     return (react_1.default.createElement("form", { className: "chat-form-container", onSubmit: submitChatMessage },
         react_1.default.createElement(ChatInput_1.default, { handleChange: handleChange, isSearchInput: false, value: messageBody }),
         react_1.default.createElement("button", { className: "button is-rounded submit-button", type: "submit", disabled: messageBody.length === 0 }, "Send")));
 }
-exports.default = ChatForm;
+exports.default = connector(ChatForm);

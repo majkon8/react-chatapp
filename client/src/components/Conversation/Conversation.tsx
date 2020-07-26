@@ -1,22 +1,52 @@
 import React from "react";
 import "./Conversation.scss";
+// redux
+import { connect, ConnectedProps } from "react-redux";
+import { setIsChatOpen } from "../../redux/actions/uiActions";
+import { setSelectedConversation } from "../../redux/actions/dataActions";
+import { IState } from "../../redux/store";
+
+const mapStateToProps = (state: IState) => ({ UI: state.UI, data: state.data });
+const mapActionsToProps = { setIsChatOpen, setSelectedConversation };
+const connector = connect(mapStateToProps, mapActionsToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 interface IProps {
   isActive?: boolean;
   isNew: boolean;
   username: string;
-  handleChatOpen(): void;
+  id: string;
+  handleActive(id: string): void;
 }
 
-export default function Conversation({
-  isActive = false,
+type Props = PropsFromRedux & IProps;
+
+function Conversation({
+  isActive,
   isNew,
   username,
-  handleChatOpen,
-}: IProps) {
+  id,
+  handleActive,
+  setIsChatOpen,
+  setSelectedConversation,
+}: Props) {
+  const handleChatOpen = () => setIsChatOpen(true);
+
+  const selectNewConversation = (id: string) => {
+    const conversation = { new: true, id };
+    setSelectedConversation(conversation);
+  };
+
+  const handleClick = () => {
+    handleActive(id);
+    handleChatOpen();
+    selectNewConversation(id);
+  };
+
   return (
     <div
-      onClick={handleChatOpen}
+      onClick={handleClick}
       className={`conversation-container ${isActive && "active-conversation"}`}
     >
       <img
@@ -34,3 +64,5 @@ export default function Conversation({
     </div>
   );
 }
+
+export default connector(Conversation);
