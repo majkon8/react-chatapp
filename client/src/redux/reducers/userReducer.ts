@@ -1,4 +1,8 @@
-import { SET_AUTHENTICATED, UserActionTypes } from "../types";
+import {
+  SET_AUTHENTICATED,
+  SET_AUTHENTICATED_USER,
+  UserActionTypes,
+} from "../types";
 
 export interface IUser {
   confirmed: boolean;
@@ -22,6 +26,8 @@ export default function (state = initialState, action: UserActionTypes) {
   switch (action.type) {
     case SET_AUTHENTICATED:
       return { ...state, isAuthenticated: action.payload };
+    case SET_AUTHENTICATED_USER:
+      return { ...state, authenticatedUser: action.payload };
     default:
       return state;
   }

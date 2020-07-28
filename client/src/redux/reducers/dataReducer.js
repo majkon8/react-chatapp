@@ -13,8 +13,9 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = require("../types");
 var initialState = {
-    searchedUsers: [],
+    searchedUsers: null,
     selectedConversation: null,
+    conversations: null,
 };
 function default_1(state, action) {
     if (state === void 0) { state = initialState; }
@@ -23,6 +24,8 @@ function default_1(state, action) {
             return __assign(__assign({}, state), { searchedUsers: action.payload });
         case types_1.SET_SELECTED_CONVERSATION:
             return __assign(__assign({}, state), { selectedConversation: action.payload });
+        case types_1.SET_CONVERSATIONS:
+            return __assign(__assign({}, state), { conversations: action.payload });
         default:
             return state;
     }

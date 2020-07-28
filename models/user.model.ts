@@ -95,7 +95,7 @@ UserSchema.methods.generateToken = function (
   return new Promise((resolve, reject) => {
     // Create the JSON Web Token and return that
     jwt.sign(
-      { _id: user._id.toHexString() },
+      { _id: user._id.toHexString(), username: user.username },
       jwtSecret,
       { expiresIn: temporary ? "10m" : "9999 years" },
       (error, token) => {

@@ -17,6 +17,7 @@ interface IProps {
   isNew: boolean;
   username: string;
   id: string;
+  message?: string;
   handleActive(id: string): void;
 }
 
@@ -27,6 +28,7 @@ function Conversation({
   isNew,
   username,
   id,
+  message,
   handleActive,
   setIsChatOpen,
   setSelectedConversation,
@@ -34,7 +36,7 @@ function Conversation({
   const handleChatOpen = () => setIsChatOpen(true);
 
   const selectNewConversation = (id: string) => {
-    const conversation = { new: true, id };
+    const conversation = { new: true, id, username };
     setSelectedConversation(conversation);
   };
 
@@ -57,7 +59,8 @@ function Conversation({
         <span className="conversation-title">{username}</span>
         {!isNew && (
           <span className="conversation-message">
-            Hello man<span> &middot; 13:43</span>
+            {message}
+            <span> &middot; 13:43</span>
           </span>
         )}
       </div>

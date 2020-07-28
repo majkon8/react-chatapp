@@ -115,11 +115,12 @@ exports.login = function (userData) { return function (dispatch) { return __awai
                 return [4 /*yield*/, axios_1.default.post("/users/login", userData)];
             case 2:
                 response = _a.sent();
-                dispatch({ type: types_1.SET_ERROR, payload: null });
-                dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
                 accessToken = response.headers["x-access-token"];
                 refreshToken = response.headers["x-refresh-token"];
                 setAuthorization({ accessToken: accessToken, refreshToken: refreshToken });
+                dispatch({ type: types_1.SET_ERROR, payload: null });
+                dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
+                dispatch({ type: types_1.SET_AUTHENTICATED_USER, payload: response.data });
                 return [3 /*break*/, 5];
             case 3:
                 error_3 = _a.sent();
@@ -219,11 +220,12 @@ exports.externalLogin = function (data) { return function (dispatch) { return __
                 return [4 /*yield*/, axios_1.default.post("/users/login/external", data)];
             case 2:
                 response = _a.sent();
-                dispatch({ type: types_1.SET_ERROR, payload: null });
-                dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
                 accessToken = response.headers["x-access-token"];
                 refreshToken = response.headers["x-refresh-token"];
                 setAuthorization({ accessToken: accessToken, refreshToken: refreshToken });
+                dispatch({ type: types_1.SET_ERROR, payload: null });
+                dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
+                dispatch({ type: types_1.SET_AUTHENTICATED_USER, payload: response.data });
                 return [3 /*break*/, 5];
             case 3:
                 error_6 = _a.sent();

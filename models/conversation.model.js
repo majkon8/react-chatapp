@@ -23,8 +23,13 @@ exports.Conversation = void 0;
 var mongoose_1 = __importStar(require("mongoose"));
 var conversationSchema = new mongoose_1.Schema({
     members: {
-        type: [mongoose_1.Schema.Types.ObjectId],
-        required: true,
+        ids: { type: [mongoose_1.Schema.Types.ObjectId], required: true },
+        usernames: { type: [String], required: true },
+    },
+    lastMessage: {
+        body: String,
+        createdAt: Date,
+        authorId: mongoose_1.Schema.Types.ObjectId,
     },
 });
 exports.Conversation = mongoose_1.default.model("Conversation", conversationSchema);

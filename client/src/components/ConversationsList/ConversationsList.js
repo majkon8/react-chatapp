@@ -30,16 +30,27 @@ var Conversation_1 = __importDefault(require("../Conversation/Conversation"));
 var core_1 = require("@material-ui/core");
 // redux
 var react_redux_1 = require("react-redux");
-var mapStateToProps = function (state) { return ({ UI: state.UI, data: state.data }); };
-var connector = react_redux_1.connect(mapStateToProps, {});
+var dataActions_1 = require("../../redux/actions/dataActions");
+var mapStateToProps = function (state) { return ({
+    UI: state.UI,
+    data: state.data,
+    user: state.user,
+}); };
+var mapActionsToProps = { getAllConversations: dataActions_1.getAllConversations };
+var connector = react_redux_1.connect(mapStateToProps, mapActionsToProps);
 function ConversationsList(_a) {
-    var UI = _a.UI, data = _a.data;
-    var _b = react_1.useState(""), activeId = _b[0], setActiveId = _b[1];
+    var _b, _c;
+    var UI = _a.UI, data = _a.data, user = _a.user, getAllConversations = _a.getAllConversations;
+    var _d = react_1.useState(""), activeId = _d[0], setActiveId = _d[1];
+    react_1.useEffect(function () {
+        getAllConversations();
+    }, []);
     var handleActive = function (id) { return setActiveId(id); };
     return (react_1.default.createElement("ul", { className: "conversations-list-container " + (UI.isChatOpen && "is-closed") },
         react_1.default.createElement(simplebar_react_1.default, { style: { maxHeight: "calc(100vh - 70px)" } },
-            data.searchedUsers.length > 0 && (react_1.default.createElement("p", { className: "conversations-title" }, "Make new conversation with:")),
-            UI.loading ? (react_1.default.createElement(core_1.CircularProgress, { color: "inherit" })) : (data.searchedUsers.map(function (user) { return (react_1.default.createElement(Conversation_1.default, { isActive: activeId === user._id, key: user._id, isNew: true, username: user.username, id: user._id, handleActive: handleActive })); })),
-            react_1.default.createElement("p", { className: "conversations-title" }, "Your conversations:"))));
+            data.searchedUsers && (react_1.default.createElement("p", { className: "conversations-title" }, "Make new conversation with:")),
+            UI.loading && data.searchedUsers ? (react_1.default.createElement(core_1.CircularProgress, { color: "inherit" })) : ((_b = data.searchedUsers) === null || _b === void 0 ? void 0 : _b.map(function (searchedUser) { return (react_1.default.createElement(Conversation_1.default, { isActive: activeId === searchedUser._id, key: searchedUser._id, isNew: true, username: searchedUser.username, id: searchedUser._id, handleActive: handleActive })); })),
+            react_1.default.createElement("p", { className: "conversations-title" }, "Your conversations:"),
+            UI.loading ? (react_1.default.createElement(core_1.CircularProgress, { color: "inherit" })) : ((_c = data.conversations) === null || _c === void 0 ? void 0 : _c.map(function (conversation) { return (react_1.default.createElement(Conversation_1.default, { isActive: activeId === conversation._id, key: conversation._id, isNew: false, username: conversation.members.usernames.filter(function (username) { var _a; return username != ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a.username); })[0], id: conversation._id, message: conversation.lastMessage.body, handleActive: handleActive })); })))));
 }
 exports.default = connector(ConversationsList);

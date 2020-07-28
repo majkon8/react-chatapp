@@ -21,7 +21,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = __importStar(require("express"));
 var conversations = __importStar(require("../controlers/conversation.controller"));
+var auth_1 = require("../middlewares/auth");
 var router = express.Router();
-/* POST /conversations */
-router.post("/", conversations.create);
+/* GET /conversations/ */
+router.get("/", auth_1.tokenAuth, conversations.getAll);
 module.exports = router;

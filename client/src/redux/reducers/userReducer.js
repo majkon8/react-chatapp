@@ -21,6 +21,8 @@ function default_1(state, action) {
     switch (action.type) {
         case types_1.SET_AUTHENTICATED:
             return __assign(__assign({}, state), { isAuthenticated: action.payload });
+        case types_1.SET_AUTHENTICATED_USER:
+            return __assign(__assign({}, state), { authenticatedUser: action.payload });
         default:
             return state;
     }

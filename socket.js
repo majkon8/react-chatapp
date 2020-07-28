@@ -62,8 +62,8 @@ var auth_1 = require("./middlewares/auth");
 var mongoose_1 = require("./mongoose");
 index_1.io.use(auth_1.tokenAuthSocket);
 index_1.io.on("connection", function (socket) {
-    console.log("Connected " + socket.userId);
-    socket.on("disconnect", function () { return console.log("Disconnected " + socket.userId); });
+    console.log("Connected " + socket.user._id);
+    socket.on("disconnect", function () { return console.log("Disconnected " + socket.user._id); });
     socket.on("sendMessage", function (message) { return __awaiter(void 0, void 0, void 0, function () {
         var conversationId, members, newConversation, newMessage, createdMessage, error_1;
         return __generator(this, function (_a) {
@@ -72,7 +72,13 @@ index_1.io.on("connection", function (socket) {
                     _a.trys.push([0, 5, , 6]);
                     conversationId = void 0;
                     if (!message.conversation.new) return [3 /*break*/, 2];
-                    members = [socket.userId, message.conversation.id];
+                    members = {
+                        ids: [
+                            mongoose_1.mongoose.Types.ObjectId(socket.user._id),
+                            mongoose_1.mongoose.Types.ObjectId(message.conversation.id),
+                        ],
+                        usernames: [socket.user.username, message.conversation.username],
+                    };
                     return [4 /*yield*/, conversations.create(members)];
                 case 1:
                     newConversation = _a.sent();
@@ -84,7 +90,7 @@ index_1.io.on("connection", function (socket) {
                 case 3:
                     newMessage = {
                         conversationId: mongoose_1.mongoose.Types.ObjectId(conversationId),
-                        authorId: mongoose_1.mongoose.Types.ObjectId(socket.userId),
+                        authorId: mongoose_1.mongoose.Types.ObjectId(socket.user._id),
                         body: message.body,
                     };
                     return [4 /*yield*/, messages.create(newMessage)];

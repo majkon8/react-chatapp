@@ -33,5 +33,5 @@ var messageSchema = new mongoose_1.Schema({
     body: {
         type: String,
     },
-}, { timestamps: true });
+}, { timestamps: { createdAt: true, updatedAt: false } });
 exports.Message = mongoose_1.default.model("Message", messageSchema);

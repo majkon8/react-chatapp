@@ -13,10 +13,10 @@ var mapStateToProps = function (state) { return ({ UI: state.UI, data: state.dat
 var mapActionsToProps = { setIsChatOpen: uiActions_1.setIsChatOpen, setSelectedConversation: dataActions_1.setSelectedConversation };
 var connector = react_redux_1.connect(mapStateToProps, mapActionsToProps);
 function Conversation(_a) {
-    var isActive = _a.isActive, isNew = _a.isNew, username = _a.username, id = _a.id, handleActive = _a.handleActive, setIsChatOpen = _a.setIsChatOpen, setSelectedConversation = _a.setSelectedConversation;
+    var isActive = _a.isActive, isNew = _a.isNew, username = _a.username, id = _a.id, message = _a.message, handleActive = _a.handleActive, setIsChatOpen = _a.setIsChatOpen, setSelectedConversation = _a.setSelectedConversation;
     var handleChatOpen = function () { return setIsChatOpen(true); };
     var selectNewConversation = function (id) {
-        var conversation = { new: true, id: id };
+        var conversation = { new: true, id: id, username: username };
         setSelectedConversation(conversation);
     };
     var handleClick = function () {
@@ -29,7 +29,7 @@ function Conversation(_a) {
         react_1.default.createElement("div", { className: "title-message-container" },
             react_1.default.createElement("span", { className: "conversation-title" }, username),
             !isNew && (react_1.default.createElement("span", { className: "conversation-message" },
-                "Hello man",
+                message,
                 react_1.default.createElement("span", null, " \u00B7 13:43"))))));
 }
 exports.default = connector(Conversation);

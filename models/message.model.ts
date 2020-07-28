@@ -1,9 +1,10 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IMessageDocument extends Document {
-  conversationId: string;
-  authorId: string;
+  conversationId: mongoose.Types.ObjectId;
+  authorId: mongoose.Types.ObjectId;
   body: string;
+  createdAt: Date;
 }
 
 export interface IMessageModel extends Model<IMessageDocument> {}
@@ -22,7 +23,7 @@ const messageSchema: Schema = new Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  { timestamps: { createdAt: true, updatedAt: false } }
 );
 
 export const Message: IMessageModel = mongoose.model<
