@@ -2,6 +2,7 @@ import { User } from "../models/user.model";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { transporter } from "../helpers/mailerConfig";
+import { Req } from "../middlewares/auth";
 
 interface ISignupBody {
   email: string;
@@ -9,6 +10,20 @@ interface ISignupBody {
   password: string;
   birthDate: string;
 }
+
+// GET AUTHENTICATED USER
+export const getAuthenticatedUser = async (req: Req, res: Response) => {
+  try {
+    const refreshToken = req.get("x-refresh-token");
+    const userId = req.user?._id;
+    const user = await User.findByIdAndToken(userId, refreshToken);
+    if (!user) return res.status(404).send({ error: "User not found" });
+    return res.send(user);
+  } catch (error) {
+    console.error(error);
+    return res.status(400).send(error);
+  }
+};
 
 // SEARCH FOR USERS BY NAME
 export const searchForUsers = async (req: Request, res: Response) => {
@@ -185,4 +200,29 @@ export const externalLogin = async (req: Request, res: Response) => {
     console.error(error);
     res.status(400).send(error);
   }
+};
+
+// REFRESH ACCESS TOKEN
+export const refreshAccessToken = (req: Req, res: Response) => {
+  const refreshToken = req.get("x-refresh-token");
+  if (!refreshToken)
+    return res.status(400).json({ error: "No refresh token provided" });
+  jwt.verify(refreshToken, User.getJWTSecret(), (error, decoded: any) => {
+    if (error) {
+      console.error(error);
+      return res.status(400).send(error);
+    }
+    jwt.sign(
+      { _id: decoded._id, username: decoded.username },
+      User.getJWTSecret(),
+      { expiresIn: "10m" },
+      (error, token) => {
+        if (error) {
+          console.error(error);
+          return res.status(400).send(error);
+        }
+        return res.send(token);
+      }
+    );
+  });
 };

@@ -29,6 +29,10 @@ interface IUserDocument extends Document {
 
 interface IUserModel extends Model<IUserDocument> {
   findByCredentials(email: string, password: string): Promise<IUserDocument>;
+  findByIdAndToken(
+    _id: string | undefined,
+    token: string | undefined
+  ): IUserDocument;
   getJWTSecret(): string;
 }
 
@@ -147,6 +151,15 @@ UserSchema.statics.findByCredentials = async function (
       }
     });
   });
+};
+
+UserSchema.statics.findByIdAndToken = async function (
+  _id: string | undefined,
+  token: string | undefined
+) {
+  const User = this;
+  const user: IUserDocument = await User.findOne({ _id, refreshToken: token });
+  return user;
 };
 
 /*** Middleware ***/

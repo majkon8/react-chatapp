@@ -21,9 +21,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = __importStar(require("express"));
 var users = __importStar(require("../controlers/user.controler"));
+var auth_1 = require("../middlewares/auth");
 var router = express.Router();
-/* GET /users/:username */
-router.get("/:username", users.searchForUsers);
+/* GET /users/search/:username */
+router.get("/search/:username", users.searchForUsers);
+/* GET /users */
+router.get("/", auth_1.tokenAuth, users.getAuthenticatedUser);
 /* PATCH /users/:id */
 router.patch("/:id", users.update);
 /* POST /users */
@@ -38,4 +41,6 @@ router.post("/forgot/", users.forgotPassword);
 router.post("/reset", users.resetPassword);
 /* POST /users/login/external */
 router.post("/login/external", users.externalLogin);
+/* GET /users/token */
+router.get("/token", users.refreshAccessToken);
 module.exports = router;

@@ -3,6 +3,7 @@ import { Socket } from "../socket";
 import { User } from "../models/user.model";
 import { verify } from "jsonwebtoken";
 import { Request, Response } from "express";
+import { decode } from "querystring";
 
 const secretKey = User.getJWTSecret();
 

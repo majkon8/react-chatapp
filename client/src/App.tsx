@@ -1,7 +1,8 @@
-import React, { lazy, Suspense, useEffect } from "react";
+import React, { lazy, Suspense } from "react";
 import "./App.scss";
 import { Switch, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import axios from "axios";
 // redux
 import { Provider } from "react-redux";
 import store from "./redux/store";
@@ -23,6 +24,22 @@ const ConfirmAccount = lazy(() =>
 
 const refreshToken = localStorage.refreshToken;
 if (refreshToken) store.dispatch({ type: SET_AUTHENTICATED, payload: true });
+
+axios.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.config && error.response && error.response.status === 401) {
+      const response = await axios.get("/users/token", {
+        headers: { "x-refresh-token": refreshToken },
+      });
+      const accessToken = response.data;
+      localStorage.setItem("accessToken", accessToken);
+      error.config.headers["x-access-token"] = accessToken;
+      axios.defaults.headers.common["x-access-token"] = accessToken;
+      return axios.request(error.config);
+    }
+  }
+);
 
 function App() {
   const location = useLocation();

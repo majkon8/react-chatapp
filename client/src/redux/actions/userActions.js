@@ -39,11 +39,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.externalLogin = exports.resetPassword = exports.forgotPassword = exports.login = exports.confirmAccount = exports.signup = void 0;
+exports.externalLogin = exports.resetPassword = exports.forgotPassword = exports.login = exports.confirmAccount = exports.signup = exports.getAuthenticatedUser = void 0;
 var types_1 = require("../types");
 var axios_1 = __importDefault(require("axios"));
+exports.getAuthenticatedUser = function () { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
+    var response, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, 4, 5]);
+                return [4 /*yield*/, axios_1.default.get("/users", {
+                        headers: { "x-refresh-token": localStorage.getItem("refreshToken") },
+                    })];
+            case 2:
+                response = _a.sent();
+                dispatch({ type: types_1.SET_AUTHENTICATED_USER, payload: response.data });
+                return [3 /*break*/, 5];
+            case 3:
+                error_1 = _a.sent();
+                console.error(error_1);
+                return [3 /*break*/, 5];
+            case 4:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                return [7 /*endfinally*/];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); }; };
 exports.signup = function (userData) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
+    var error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -60,9 +87,9 @@ exports.signup = function (userData) { return function (dispatch) { return __awa
                 });
                 return [3 /*break*/, 5];
             case 3:
-                error_1 = _a.sent();
-                console.error(error_1);
-                if (error_1.response.data.code === 11000)
+                error_2 = _a.sent();
+                console.error(error_2);
+                if (error_2.response.data.code === 11000)
                     dispatch({ type: types_1.SET_ERROR, payload: "Email already registered" });
                 else
                     dispatch({
@@ -78,7 +105,7 @@ exports.signup = function (userData) { return function (dispatch) { return __awa
     });
 }); }; };
 exports.confirmAccount = function (token) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-    var error_2;
+    var error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -92,8 +119,8 @@ exports.confirmAccount = function (token) { return function (dispatch) { return 
                 });
                 return [3 /*break*/, 3];
             case 2:
-                error_2 = _a.sent();
-                console.error(error_2);
+                error_3 = _a.sent();
+                console.error(error_3);
                 dispatch({
                     type: types_1.SET_ERROR,
                     payload: "Something went wrong. Try again later",
@@ -104,7 +131,7 @@ exports.confirmAccount = function (token) { return function (dispatch) { return 
     });
 }); }; };
 exports.login = function (userData) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-    var response, accessToken, refreshToken, error_3;
+    var response, accessToken, refreshToken, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -121,41 +148,6 @@ exports.login = function (userData) { return function (dispatch) { return __awai
                 dispatch({ type: types_1.SET_ERROR, payload: null });
                 dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
                 dispatch({ type: types_1.SET_AUTHENTICATED_USER, payload: response.data });
-                return [3 /*break*/, 5];
-            case 3:
-                error_3 = _a.sent();
-                console.error(error_3);
-                if (error_3.response.data.error)
-                    dispatch({ type: types_1.SET_ERROR, payload: error_3.response.data.error });
-                else
-                    dispatch({
-                        type: types_1.SET_ERROR,
-                        payload: "Something went wrong. Try again later",
-                    });
-                return [3 /*break*/, 5];
-            case 4:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
-                return [7 /*endfinally*/];
-            case 5: return [2 /*return*/];
-        }
-    });
-}); }; };
-exports.forgotPassword = function (email) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-    var error_4;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, 4, 5]);
-                return [4 /*yield*/, axios_1.default.post("/users/forgot", { email: email })];
-            case 2:
-                _a.sent();
-                dispatch({
-                    type: types_1.SET_SUCCESS,
-                    payload: "Reset password email sent",
-                });
                 return [3 /*break*/, 5];
             case 3:
                 error_4 = _a.sent();
@@ -175,8 +167,43 @@ exports.forgotPassword = function (email) { return function (dispatch) { return 
         }
     });
 }); }; };
-exports.resetPassword = function (data) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
+exports.forgotPassword = function (email) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
     var error_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, 4, 5]);
+                return [4 /*yield*/, axios_1.default.post("/users/forgot", { email: email })];
+            case 2:
+                _a.sent();
+                dispatch({
+                    type: types_1.SET_SUCCESS,
+                    payload: "Reset password email sent",
+                });
+                return [3 /*break*/, 5];
+            case 3:
+                error_5 = _a.sent();
+                console.error(error_5);
+                if (error_5.response.data.error)
+                    dispatch({ type: types_1.SET_ERROR, payload: error_5.response.data.error });
+                else
+                    dispatch({
+                        type: types_1.SET_ERROR,
+                        payload: "Something went wrong. Try again later",
+                    });
+                return [3 /*break*/, 5];
+            case 4:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                return [7 /*endfinally*/];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); }; };
+exports.resetPassword = function (data) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
+    var error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -193,8 +220,8 @@ exports.resetPassword = function (data) { return function (dispatch) { return __
                 });
                 return [3 /*break*/, 5];
             case 3:
-                error_5 = _a.sent();
-                console.error(error_5);
+                error_6 = _a.sent();
+                console.error(error_6);
                 dispatch({
                     type: types_1.SET_ERROR,
                     payload: "Something went wrong. Try again later",
@@ -209,7 +236,7 @@ exports.resetPassword = function (data) { return function (dispatch) { return __
 }); }; };
 // source is 'facebook' or 'google'
 exports.externalLogin = function (data) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-    var response, accessToken, refreshToken, error_6;
+    var response, accessToken, refreshToken, error_7;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -228,10 +255,10 @@ exports.externalLogin = function (data) { return function (dispatch) { return __
                 dispatch({ type: types_1.SET_AUTHENTICATED_USER, payload: response.data });
                 return [3 /*break*/, 5];
             case 3:
-                error_6 = _a.sent();
-                console.error(error_6);
-                if (error_6.response.data.error)
-                    dispatch({ type: types_1.SET_ERROR, payload: error_6.response.data.error });
+                error_7 = _a.sent();
+                console.error(error_7);
+                if (error_7.response.data.error)
+                    dispatch({ type: types_1.SET_ERROR, payload: error_7.response.data.error });
                 else
                     dispatch({
                         type: types_1.SET_ERROR,
@@ -250,6 +277,7 @@ var setAuthorization = function (tokens) {
     var accessToken = tokens.accessToken;
     var refreshToken = tokens.refreshToken;
     axios_1.default.defaults.headers.common["x-access-token"] = accessToken;
+    // Access token in local storage needed for socket connection
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
 };

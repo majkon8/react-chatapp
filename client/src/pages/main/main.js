@@ -34,10 +34,12 @@ var ChatBar_1 = __importDefault(require("../../components/ChatBar/ChatBar"));
 var socket_io_client_1 = __importDefault(require("socket.io-client"));
 // redux
 var react_redux_1 = require("react-redux");
+var userActions_1 = require("../../redux/actions/userActions");
 var mapStateToProps = function (state) { return ({ UI: state.UI }); };
-var connector = react_redux_1.connect(mapStateToProps, {});
+var mapActionsToProps = { getAuthenticatedUser: userActions_1.getAuthenticatedUser };
+var connector = react_redux_1.connect(mapStateToProps, mapActionsToProps);
 function Main(_a) {
-    var UI = _a.UI;
+    var UI = _a.UI, getAuthenticatedUser = _a.getAuthenticatedUser;
     var _b = react_1.useState(null), socket = _b[0], setSocket = _b[1];
     var setupSocket = function () {
         var accessToken = localStorage.getItem("accessToken");
@@ -56,7 +58,10 @@ function Main(_a) {
         }
     };
     react_1.useEffect(function () {
-        setupSocket();
+        getAuthenticatedUser();
+        setTimeout(function () {
+            setupSocket();
+        }, 1000);
     }, []);
     return (react_1.default.createElement(framer_motion_1.motion.div, { className: "main-container " + (UI.theme === "light" && "theme-light"), initial: "initial", animate: "in", exit: "out", variants: home_1.pageVariants, transition: home_1.pageTransition },
         react_1.default.createElement(ChatSearch_1.default, null),

@@ -183,6 +183,21 @@ UserSchema.statics.findByCredentials = function (email, password) {
         });
     });
 };
+UserSchema.statics.findByIdAndToken = function (_id, token) {
+    return __awaiter(this, void 0, void 0, function () {
+        var User, user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    User = this;
+                    return [4 /*yield*/, User.findOne({ _id: _id, refreshToken: token })];
+                case 1:
+                    user = _a.sent();
+                    return [2 /*return*/, user];
+            }
+        });
+    });
+};
 /*** Middleware ***/
 // hash password
 UserSchema.pre("save", function (next) {

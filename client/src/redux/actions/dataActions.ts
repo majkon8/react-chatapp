@@ -17,7 +17,7 @@ export const searchForUsers = (username: string) => async (
     if (username.length === 0) {
       dispatch({ type: SET_SEARCHED_USERS, payload: [] });
     } else {
-      const response = await axios.get(`/users/${username}`);
+      const response = await axios.get(`/users/search/${username}`);
       dispatch({ type: SET_SEARCHED_USERS, payload: response.data });
     }
   } catch (error) {

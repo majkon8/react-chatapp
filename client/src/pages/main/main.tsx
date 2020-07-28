@@ -10,16 +10,18 @@ import ChatBar from "../../components/ChatBar/ChatBar";
 import io from "socket.io-client";
 // redux
 import { connect, ConnectedProps } from "react-redux";
+import { getAuthenticatedUser } from "../../redux/actions/userActions";
 import { IState } from "../../redux/store";
 
 const mapStateToProps = (state: IState) => ({ UI: state.UI });
-const connector = connect(mapStateToProps, {});
+const mapActionsToProps = { getAuthenticatedUser };
+const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux;
 
-function Main({ UI }: Props) {
+function Main({ UI, getAuthenticatedUser }: Props) {
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
 
   const setupSocket = () => {
@@ -40,7 +42,11 @@ function Main({ UI }: Props) {
   };
 
   useEffect(() => {
-    setupSocket();
+    getAuthenticatedUser();
+    // timeout needed for access token refresh
+    setTimeout(() => {
+      setupSocket();
+    }, 1000);
   }, []);
 
   return (

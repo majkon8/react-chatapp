@@ -56,7 +56,7 @@ exports.searchForUsers = function (username) { return function (dispatch) { retu
                 if (!(username.length === 0)) return [3 /*break*/, 2];
                 dispatch({ type: types_1.SET_SEARCHED_USERS, payload: [] });
                 return [3 /*break*/, 4];
-            case 2: return [4 /*yield*/, axios_1.default.get("/users/" + username)];
+            case 2: return [4 /*yield*/, axios_1.default.get("/users/search/" + username)];
             case 3:
                 response = _a.sent();
                 dispatch({ type: types_1.SET_SEARCHED_USERS, payload: response.data });
