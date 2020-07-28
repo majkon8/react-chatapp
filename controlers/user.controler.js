@@ -57,12 +57,12 @@ exports.getAuthenticatedUser = function (req, res) { return __awaiter(void 0, vo
             case 1:
                 user = _b.sent();
                 if (!user)
-                    return [2 /*return*/, res.status(404).send({ error: "User not found" })];
-                return [2 /*return*/, res.send(user)];
+                    return [2 /*return*/, res.status(404).json({ error: "User not found" })];
+                return [2 /*return*/, res.json(user)];
             case 2:
                 error_1 = _b.sent();
                 console.error(error_1);
-                return [2 /*return*/, res.status(400).send(error_1)];
+                return [2 /*return*/, res.status(400).json(error_1)];
             case 3: return [2 /*return*/];
         }
     });
@@ -82,11 +82,11 @@ exports.searchForUsers = function (req, res) { return __awaiter(void 0, void 0, 
             case 1:
                 users = _a.sent();
                 confirmedUsers = users.filter(function (user) { return user.confirmed; });
-                return [2 /*return*/, res.send(confirmedUsers)];
+                return [2 /*return*/, res.json(confirmedUsers)];
             case 2:
                 error_2 = _a.sent();
                 console.error(error_2);
-                return [2 /*return*/, res.status(400).send(error_2)];
+                return [2 /*return*/, res.status(400).json(error_2)];
             case 3: return [2 /*return*/];
         }
     });
@@ -101,11 +101,11 @@ exports.update = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, user_model_1.User.findByIdAndUpdate(req.params.id, { $set: req.body.result }, { new: true })];
             case 1:
                 user = _a.sent();
-                return [2 /*return*/, res.send(user)];
+                return [2 /*return*/, res.json(user)];
             case 2:
                 error_3 = _a.sent();
                 console.error(error_3);
-                return [2 /*return*/, res.status(400).send(error_3)];
+                return [2 /*return*/, res.status(400).json(error_3)];
             case 3: return [2 /*return*/];
         }
     });
@@ -133,14 +133,14 @@ exports.signup = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 mailOptions = newUser.createEmail(true);
                 mailerConfig_1.transporter.sendMail(mailOptions, function (error) {
                     if (error)
-                        return res.status(400).send(error);
-                    return res.send("success");
+                        return res.status(400).json(error);
+                    return res.json("success");
                 });
                 return [3 /*break*/, 5];
             case 4:
                 error_4 = _a.sent();
                 console.error(error_4);
-                return [2 /*return*/, res.status(400).send(error_4)];
+                return [2 /*return*/, res.status(400).json(error_4)];
             case 5: return [2 /*return*/];
         }
     });
@@ -158,14 +158,14 @@ exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, f
             case 1:
                 user = _a.sent();
                 if (!user.confirmed)
-                    return [2 /*return*/, res.status(400).send({ error: "Account not confirmed" })];
+                    return [2 /*return*/, res.status(400).json({ error: "Account not confirmed" })];
                 refreshToken = user.refreshToken;
                 return [4 /*yield*/, user.generateToken(true)];
             case 2:
                 accessToken = _a.sent();
                 res.header("x-refresh-token", refreshToken);
                 res.header("x-access-token", accessToken);
-                return [2 /*return*/, res.send(user)];
+                return [2 /*return*/, res.json(user)];
             case 3:
                 error_5 = _a.sent();
                 console.error(error_5);
@@ -173,7 +173,7 @@ exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                     res.status(404);
                 else
                     res.status(400);
-                return [2 /*return*/, res.send(error_5)];
+                return [2 /*return*/, res.json(error_5)];
             case 4: return [2 /*return*/];
         }
     });
@@ -188,7 +188,7 @@ exports.confirmAccount = function (req, res) { return __awaiter(void 0, void 0, 
                 temporaryToken = req.params.token;
                 jsonwebtoken_1.default.verify(temporaryToken, user_model_1.User.getJWTSecret(), function (error, decoded) {
                     if (error)
-                        return res.status(400).send(error);
+                        return res.status(400).json(error);
                     decodedToken_1 = decoded;
                 });
                 return [4 /*yield*/, user_model_1.User.findOne({
@@ -198,17 +198,16 @@ exports.confirmAccount = function (req, res) { return __awaiter(void 0, void 0, 
             case 1:
                 user = _a.sent();
                 if (!user)
-                    res.status(404).send({ error: "User not found" });
+                    res.status(404).json({ error: "User not found" });
                 user.confirmed = true;
                 return [4 /*yield*/, (user === null || user === void 0 ? void 0 : user.save())];
             case 2:
                 _a.sent();
-                return [2 /*return*/, res.send("success")];
+                return [2 /*return*/, res.json("success")];
             case 3:
                 error_6 = _a.sent();
                 console.error(error_6);
-                res.status(400).send(error_6);
-                return [3 /*break*/, 4];
+                return [2 /*return*/, res.status(400).json(error_6)];
             case 4: return [2 /*return*/];
         }
     });
@@ -225,7 +224,7 @@ exports.forgotPassword = function (req, res) { return __awaiter(void 0, void 0, 
             case 1:
                 user = _a.sent();
                 if (!user)
-                    return [2 /*return*/, res.status(404).send({ error: "User not found" })];
+                    return [2 /*return*/, res.status(404).json({ error: "User not found" })];
                 return [4 /*yield*/, user.generateToken(true)];
             case 2:
                 temporaryToken = _a.sent();
@@ -236,15 +235,14 @@ exports.forgotPassword = function (req, res) { return __awaiter(void 0, void 0, 
                 mailOptions = user.createEmail(false);
                 mailerConfig_1.transporter.sendMail(mailOptions, function (error) {
                     if (error)
-                        return res.status(400).send(error);
-                    return res.send("success");
+                        return res.status(400).json(error);
+                    return res.json("success");
                 });
                 return [3 /*break*/, 5];
             case 4:
                 error_7 = _a.sent();
                 console.error(error_7);
-                res.status(400).send(error_7);
-                return [3 /*break*/, 5];
+                return [2 /*return*/, res.status(400).json(error_7)];
             case 5: return [2 /*return*/];
         }
     });
@@ -260,7 +258,7 @@ exports.resetPassword = function (req, res) { return __awaiter(void 0, void 0, v
                 temporaryToken = req.body.token;
                 jsonwebtoken_1.default.verify(temporaryToken, user_model_1.User.getJWTSecret(), function (error, decoded) {
                     if (error)
-                        return res.status(400).send(error);
+                        return res.status(400).json(error);
                     decodedToken_2 = decoded;
                 });
                 return [4 /*yield*/, user_model_1.User.findOne({
@@ -270,17 +268,17 @@ exports.resetPassword = function (req, res) { return __awaiter(void 0, void 0, v
             case 1:
                 user = _a.sent();
                 if (!user)
-                    return [2 /*return*/, res.status(404).send({ error: "User not found" })];
+                    return [2 /*return*/, res.status(404).json({ error: "User not found" })];
                 user.password = newPassword;
                 return [4 /*yield*/, user.save()];
             case 2:
                 _a.sent();
-                res.send("success");
+                res.json("success");
                 return [3 /*break*/, 4];
             case 3:
                 error_8 = _a.sent();
                 console.error(error_8);
-                return [2 /*return*/, res.status(400).send(error_8)];
+                return [2 /*return*/, res.status(400).json(error_8)];
             case 4: return [2 /*return*/];
         }
     });
@@ -298,7 +296,7 @@ exports.externalLogin = function (req, res) { return __awaiter(void 0, void 0, v
                 user = _a.sent();
                 // user already created an account with that email address internally
                 if (user && !user.createdExternally)
-                    return [2 /*return*/, res.status(400).send({ error: "Email already registered" })];
+                    return [2 /*return*/, res.status(400).json({ error: "Email already registered" })];
                 if (!!user) return [3 /*break*/, 6];
                 newUser = new user_model_1.User(body);
                 return [4 /*yield*/, newUser.generateToken()];
@@ -319,7 +317,7 @@ exports.externalLogin = function (req, res) { return __awaiter(void 0, void 0, v
                 accessToken = _a.sent();
                 res.header("x-refresh-token", refreshToken);
                 res.header("x-access-token", accessToken);
-                return [2 /*return*/, res.send("success")];
+                return [2 /*return*/, res.json("success")];
             case 6:
                 if (!(user && user.createdExternally)) return [3 /*break*/, 8];
                 refreshToken = user.refreshToken;
@@ -328,13 +326,12 @@ exports.externalLogin = function (req, res) { return __awaiter(void 0, void 0, v
                 accessToken = _a.sent();
                 res.header("x-refresh-token", refreshToken);
                 res.header("x-access-token", accessToken);
-                return [2 /*return*/, res.send(user)];
+                return [2 /*return*/, res.json(user)];
             case 8: return [3 /*break*/, 10];
             case 9:
                 error_9 = _a.sent();
                 console.error(error_9);
-                res.status(400).send(error_9);
-                return [3 /*break*/, 10];
+                return [2 /*return*/, res.status(400).json(error_9)];
             case 10: return [2 /*return*/];
         }
     });
@@ -347,14 +344,14 @@ exports.refreshAccessToken = function (req, res) {
     jsonwebtoken_1.default.verify(refreshToken, user_model_1.User.getJWTSecret(), function (error, decoded) {
         if (error) {
             console.error(error);
-            return res.status(400).send(error);
+            return res.status(400).json(error);
         }
         jsonwebtoken_1.default.sign({ _id: decoded._id, username: decoded.username }, user_model_1.User.getJWTSecret(), { expiresIn: "10m" }, function (error, token) {
             if (error) {
                 console.error(error);
-                return res.status(400).send(error);
+                return res.status(400).json(error);
             }
-            return res.send(token);
+            return res.json(token);
         });
     });
 };

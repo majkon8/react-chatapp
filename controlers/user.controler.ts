@@ -17,11 +17,11 @@ export const getAuthenticatedUser = async (req: Req, res: Response) => {
     const refreshToken = req.get("x-refresh-token");
     const userId = req.user?._id;
     const user = await User.findByIdAndToken(userId, refreshToken);
-    if (!user) return res.status(404).send({ error: "User not found" });
-    return res.send(user);
+    if (!user) return res.status(404).json({ error: "User not found" });
+    return res.json(user);
   } catch (error) {
     console.error(error);
-    return res.status(400).send(error);
+    return res.status(400).json(error);
   }
 };
 
@@ -34,10 +34,10 @@ export const searchForUsers = async (req: Request, res: Response) => {
       username: { $regex: usernameRegex, $options: "i" },
     });
     const confirmedUsers = users.filter((user) => user.confirmed);
-    return res.send(confirmedUsers);
+    return res.json(confirmedUsers);
   } catch (error) {
     console.error(error);
-    return res.status(400).send(error);
+    return res.status(400).json(error);
   }
 };
 
@@ -49,10 +49,10 @@ export const update = async (req: Request, res: Response) => {
       { $set: req.body.result },
       { new: true }
     );
-    return res.send(user);
+    return res.json(user);
   } catch (error) {
     console.error(error);
-    return res.status(400).send(error);
+    return res.status(400).json(error);
   }
 };
 
@@ -68,12 +68,12 @@ export const signup = async (req: Request, res: Response) => {
     await newUser.save();
     const mailOptions = newUser.createEmail(true);
     transporter.sendMail(mailOptions, (error) => {
-      if (error) return res.status(400).send(error);
-      return res.send("success");
+      if (error) return res.status(400).json(error);
+      return res.json("success");
     });
   } catch (error) {
     console.error(error);
-    return res.status(400).send(error);
+    return res.status(400).json(error);
   }
 };
 
@@ -84,17 +84,17 @@ export const login = async (req: Request, res: Response) => {
     const password: string = req.body.password;
     const user = await User.findByCredentials(email, password);
     if (!user.confirmed)
-      return res.status(400).send({ error: "Account not confirmed" });
+      return res.status(400).json({ error: "Account not confirmed" });
     const refreshToken = user.refreshToken;
     const accessToken = await user.generateToken(true);
     res.header("x-refresh-token", refreshToken);
     res.header("x-access-token", accessToken);
-    return res.send(user);
+    return res.json(user);
   } catch (error) {
     console.error(error);
     if (error.error === "User not found") res.status(404);
     else res.status(400);
-    return res.send(error);
+    return res.json(error);
   }
 };
 
@@ -104,20 +104,20 @@ export const confirmAccount = async (req: Request, res: Response) => {
     const temporaryToken = req.params.token;
     let decodedToken: any;
     jwt.verify(temporaryToken, User.getJWTSecret(), (error, decoded) => {
-      if (error) return res.status(400).send(error);
+      if (error) return res.status(400).json(error);
       decodedToken = decoded;
     });
     const user = await User.findOne({
       _id: decodedToken!._id,
       temporaryToken,
     });
-    if (!user) res.status(404).send({ error: "User not found" });
+    if (!user) res.status(404).json({ error: "User not found" });
     user!.confirmed = true;
     await user?.save();
-    return res.send("success");
+    return res.json("success");
   } catch (error) {
     console.error(error);
-    res.status(400).send(error);
+    return res.status(400).json(error);
   }
 };
 
@@ -126,18 +126,18 @@ export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const email: string = req.body.email;
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).send({ error: "User not found" });
+    if (!user) return res.status(404).json({ error: "User not found" });
     const temporaryToken = await user.generateToken(true);
     user.temporaryToken = temporaryToken;
     await user.save();
     const mailOptions = user.createEmail(false);
     transporter.sendMail(mailOptions, (error) => {
-      if (error) return res.status(400).send(error);
-      return res.send("success");
+      if (error) return res.status(400).json(error);
+      return res.json("success");
     });
   } catch (error) {
     console.error(error);
-    res.status(400).send(error);
+    return res.status(400).json(error);
   }
 };
 
@@ -148,20 +148,20 @@ export const resetPassword = async (req: Request, res: Response) => {
     const temporaryToken: string = req.body.token;
     let decodedToken: any;
     jwt.verify(temporaryToken, User.getJWTSecret(), (error, decoded) => {
-      if (error) return res.status(400).send(error);
+      if (error) return res.status(400).json(error);
       decodedToken = decoded;
     });
     const user = await User.findOne({
       _id: decodedToken!._id,
       temporaryToken,
     });
-    if (!user) return res.status(404).send({ error: "User not found" });
+    if (!user) return res.status(404).json({ error: "User not found" });
     user.password = newPassword;
     await user.save();
-    res.send("success");
+    res.json("success");
   } catch (error) {
     console.error(error);
-    return res.status(400).send(error);
+    return res.status(400).json(error);
   }
 };
 
@@ -172,7 +172,7 @@ export const externalLogin = async (req: Request, res: Response) => {
     const user = await User.findOne({ email: body.email });
     // user already created an account with that email address internally
     if (user && !user.createdExternally)
-      return res.status(400).send({ error: "Email already registered" });
+      return res.status(400).json({ error: "Email already registered" });
     // create new account with user's facebook/google data and log him in
     if (!user) {
       const newUser = new User(body);
@@ -186,7 +186,7 @@ export const externalLogin = async (req: Request, res: Response) => {
       const accessToken = await newUser.generateToken(true);
       res.header("x-refresh-token", refreshToken);
       res.header("x-access-token", accessToken);
-      return res.send("success");
+      return res.json("success");
     }
     // log in with facebook/google data
     if (user && user.createdExternally) {
@@ -194,11 +194,11 @@ export const externalLogin = async (req: Request, res: Response) => {
       const accessToken = await user.generateToken(true);
       res.header("x-refresh-token", refreshToken);
       res.header("x-access-token", accessToken);
-      return res.send(user);
+      return res.json(user);
     }
   } catch (error) {
     console.error(error);
-    res.status(400).send(error);
+    return res.status(400).json(error);
   }
 };
 
@@ -210,7 +210,7 @@ export const refreshAccessToken = (req: Req, res: Response) => {
   jwt.verify(refreshToken, User.getJWTSecret(), (error, decoded: any) => {
     if (error) {
       console.error(error);
-      return res.status(400).send(error);
+      return res.status(400).json(error);
     }
     jwt.sign(
       { _id: decoded._id, username: decoded.username },
@@ -219,9 +219,9 @@ export const refreshAccessToken = (req: Req, res: Response) => {
       (error, token) => {
         if (error) {
           console.error(error);
-          return res.status(400).send(error);
+          return res.status(400).json(error);
         }
-        return res.send(token);
+        return res.json(token);
       }
     );
   });

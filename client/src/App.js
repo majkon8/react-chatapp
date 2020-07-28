@@ -100,7 +100,7 @@ axios_1.default.interceptors.response.use(function (response) { return response;
                 axios_1.default.defaults.headers.common["x-access-token"] = accessToken;
                 store_1.default.dispatch({ type: types_1.SET_ACCESS_TOKEN, payload: accessToken });
                 return [2 /*return*/, axios_1.default.request(error.config)];
-            case 2: return [2 /*return*/];
+            case 2: return [2 /*return*/, Promise.reject(error)];
         }
     });
 }); });

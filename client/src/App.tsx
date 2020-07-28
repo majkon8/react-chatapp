@@ -38,6 +38,7 @@ axios.interceptors.response.use(
       store.dispatch({ type: SET_ACCESS_TOKEN, payload: accessToken });
       return axios.request(error.config);
     }
+    return Promise.reject(error);
   }
 );
 

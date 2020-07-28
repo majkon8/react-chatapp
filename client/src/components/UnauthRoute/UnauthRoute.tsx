@@ -7,10 +7,11 @@ import { IState } from "../../redux/store";
 const mapStateToProps = (state: IState) => ({ user: state.user });
 const connector = connect(mapStateToProps, {});
 
-const UnauthRoute = ({ component: Component, user }: any) => (
+const UnauthRoute = ({ component: Component, user, ...rest }: any) => (
   <Route
-    render={() =>
-      user.isAuthenticated ? <Redirect to="/main" /> : <Component />
+    {...rest}
+    render={(props) =>
+      user.isAuthenticated ? <Redirect to="/main" /> : <Component {...props} />
     }
   />
 );
