@@ -31,7 +31,10 @@ function Main({ UI, user, getAuthenticatedUser }: Props) {
   const setupSocket = () => {
     const accessToken = user.accessToken;
     if (accessToken && !socket) {
-      const server = "http://localhost:3000";
+      const server =
+        process.env.NODE_ENV === "production"
+          ? window.location.hostname
+          : "http://localhost:3000";
       const newSocket = io(server, { query: { accessToken } });
       newSocket.on("disconnect", () => {
         setSocket(null);

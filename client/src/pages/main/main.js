@@ -47,7 +47,9 @@ function Main(_a) {
     var setupSocket = function () {
         var accessToken = user.accessToken;
         if (accessToken && !socket) {
-            var server = "http://localhost:3000";
+            var server = process.env.NODE_ENV === "production"
+                ? window.location.hostname
+                : "http://localhost:3000";
             var newSocket = socket_io_client_1.default(server, { query: { accessToken: accessToken } });
             newSocket.on("disconnect", function () {
                 setSocket(null);
