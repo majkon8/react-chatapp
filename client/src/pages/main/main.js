@@ -35,14 +35,17 @@ var socket_io_client_1 = __importDefault(require("socket.io-client"));
 // redux
 var react_redux_1 = require("react-redux");
 var userActions_1 = require("../../redux/actions/userActions");
-var mapStateToProps = function (state) { return ({ UI: state.UI }); };
+var mapStateToProps = function (state) { return ({ UI: state.UI, user: state.user }); };
 var mapActionsToProps = { getAuthenticatedUser: userActions_1.getAuthenticatedUser };
 var connector = react_redux_1.connect(mapStateToProps, mapActionsToProps);
 function Main(_a) {
-    var UI = _a.UI, getAuthenticatedUser = _a.getAuthenticatedUser;
+    var UI = _a.UI, user = _a.user, getAuthenticatedUser = _a.getAuthenticatedUser;
     var _b = react_1.useState(null), socket = _b[0], setSocket = _b[1];
+    react_1.useEffect(function () {
+        getAuthenticatedUser();
+    }, []);
     var setupSocket = function () {
-        var accessToken = localStorage.getItem("accessToken");
+        var accessToken = user.accessToken;
         if (accessToken && !socket) {
             var server = "http://localhost:3000";
             var newSocket = socket_io_client_1.default(server, { query: { accessToken: accessToken } });
@@ -58,11 +61,10 @@ function Main(_a) {
         }
     };
     react_1.useEffect(function () {
-        getAuthenticatedUser();
-        setTimeout(function () {
-            setupSocket();
-        }, 1000);
-    }, []);
+        if (!user.accessToken)
+            return;
+        setupSocket();
+    }, [user.accessToken]);
     return (react_1.default.createElement(framer_motion_1.motion.div, { className: "main-container " + (UI.theme === "light" && "theme-light"), initial: "initial", animate: "in", exit: "out", variants: home_1.pageVariants, transition: home_1.pageTransition },
         react_1.default.createElement(ChatSearch_1.default, null),
         react_1.default.createElement(ConversationsList_1.default, null),

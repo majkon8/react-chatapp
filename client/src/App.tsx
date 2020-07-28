@@ -6,7 +6,7 @@ import axios from "axios";
 // redux
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import { SET_AUTHENTICATED } from "./redux/types";
+import { SET_AUTHENTICATED, SET_ACCESS_TOKEN } from "./redux/types";
 // pages and components
 import Main from "./pages/main/main";
 import Home from "./pages/home/home";
@@ -33,9 +33,9 @@ axios.interceptors.response.use(
         headers: { "x-refresh-token": refreshToken },
       });
       const accessToken = response.data;
-      localStorage.setItem("accessToken", accessToken);
       error.config.headers["x-access-token"] = accessToken;
       axios.defaults.headers.common["x-access-token"] = accessToken;
+      store.dispatch({ type: SET_ACCESS_TOKEN, payload: accessToken });
       return axios.request(error.config);
     }
   }

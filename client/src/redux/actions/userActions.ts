@@ -4,6 +4,7 @@ import {
   SET_SUCCESS,
   SET_AUTHENTICATED,
   SET_AUTHENTICATED_USER,
+  SET_ACCESS_TOKEN,
 } from "../types";
 import { Dispatch } from "redux";
 import axios from "axios";
@@ -84,9 +85,10 @@ export const login = (userData: IUserData) => async (dispatch: Dispatch) => {
     const accessToken: string = response.headers["x-access-token"];
     const refreshToken: string = response.headers["x-refresh-token"];
     setAuthorization({ accessToken, refreshToken });
-    dispatch({ type: SET_ERROR, payload: null });
+    dispatch({ type: SET_ACCESS_TOKEN, payload: accessToken });
     dispatch({ type: SET_AUTHENTICATED, payload: true });
     dispatch({ type: SET_AUTHENTICATED_USER, payload: response.data });
+    dispatch({ type: SET_ERROR, payload: null });
   } catch (error) {
     console.error(error);
     if (error.response.data.error)
@@ -154,9 +156,10 @@ export const externalLogin = (data: IUserData) => async (
     const accessToken: string = response.headers["x-access-token"];
     const refreshToken: string = response.headers["x-refresh-token"];
     setAuthorization({ accessToken, refreshToken });
-    dispatch({ type: SET_ERROR, payload: null });
+    dispatch({ type: SET_ACCESS_TOKEN, payload: accessToken });
     dispatch({ type: SET_AUTHENTICATED, payload: true });
     dispatch({ type: SET_AUTHENTICATED_USER, payload: response.data });
+    dispatch({ type: SET_ERROR, payload: null });
   } catch (error) {
     console.error(error);
     if (error.response.data.error)
@@ -176,7 +179,5 @@ const setAuthorization = (tokens: ITokens) => {
   const accessToken = tokens.accessToken;
   const refreshToken = tokens.refreshToken;
   axios.defaults.headers.common["x-access-token"] = accessToken;
-  // Access token in local storage needed for socket connection
-  localStorage.setItem("accessToken", accessToken);
   localStorage.setItem("refreshToken", refreshToken);
 };

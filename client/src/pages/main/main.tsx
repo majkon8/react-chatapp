@@ -13,7 +13,7 @@ import { connect, ConnectedProps } from "react-redux";
 import { getAuthenticatedUser } from "../../redux/actions/userActions";
 import { IState } from "../../redux/store";
 
-const mapStateToProps = (state: IState) => ({ UI: state.UI });
+const mapStateToProps = (state: IState) => ({ UI: state.UI, user: state.user });
 const mapActionsToProps = { getAuthenticatedUser };
 const connector = connect(mapStateToProps, mapActionsToProps);
 
@@ -21,11 +21,15 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux;
 
-function Main({ UI, getAuthenticatedUser }: Props) {
+function Main({ UI, user, getAuthenticatedUser }: Props) {
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
 
+  useEffect(() => {
+    getAuthenticatedUser();
+  }, []);
+
   const setupSocket = () => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = user.accessToken;
     if (accessToken && !socket) {
       const server = "http://localhost:3000";
       const newSocket = io(server, { query: { accessToken } });
@@ -42,12 +46,9 @@ function Main({ UI, getAuthenticatedUser }: Props) {
   };
 
   useEffect(() => {
-    getAuthenticatedUser();
-    // timeout needed for access token refresh
-    setTimeout(() => {
-      setupSocket();
-    }, 1000);
-  }, []);
+    if (!user.accessToken) return;
+    setupSocket();
+  }, [user.accessToken]);
 
   return (
     <motion.div

@@ -145,9 +145,10 @@ exports.login = function (userData) { return function (dispatch) { return __awai
                 accessToken = response.headers["x-access-token"];
                 refreshToken = response.headers["x-refresh-token"];
                 setAuthorization({ accessToken: accessToken, refreshToken: refreshToken });
-                dispatch({ type: types_1.SET_ERROR, payload: null });
+                dispatch({ type: types_1.SET_ACCESS_TOKEN, payload: accessToken });
                 dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
                 dispatch({ type: types_1.SET_AUTHENTICATED_USER, payload: response.data });
+                dispatch({ type: types_1.SET_ERROR, payload: null });
                 return [3 /*break*/, 5];
             case 3:
                 error_4 = _a.sent();
@@ -250,9 +251,10 @@ exports.externalLogin = function (data) { return function (dispatch) { return __
                 accessToken = response.headers["x-access-token"];
                 refreshToken = response.headers["x-refresh-token"];
                 setAuthorization({ accessToken: accessToken, refreshToken: refreshToken });
-                dispatch({ type: types_1.SET_ERROR, payload: null });
+                dispatch({ type: types_1.SET_ACCESS_TOKEN, payload: accessToken });
                 dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
                 dispatch({ type: types_1.SET_AUTHENTICATED_USER, payload: response.data });
+                dispatch({ type: types_1.SET_ERROR, payload: null });
                 return [3 /*break*/, 5];
             case 3:
                 error_7 = _a.sent();
@@ -277,7 +279,5 @@ var setAuthorization = function (tokens) {
     var accessToken = tokens.accessToken;
     var refreshToken = tokens.refreshToken;
     axios_1.default.defaults.headers.common["x-access-token"] = accessToken;
-    // Access token in local storage needed for socket connection
-    localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
 };

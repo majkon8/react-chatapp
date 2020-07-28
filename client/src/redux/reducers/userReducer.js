@@ -15,6 +15,7 @@ var types_1 = require("../types");
 var initialState = {
     isAuthenticated: false,
     authenticatedUser: null,
+    accessToken: "",
 };
 function default_1(state, action) {
     if (state === void 0) { state = initialState; }
@@ -23,6 +24,8 @@ function default_1(state, action) {
             return __assign(__assign({}, state), { isAuthenticated: action.payload });
         case types_1.SET_AUTHENTICATED_USER:
             return __assign(__assign({}, state), { authenticatedUser: action.payload });
+        case types_1.SET_ACCESS_TOKEN:
+            return __assign(__assign({}, state), { accessToken: action.payload });
         default:
             return state;
     }

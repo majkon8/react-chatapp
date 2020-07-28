@@ -4,6 +4,7 @@ import { ISelectedConversation, IConversation } from "./reducers/dataReducer";
 // user reducer types
 export const SET_AUTHENTICATED = "SET_AUTHENTICATED";
 export const SET_AUTHENTICATED_USER = "SET_AUTHENTICATED_USER";
+export const SET_ACCESS_TOKEN = "SET_ACCESS_TOKEN";
 // UI reducer types
 export const SET_ERROR = "SET_ERROR";
 export const SET_SUCCESS = "SET_SUCCESS";
@@ -25,10 +26,15 @@ interface ISetAuthenticatedUserAction {
   type: typeof SET_AUTHENTICATED_USER;
   payload: IUser;
 }
+interface ISetAccessTokenAction {
+  type: typeof SET_ACCESS_TOKEN;
+  payload: string;
+}
 
 export type UserActionTypes =
   | ISetAuthenticatedAction
-  | ISetAuthenticatedUserAction;
+  | ISetAuthenticatedUserAction
+  | ISetAccessTokenAction;
 
 // UI interfaces
 interface ISetErrorAction {

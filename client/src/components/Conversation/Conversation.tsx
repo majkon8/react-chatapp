@@ -36,7 +36,7 @@ function Conversation({
   const handleChatOpen = () => setIsChatOpen(true);
 
   const selectNewConversation = (id: string) => {
-    const conversation = { new: true, id, username };
+    const conversation = { new: isNew === true, id, username };
     setSelectedConversation(conversation);
   };
 

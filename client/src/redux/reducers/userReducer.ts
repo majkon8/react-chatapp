@@ -1,6 +1,7 @@
 import {
   SET_AUTHENTICATED,
   SET_AUTHENTICATED_USER,
+  SET_ACCESS_TOKEN,
   UserActionTypes,
 } from "../types";
 
@@ -15,11 +16,13 @@ export interface IUser {
 export interface IUserState {
   isAuthenticated: boolean;
   authenticatedUser: IUser | null;
+  accessToken: string;
 }
 
 const initialState: IUserState = {
   isAuthenticated: false,
   authenticatedUser: null,
+  accessToken: "",
 };
 
 export default function (state = initialState, action: UserActionTypes) {
@@ -28,6 +31,11 @@ export default function (state = initialState, action: UserActionTypes) {
       return { ...state, isAuthenticated: action.payload };
     case SET_AUTHENTICATED_USER:
       return { ...state, authenticatedUser: action.payload };
+    case SET_ACCESS_TOKEN:
+      return {
+        ...state,
+        accessToken: action.payload,
+      };
     default:
       return state;
   }

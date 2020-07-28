@@ -16,7 +16,7 @@ function Conversation(_a) {
     var isActive = _a.isActive, isNew = _a.isNew, username = _a.username, id = _a.id, message = _a.message, handleActive = _a.handleActive, setIsChatOpen = _a.setIsChatOpen, setSelectedConversation = _a.setSelectedConversation;
     var handleChatOpen = function () { return setIsChatOpen(true); };
     var selectNewConversation = function (id) {
-        var conversation = { new: true, id: id, username: username };
+        var conversation = { new: isNew === true, id: id, username: username };
         setSelectedConversation(conversation);
     };
     var handleClick = function () {
