@@ -49,6 +49,7 @@ io.on("connection", (socket: Socket) => {
       if (createdMessage)
         return io
           .in(message.conversation.userId)
+          .in(socket.user._id)
           .emit("receiveMessage", createdMessage);
     } catch (error) {
       console.error(error);

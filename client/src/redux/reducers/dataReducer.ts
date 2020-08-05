@@ -3,13 +3,17 @@ import {
   DataActionTypes,
   SET_SELECTED_CONVERSATION,
   SET_CONVERSATIONS,
+  SET_MESSAGES,
+  SET_NEW_MESSAGE,
 } from "../types";
 import { IUser } from "./userReducer";
 
-interface IMessage {
+export interface IMessage {
+  _id?: string;
   body: string;
   authorId: string;
-  createdAt: Date;
+  conversationId?: string;
+  createdAt: string;
 }
 
 interface IMembers {
@@ -25,7 +29,6 @@ export interface IConversation {
 
 export interface ISelectedConversation {
   new: boolean;
-  // if new then id is an id of selected user
   id: string;
   username: string;
 }
@@ -34,12 +37,14 @@ export interface IDataState {
   searchedUsers: IUser[] | null;
   selectedConversation: ISelectedConversation | null;
   conversations: IConversation[] | null;
+  messages: IMessage[] | null;
 }
 
 const initialState: IDataState = {
   searchedUsers: null,
   selectedConversation: null,
   conversations: null,
+  messages: null,
 };
 
 export default function (state = initialState, action: DataActionTypes) {
@@ -50,6 +55,11 @@ export default function (state = initialState, action: DataActionTypes) {
       return { ...state, selectedConversation: action.payload };
     case SET_CONVERSATIONS:
       return { ...state, conversations: action.payload };
+    case SET_MESSAGES:
+      return { ...state, messages: action.payload };
+    case SET_NEW_MESSAGE:
+      if (action.payload.conversationId === state.selectedConversation?.id)
+        return { ...state, messages: [...state.messages, action.payload] };
     default:
       return state;
   }

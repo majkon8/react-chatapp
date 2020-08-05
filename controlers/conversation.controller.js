@@ -95,7 +95,7 @@ exports.getAll = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 user = req.user;
                 return [4 /*yield*/, conversation_model_1.Conversation.find({
                         "members.ids": mongoose_1.mongoose.Types.ObjectId(user === null || user === void 0 ? void 0 : user._id),
-                    })];
+                    }).sort({ _id: -1 })];
             case 1:
                 conversations = _a.sent();
                 res.send(conversations);

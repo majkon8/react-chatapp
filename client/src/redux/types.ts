@@ -1,5 +1,9 @@
 import { IUser } from "./reducers/userReducer";
-import { ISelectedConversation, IConversation } from "./reducers/dataReducer";
+import {
+  ISelectedConversation,
+  IConversation,
+  IMessage,
+} from "./reducers/dataReducer";
 
 // user reducer types
 export const SET_AUTHENTICATED = "SET_AUTHENTICATED";
@@ -16,6 +20,8 @@ export const SET_CHAT_OPEN = "SET_IS_CHAT_OPEN";
 export const SET_SEARCHED_USERS = "SET_SEARCHED_USERS";
 export const SET_SELECTED_CONVERSATION = "SET_SELECTED_CONVERSATION";
 export const SET_CONVERSATIONS = "SET_CONVERSATIONS";
+export const SET_MESSAGES = "SET_MESSAGES";
+export const SET_NEW_MESSAGE = "SET_NEW_MESSAGE";
 
 // user interfaces
 interface ISetAuthenticatedAction {
@@ -83,8 +89,18 @@ interface ISetConversationsAction {
   type: typeof SET_CONVERSATIONS;
   payload: IConversation;
 }
+interface ISetMessagesAction {
+  type: typeof SET_MESSAGES;
+  payload: IMessage[];
+}
+interface ISetNewMessageAction {
+  type: typeof SET_NEW_MESSAGE;
+  payload: IMessage;
+}
 
 export type DataActionTypes =
   | ISetSearchedUsersAction
   | ISetSelectedConversationAction
-  | ISetConversationsAction;
+  | ISetConversationsAction
+  | ISetMessagesAction
+  | ISetNewMessageAction;

@@ -1,9 +1,10 @@
 import * as express from "express";
 import * as messages from "../controlers/message.controller";
+import { tokenAuth } from "../middlewares/auth";
 
 let router = express.Router();
 
-/* POST /messages */
-router.post("/", messages.create);
+/* GET /messages/:conversationId */
+router.get("/:conversationId", tokenAuth, messages.getConversationMessages);
 
 module.exports = router;

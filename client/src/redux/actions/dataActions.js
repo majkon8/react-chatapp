@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllConversations = exports.setSelectedConversation = exports.searchForUsers = void 0;
+exports.setNewMessage = exports.getMessages = exports.getAllConversations = exports.setSelectedConversation = exports.searchForUsers = void 0;
 var types_1 = require("../types");
 var axios_1 = __importDefault(require("axios"));
 exports.searchForUsers = function (username) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
@@ -101,3 +101,31 @@ exports.getAllConversations = function () { return function (dispatch) { return 
         }
     });
 }); }; };
+exports.getMessages = function (conversationId) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
+    var response, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, 4, 5]);
+                return [4 /*yield*/, axios_1.default.get("/messages/" + conversationId)];
+            case 2:
+                response = _a.sent();
+                dispatch({ type: types_1.SET_MESSAGES, payload: response.data });
+                return [3 /*break*/, 5];
+            case 3:
+                error_3 = _a.sent();
+                console.error(error_3);
+                return [3 /*break*/, 5];
+            case 4:
+                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                return [7 /*endfinally*/];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); }; };
+exports.setNewMessage = function (message) { return function (dispatch) {
+    return dispatch({ type: types_1.SET_NEW_MESSAGE, payload: message });
+}; };

@@ -37,7 +37,7 @@ export const getAll = async (req: Req, res: Response) => {
     const user = req.user;
     const conversations = await Conversation.find({
       "members.ids": mongoose.Types.ObjectId(user?._id),
-    });
+    }).sort({ _id: -1 });
     res.send(conversations);
   } catch (error) {
     console.error(error);

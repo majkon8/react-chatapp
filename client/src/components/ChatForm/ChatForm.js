@@ -18,6 +18,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -31,7 +47,7 @@ var mapStateToProps = function (state) { return ({ data: state.data }); };
 var connector = react_redux_1.connect(mapStateToProps, {});
 function ChatForm(_a) {
     var data = _a.data, socket = _a.socket;
-    var _b = react_1.useState(""), messageBody = _b[0], setMessageBody = _b[1];
+    var _b = __read(react_1.useState(""), 2), messageBody = _b[0], setMessageBody = _b[1];
     var handleChange = function (event) {
         return setMessageBody(event.target.value);
     };

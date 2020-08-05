@@ -100,6 +100,7 @@ index_1.io.on("connection", function (socket) {
                     if (createdMessage)
                         return [2 /*return*/, index_1.io
                                 .in(message.conversation.userId)
+                                .in(socket.user._id)
                                 .emit("receiveMessage", createdMessage)];
                     return [3 /*break*/, 6];
                 case 5:

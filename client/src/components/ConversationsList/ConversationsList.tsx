@@ -57,9 +57,11 @@ function ConversationsList({ UI, data, user, getAllConversations }: Props) {
         {(UI.loading && !data.conversations) || !user.authenticatedUser ? (
           <CircularProgress color="inherit" />
         ) : (
-          data.conversations?.map((conversation) => (
+          data.conversations?.map((conversation, index) => (
             <Conversation
-              isActive={activeId === conversation._id}
+              isActive={
+                activeId === "" ? index === 0 : activeId === conversation._id
+              }
               key={conversation._id}
               isNew={false}
               username={
@@ -74,6 +76,7 @@ function ConversationsList({ UI, data, user, getAllConversations }: Props) {
               }
               id={conversation._id}
               message={conversation.lastMessage.body}
+              createdAt={conversation.lastMessage.createdAt}
               handleActive={handleActive}
             />
           ))

@@ -24,7 +24,7 @@ var users = __importStar(require("../controlers/user.controler"));
 var auth_1 = require("../middlewares/auth");
 var router = express.Router();
 /* GET /users/search/:username */
-router.get("/search/:username", users.searchForUsers);
+router.get("/search/:username", auth_1.tokenAuth, users.searchForUsers);
 /* GET /users */
 router.get("/", auth_1.tokenAuth, users.getAuthenticatedUser);
 /* PATCH /users/:id */

@@ -5,7 +5,7 @@ import { tokenAuth } from "../middlewares/auth";
 let router = express.Router();
 
 /* GET /users/search/:username */
-router.get("/search/:username", users.searchForUsers);
+router.get("/search/:username", tokenAuth, users.searchForUsers);
 
 /* GET /users */
 router.get("/", tokenAuth, users.getAuthenticatedUser);

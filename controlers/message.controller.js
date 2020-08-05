@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create = void 0;
+exports.getConversationMessages = exports.create = void 0;
 var message_model_1 = require("../models/message.model");
 var conversation_controller_1 = require("../controlers/conversation.controller");
 // CREATE MESSAGE
@@ -59,6 +59,30 @@ exports.create = function (message) { return __awaiter(void 0, void 0, void 0, f
                 console.error(error_1);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
+        }
+    });
+}); };
+// GET MESSAGES OF CONVERSATION
+exports.getConversationMessages = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var conversationId, messages, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                conversationId = req.params.conversationId;
+                return [4 /*yield*/, message_model_1.Message.find({ conversationId: conversationId }).sort({
+                        createdAt: "ascending",
+                    })];
+            case 1:
+                messages = _a.sent();
+                res.json(messages);
+                return [3 /*break*/, 3];
+            case 2:
+                error_2 = _a.sent();
+                console.error(error_2);
+                res.status(400).json(error_2);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };

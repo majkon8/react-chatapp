@@ -9,9 +9,37 @@ const connector = connect(mapStateToProps, {});
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = PropsFromRedux & { isOwnMessage: boolean };
+interface IProps {
+  isOwnMessage: boolean;
+  body: string;
+  createdAt: string;
+}
 
-function Message({ isOwnMessage, UI }: Props) {
+type Props = PropsFromRedux & IProps;
+
+export function formatDate(date: string) {
+  const now = new Date();
+  const nowDay = now.getDate();
+  const nowMonth = now.getMonth();
+  const nowYear = now.getFullYear();
+  const dateDay = date.slice(8, 10);
+  const dateMonth = date.slice(5, 7);
+  const dateYear = date.slice(0, 4);
+  const formattedTime = date.slice(11, 16);
+  if (
+    nowYear === +dateYear &&
+    nowMonth + 1 === +dateMonth &&
+    nowDay === +dateDay
+  ) {
+    return formattedTime;
+  } else if (nowYear === +dateYear) {
+    return `${dateDay}.${dateMonth}, ${formattedTime}`;
+  } else {
+    return `${dateDay}.${dateMonth}.${dateYear}, ${formattedTime}`;
+  }
+}
+
+function Message({ isOwnMessage, UI, body, createdAt }: Props) {
   const textColor = [
     "rgb(127, 219, 255)",
     "rgb(1, 255, 112)",
@@ -20,6 +48,8 @@ function Message({ isOwnMessage, UI }: Props) {
   ].includes(UI.color)
     ? "#333"
     : "#eee";
+
+  const formattedCreatedAt = formatDate(createdAt);
 
   return (
     <div
@@ -43,10 +73,10 @@ function Message({ isOwnMessage, UI }: Props) {
           }}
           className="chat-message-text"
         >
-          Hello mate, how are you?
+          {body}
         </span>
       </div>
-      <span className="chat-message-time">23.07.2020, 17:22</span>
+      <span className="chat-message-time">{formattedCreatedAt}</span>
     </div>
   );
 }

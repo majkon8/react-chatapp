@@ -54,6 +54,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
 // redux
@@ -64,7 +80,7 @@ var mapActionsToProps = { confirmAccount: userActions_1.confirmAccount };
 var connector = react_redux_1.connect(null, mapActionsToProps);
 function ConfirmAccount(_a) {
     var confirmAccount = _a.confirmAccount, match = _a.match;
-    var _b = react_1.useState(false), redirect = _b[0], setRedirect = _b[1];
+    var _b = __read(react_1.useState(false), 2), redirect = _b[0], setRedirect = _b[1];
     react_1.useEffect(function () {
         function fetchApi() {
             return __awaiter(this, void 0, void 0, function () {

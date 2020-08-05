@@ -11,8 +11,10 @@ app.use(cors({ credentials: true, origin: "http://localhost:3001" }));
 
 const userRoutes = require("./routes/user.routes");
 const conversationRoutes = require("./routes/conversation.routes");
+const messagesRoutes = require("./routes/message.routes");
 app.use("/users", userRoutes);
 app.use("/conversations", conversationRoutes);
+app.use("/messages", messagesRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client", "build")));
