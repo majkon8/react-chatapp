@@ -63,6 +63,7 @@ var mongoose_1 = require("./mongoose");
 index_1.io.use(auth_1.tokenAuthSocket);
 index_1.io.on("connection", function (socket) {
     console.log("Connected " + socket.user._id);
+    socket.join(socket.user._id);
     socket.on("disconnect", function () { return console.log("Disconnected " + socket.user._id); });
     socket.on("sendMessage", function (message) { return __awaiter(void 0, void 0, void 0, function () {
         var conversationId, members, newConversation, newMessage, createdMessage, error_1;
@@ -75,7 +76,7 @@ index_1.io.on("connection", function (socket) {
                     members = {
                         ids: [
                             mongoose_1.mongoose.Types.ObjectId(socket.user._id),
-                            mongoose_1.mongoose.Types.ObjectId(message.conversation.id),
+                            mongoose_1.mongoose.Types.ObjectId(message.conversation.userId),
                         ],
                         usernames: [socket.user.username, message.conversation.username],
                     };
@@ -97,7 +98,9 @@ index_1.io.on("connection", function (socket) {
                 case 4:
                     createdMessage = _a.sent();
                     if (createdMessage)
-                        return [2 /*return*/, index_1.io.emit("receiveMessage", createdMessage)];
+                        return [2 /*return*/, index_1.io
+                                .in(message.conversation.userId)
+                                .emit("receiveMessage", createdMessage)];
                     return [3 /*break*/, 6];
                 case 5:
                     error_1 = _a.sent();

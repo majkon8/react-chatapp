@@ -13,10 +13,10 @@ var mapStateToProps = function (state) { return ({ UI: state.UI, data: state.dat
 var mapActionsToProps = { setIsChatOpen: uiActions_1.setIsChatOpen, setSelectedConversation: dataActions_1.setSelectedConversation };
 var connector = react_redux_1.connect(mapStateToProps, mapActionsToProps);
 function Conversation(_a) {
-    var isActive = _a.isActive, isNew = _a.isNew, username = _a.username, id = _a.id, message = _a.message, handleActive = _a.handleActive, setIsChatOpen = _a.setIsChatOpen, setSelectedConversation = _a.setSelectedConversation;
+    var isActive = _a.isActive, isNew = _a.isNew, username = _a.username, userId = _a.userId, id = _a.id, message = _a.message, handleActive = _a.handleActive, setIsChatOpen = _a.setIsChatOpen, setSelectedConversation = _a.setSelectedConversation;
     var handleChatOpen = function () { return setIsChatOpen(true); };
     var selectNewConversation = function (id) {
-        var conversation = { new: isNew === true, id: id, username: username };
+        var conversation = { new: isNew === true, id: id, username: username, userId: userId };
         setSelectedConversation(conversation);
     };
     var handleClick = function () {

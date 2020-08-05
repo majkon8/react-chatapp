@@ -16,6 +16,7 @@ interface IProps {
   isActive?: boolean;
   isNew: boolean;
   username: string;
+  userId: string;
   id: string;
   message?: string;
   handleActive(id: string): void;
@@ -27,6 +28,7 @@ function Conversation({
   isActive,
   isNew,
   username,
+  userId,
   id,
   message,
   handleActive,
@@ -36,7 +38,7 @@ function Conversation({
   const handleChatOpen = () => setIsChatOpen(true);
 
   const selectNewConversation = (id: string) => {
-    const conversation = { new: isNew === true, id, username };
+    const conversation = { new: isNew === true, id, username, userId };
     setSelectedConversation(conversation);
   };
 

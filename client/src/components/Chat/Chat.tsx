@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Chat.scss";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
@@ -16,9 +16,14 @@ interface IProps {
 }
 
 export default function Chat({ socket }: IProps) {
-  socket?.on("receiveMessage", (message: IMessage) => {
-    console.log(message);
-  });
+  useEffect(() => {
+    socket?.on("receiveMessage", (message: IMessage) => {
+      console.log(message);
+    });
+    return () => {
+      socket?.off("receiveMessage");
+    };
+  }, [socket]);
 
   return (
     <div className="chat-container">

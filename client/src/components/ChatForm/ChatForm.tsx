@@ -10,9 +10,7 @@ const connector = connect(mapStateToProps, {});
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = PropsFromRedux & {
-  socket: SocketIOClient.Socket | null;
-};
+type Props = PropsFromRedux & { socket: SocketIOClient.Socket | null };
 
 function ChatForm({ data, socket }: Props) {
   const [messageBody, setMessageBody] = useState("");

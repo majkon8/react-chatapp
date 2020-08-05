@@ -7,6 +7,7 @@ import { mongoose } from "./mongoose";
 interface IConversation {
   new: boolean;
   id: string;
+  userId: string;
   username: string;
 }
 
@@ -21,6 +22,7 @@ io.use(tokenAuthSocket);
 
 io.on("connection", (socket: Socket) => {
   console.log(`Connected ${socket.user._id}`);
+  socket.join(socket.user._id);
 
   socket.on("disconnect", () => console.log(`Disconnected ${socket.user._id}`));
 
@@ -31,7 +33,7 @@ io.on("connection", (socket: Socket) => {
         const members = {
           ids: [
             mongoose.Types.ObjectId(socket.user._id),
-            mongoose.Types.ObjectId(message.conversation.id),
+            mongoose.Types.ObjectId(message.conversation.userId),
           ],
           usernames: [socket.user.username, message.conversation.username],
         };
@@ -44,7 +46,10 @@ io.on("connection", (socket: Socket) => {
         body: message.body,
       };
       const createdMessage = await messages.create(newMessage);
-      if (createdMessage) return io.emit("receiveMessage", createdMessage);
+      if (createdMessage)
+        return io
+          .in(message.conversation.userId)
+          .emit("receiveMessage", createdMessage);
     } catch (error) {
       console.error(error);
     }
