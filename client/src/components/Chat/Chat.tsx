@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, MutableRefObject } from "react";
 import "./Chat.scss";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
@@ -32,7 +32,17 @@ interface IMessage {
   createdAt: string;
 }
 
+interface IScrollElement extends HTMLDivElement {
+  getScrollElement(): any;
+}
+
 function Chat({ socket, UI, data, user, setNewMessage }: Props) {
+  const scrollRef = useRef() as MutableRefObject<IScrollElement>;
+
+  useEffect(() => {
+    scrollRef.current.getScrollElement().scrollTop = 10000;
+  }, [data.messages?.[0].conversationId]);
+
   useEffect(() => {
     socket?.on("receiveMessage", (message: IMessage) => setNewMessage(message));
     return () => {
@@ -42,11 +52,13 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
 
   return (
     <div className="chat-container">
-      <SimpleBar style={{ maxHeight: "calc(100vh - 140px)" }}>
+      <SimpleBar
+        // @ts-ignore
+        ref={scrollRef}
+        style={{ maxHeight: "calc(100vh - 140px)" }}
+      >
         {UI.loading && !data.messages ? (
-          <div className="chat-loading-spinner-container">
-            <CircularProgress color="inherit" />
-          </div>
+          <CircularProgress color="inherit" />
         ) : (
           data.messages?.map((message) => (
             <Message

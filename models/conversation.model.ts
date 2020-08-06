@@ -18,17 +18,20 @@ export interface IConversationDocument extends Document {
 
 export interface IConversationModel extends Model<IConversationDocument> {}
 
-const conversationSchema: Schema = new Schema({
-  members: {
-    ids: { type: [Schema.Types.ObjectId], required: true },
-    usernames: { type: [String], required: true },
+const conversationSchema: Schema = new Schema(
+  {
+    members: {
+      ids: { type: [Schema.Types.ObjectId], required: true },
+      usernames: { type: [String], required: true },
+    },
+    lastMessage: {
+      body: String,
+      createdAt: Date,
+      authorId: Schema.Types.ObjectId,
+    },
   },
-  lastMessage: {
-    body: String,
-    createdAt: Date,
-    authorId: Schema.Types.ObjectId,
-  },
-});
+  { timestamps: { createdAt: false, updatedAt: true } }
+);
 
 export const Conversation: IConversationModel = mongoose.model<
   IConversationDocument,

@@ -39,8 +39,12 @@ var mapStateToProps = function (state) { return ({
 var mapActionsToProps = { setNewMessage: dataActions_1.setNewMessage };
 var connector = react_redux_1.connect(mapStateToProps, mapActionsToProps);
 function Chat(_a) {
-    var _b;
+    var _b, _c;
     var socket = _a.socket, UI = _a.UI, data = _a.data, user = _a.user, setNewMessage = _a.setNewMessage;
+    var scrollRef = react_1.useRef();
+    react_1.useEffect(function () {
+        scrollRef.current.getScrollElement().scrollTop = 10000;
+    }, [(_b = data.messages) === null || _b === void 0 ? void 0 : _b[0].conversationId]);
     react_1.useEffect(function () {
         socket === null || socket === void 0 ? void 0 : socket.on("receiveMessage", function (message) { return setNewMessage(message); });
         return function () {
@@ -48,8 +52,11 @@ function Chat(_a) {
         };
     }, [socket]);
     return (react_1.default.createElement("div", { className: "chat-container" },
-        react_1.default.createElement(simplebar_react_1.default, { style: { maxHeight: "calc(100vh - 140px)" } }, UI.loading && !data.messages ? (react_1.default.createElement("div", { className: "chat-loading-spinner-container" },
-            react_1.default.createElement(core_1.CircularProgress, { color: "inherit" }))) : ((_b = data.messages) === null || _b === void 0 ? void 0 : _b.map(function (message) {
+        react_1.default.createElement(simplebar_react_1.default
+        // @ts-ignore
+        , { 
+            // @ts-ignore
+            ref: scrollRef, style: { maxHeight: "calc(100vh - 140px)" } }, UI.loading && !data.messages ? (react_1.default.createElement(core_1.CircularProgress, { color: "inherit" })) : ((_c = data.messages) === null || _c === void 0 ? void 0 : _c.map(function (message) {
             var _a;
             return (react_1.default.createElement(Message_1.default, { key: message._id, isOwnMessage: message.authorId === ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a._id), body: message.body, createdAt: message.createdAt }));
         })))));

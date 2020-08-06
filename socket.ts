@@ -21,11 +21,7 @@ export type Socket = SocketIO.Socket & { user: IDecodedUser };
 io.use(tokenAuthSocket);
 
 io.on("connection", (socket: Socket) => {
-  console.log(`Connected ${socket.user._id}`);
   socket.join(socket.user._id);
-
-  socket.on("disconnect", () => console.log(`Disconnected ${socket.user._id}`));
-
   socket.on("sendMessage", async (message: IMessage) => {
     try {
       let conversationId;

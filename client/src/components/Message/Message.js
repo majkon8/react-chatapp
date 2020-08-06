@@ -6,29 +6,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.formatDate = void 0;
 var react_1 = __importDefault(require("react"));
 require("./Message.scss");
+var moment_1 = __importDefault(require("moment"));
 // redux
 var react_redux_1 = require("react-redux");
 var mapStateToProps = function (state) { return ({ UI: state.UI }); };
 var connector = react_redux_1.connect(mapStateToProps, {});
 function formatDate(date) {
-    var now = new Date();
-    var nowDay = now.getDate();
-    var nowMonth = now.getMonth();
-    var nowYear = now.getFullYear();
-    var dateDay = date.slice(8, 10);
-    var dateMonth = date.slice(5, 7);
-    var dateYear = date.slice(0, 4);
-    var formattedTime = date.slice(11, 16);
-    if (nowYear === +dateYear &&
-        nowMonth + 1 === +dateMonth &&
-        nowDay === +dateDay) {
-        return formattedTime;
+    if (moment_1.default().format("DD.MM.YYYY") === moment_1.default(date).format("DD.MM.YYYY")) {
+        return moment_1.default(date).format("HH:mm");
     }
-    else if (nowYear === +dateYear) {
-        return dateDay + "." + dateMonth + ", " + formattedTime;
+    else if (moment_1.default().format("YYYY") === moment_1.default(date).format("YYYY")) {
+        return moment_1.default(date).format("DD.MM, HH:mm");
     }
     else {
-        return dateDay + "." + dateMonth + "." + dateYear + ", " + formattedTime;
+        return moment_1.default(date).format("DD.MM.YYYY, HH:mm");
     }
 }
 exports.formatDate = formatDate;

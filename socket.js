@@ -62,9 +62,7 @@ var auth_1 = require("./middlewares/auth");
 var mongoose_1 = require("./mongoose");
 index_1.io.use(auth_1.tokenAuthSocket);
 index_1.io.on("connection", function (socket) {
-    console.log("Connected " + socket.user._id);
     socket.join(socket.user._id);
-    socket.on("disconnect", function () { return console.log("Disconnected " + socket.user._id); });
     socket.on("sendMessage", function (message) { return __awaiter(void 0, void 0, void 0, function () {
         var conversationId, members, newConversation, newMessage, createdMessage, error_1;
         return __generator(this, function (_a) {
