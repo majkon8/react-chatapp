@@ -1,6 +1,6 @@
 import {
   SET_SEARCHED_USERS,
-  SET_LOADING_UI,
+  SET_PENDING,
   SET_SELECTED_CONVERSATION,
   SET_CONVERSATIONS,
   SET_MESSAGES,
@@ -15,7 +15,7 @@ export const searchForUsers = (username: string) => async (
   dispatch: Dispatch
 ) => {
   if (username.length > 0 && username.length < 3) return;
-  dispatch({ type: SET_LOADING_UI, payload: true });
+  dispatch({ type: SET_PENDING, payload: { search: true } });
   try {
     if (username.length === 0) {
       dispatch({ type: SET_SEARCHED_USERS, payload: [] });
@@ -26,7 +26,7 @@ export const searchForUsers = (username: string) => async (
   } catch (error) {
     console.error(error);
   } finally {
-    dispatch({ type: SET_LOADING_UI, payload: false });
+    dispatch({ type: SET_PENDING, payload: { search: false } });
   }
 };
 
@@ -37,22 +37,21 @@ export const setSelectedConversation = (
 };
 
 export const getAllConversations = () => async (dispatch: Dispatch) => {
-  dispatch({ type: SET_LOADING_UI, payload: true });
+  dispatch({ type: SET_PENDING, payload: { conversations: true } });
   try {
     const response = await axios.get("/conversations");
     dispatch({ type: SET_CONVERSATIONS, payload: response.data });
   } catch (error) {
     console.error(error);
   } finally {
-    dispatch({ type: SET_LOADING_UI, payload: false });
+    dispatch({ type: SET_PENDING, payload: { conversations: false } });
   }
 };
 
 export const getMessages = (conversationId: string | null) => async (
   dispatch: Dispatch
 ) => {
-  dispatch({ type: SET_LOADING_UI, payload: true });
-  dispatch({ type: SET_MESSAGES, payload: null });
+  dispatch({ type: SET_PENDING, payload: { messages: true } });
   try {
     if (conversationId === null) dispatch({ type: SET_MESSAGES, payload: [] });
     else {
@@ -62,7 +61,7 @@ export const getMessages = (conversationId: string | null) => async (
   } catch (error) {
     console.error(error);
   } finally {
-    dispatch({ type: SET_LOADING_UI, payload: false });
+    dispatch({ type: SET_PENDING, payload: { messages: false } });
   }
 };
 

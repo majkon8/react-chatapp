@@ -236,7 +236,7 @@ function RegisterForm({ signup, UI }: Props) {
           Object.keys(dirtyFields).length === 0 ||
           Object.keys(dirtyFields).length !== Object.keys(getValues()).length
         }
-        loading={UI.loading}
+        loading={UI.pending.auth}
       />
       <span className="is-pulled-left info">
         <NavLink to="/login">Already signed up?</NavLink>

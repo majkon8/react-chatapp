@@ -88,7 +88,7 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
         onScroll={handleScroll}
         style={{ maxHeight: "calc(100vh - 140px)" }}
       >
-        {UI.loading && data.selectedConversation && !data.messages ? (
+        {UI.pending.messages ? (
           <CircularProgress color="inherit" />
         ) : (
           data.messages?.map((message) => (

@@ -108,7 +108,7 @@ function LoginForm({ login, forgotPassword, UI }: Props) {
         hasMarginTop={true}
         text="Sign in"
         disabled={!dirtyFields.email || !dirtyFields.password}
-        loading={UI.loading}
+        loading={UI.pending.auth}
       />
       <span className="is-pulled-left info">
         Don't have an account? <NavLink to="/register">Sign up</NavLink>

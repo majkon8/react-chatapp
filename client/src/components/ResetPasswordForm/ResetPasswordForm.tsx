@@ -72,7 +72,7 @@ function ResetPasswordForm({ token, resetPassword, UI }: Props) {
         hasMarginTop={false}
         text="Reset password"
         disabled={!dirtyFields.password || !dirtyFields.confirm_password}
-        loading={UI.loading}
+        loading={UI.pending.auth}
       />
       <span className="is-pulled-left info">
         <NavLink to="/login">Sign in</NavLink>

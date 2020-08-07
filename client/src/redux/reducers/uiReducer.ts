@@ -1,15 +1,23 @@
 import {
   SET_ERROR,
   SET_SUCCESS,
-  SET_LOADING_UI,
   SET_THEME,
   SET_COLOR,
   UIActionTypes,
   SET_CHAT_OPEN,
+  SET_PENDING,
 } from "../types";
 
+interface IPending {
+  // auth is for signup/login/forgot password/reset password
+  auth: boolean;
+  search: boolean;
+  conversations: boolean;
+  messages: boolean;
+}
+
 export interface IUIState {
-  loading: boolean;
+  pending: IPending;
   error: string | null;
   success: string | null;
   theme: string;
@@ -18,7 +26,12 @@ export interface IUIState {
 }
 
 const initialState: IUIState = {
-  loading: false,
+  pending: {
+    auth: false,
+    search: false,
+    conversations: false,
+    messages: false,
+  },
   error: null,
   success: null,
   theme: localStorage.getItem("theme") || "dark",
@@ -33,8 +46,8 @@ export default function (state = initialState, action: UIActionTypes) {
       return { ...state, error: action.payload, success: null };
     case SET_SUCCESS:
       return { ...state, success: action.payload, error: null };
-    case SET_LOADING_UI:
-      return { ...state, loading: action.payload };
+    case SET_PENDING:
+      return { ...state, pending: { ...state.pending, ...action.payload } };
     case SET_THEME:
       return { ...state, theme: action.payload };
     case SET_COLOR:

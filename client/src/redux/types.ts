@@ -13,7 +13,7 @@ export const SET_ACCESS_TOKEN = "SET_ACCESS_TOKEN";
 // UI reducer types
 export const SET_ERROR = "SET_ERROR";
 export const SET_SUCCESS = "SET_SUCCESS";
-export const SET_LOADING_UI = "SET_LOADING_UI";
+export const SET_PENDING = "SET_PENDING";
 export const SET_THEME = "SET_THEME";
 export const SET_COLOR = "SET_COLOR";
 export const SET_CHAT_OPEN = "SET_IS_CHAT_OPEN";
@@ -52,9 +52,9 @@ interface ISetSuccessAction {
   type: typeof SET_SUCCESS;
   payload: string | null;
 }
-interface ISetLoadingUIAction {
-  type: typeof SET_LOADING_UI;
-  payload: boolean;
+interface ISetPendingAction {
+  type: typeof SET_PENDING;
+  payload: any;
 }
 interface ISetThemeAction {
   type: typeof SET_THEME;
@@ -72,7 +72,7 @@ interface ISetChatOpenAction {
 export type UIActionTypes =
   | ISetErrorAction
   | ISetSuccessAction
-  | ISetLoadingUIAction
+  | ISetPendingAction
   | ISetThemeAction
   | ISetColorAction
   | ISetChatOpenAction;

@@ -1,5 +1,5 @@
 import {
-  SET_LOADING_UI,
+  SET_PENDING,
   SET_ERROR,
   SET_SUCCESS,
   SET_AUTHENTICATED,
@@ -38,7 +38,7 @@ export const getAuthenticatedUser = () => async (dispatch: Dispatch) => {
 };
 
 export const signup = (userData: IUserData) => async (dispatch: Dispatch) => {
-  dispatch({ type: SET_LOADING_UI, payload: true });
+  dispatch({ type: SET_PENDING, payload: { auth: true } });
   try {
     await axios.post("/users", userData);
     dispatch({
@@ -55,7 +55,7 @@ export const signup = (userData: IUserData) => async (dispatch: Dispatch) => {
         payload: "Something went wrong. Try again later",
       });
   } finally {
-    dispatch({ type: SET_LOADING_UI, payload: false });
+    dispatch({ type: SET_PENDING, payload: { auth: false } });
   }
 };
 
@@ -76,7 +76,7 @@ export const confirmAccount = (token: string) => async (dispatch: Dispatch) => {
 };
 
 export const login = (userData: IUserData) => async (dispatch: Dispatch) => {
-  dispatch({ type: SET_LOADING_UI, payload: true });
+  dispatch({ type: SET_PENDING, payload: { auth: true } });
   try {
     const response = await axios.post("/users/login", userData);
     const accessToken: string = response.headers["x-access-token"];
@@ -97,12 +97,12 @@ export const login = (userData: IUserData) => async (dispatch: Dispatch) => {
         payload: "Something went wrong. Try again later",
       });
   } finally {
-    dispatch({ type: SET_LOADING_UI, payload: false });
+    dispatch({ type: SET_PENDING, payload: { auth: false } });
   }
 };
 
 export const forgotPassword = (email: string) => async (dispatch: Dispatch) => {
-  dispatch({ type: SET_LOADING_UI, payload: true });
+  dispatch({ type: SET_PENDING, payload: { auth: true } });
   try {
     await axios.post("/users/forgot", { email });
     dispatch({
@@ -119,14 +119,14 @@ export const forgotPassword = (email: string) => async (dispatch: Dispatch) => {
         payload: "Something went wrong. Try again later",
       });
   } finally {
-    dispatch({ type: SET_LOADING_UI, payload: false });
+    dispatch({ type: SET_PENDING, payload: { auth: false } });
   }
 };
 
 export const resetPassword = (data: IResetPasswordData) => async (
   dispatch: Dispatch
 ) => {
-  dispatch({ type: SET_LOADING_UI, payload: true });
+  dispatch({ type: SET_PENDING, payload: { auth: true } });
   try {
     await axios.post("/users/reset", data);
     dispatch({
@@ -140,7 +140,7 @@ export const resetPassword = (data: IResetPasswordData) => async (
       payload: "Something went wrong. Try again later",
     });
   } finally {
-    dispatch({ type: SET_LOADING_UI, payload: false });
+    dispatch({ type: SET_PENDING, payload: { auth: false } });
   }
 };
 
@@ -148,7 +148,7 @@ export const resetPassword = (data: IResetPasswordData) => async (
 export const externalLogin = (data: IUserData) => async (
   dispatch: Dispatch
 ) => {
-  dispatch({ type: SET_LOADING_UI, payload: true });
+  dispatch({ type: SET_PENDING, payload: { auth: true } });
   try {
     const response = await axios.post("/users/login/external", data);
     const accessToken: string = response.headers["x-access-token"];
@@ -169,7 +169,7 @@ export const externalLogin = (data: IUserData) => async (
         payload: "Something went wrong. Try again later",
       });
   } finally {
-    dispatch({ type: SET_LOADING_UI, payload: false });
+    dispatch({ type: SET_PENDING, payload: { auth: false } });
   }
 };
 

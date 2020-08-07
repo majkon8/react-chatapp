@@ -43,7 +43,7 @@ function ConversationsList({ UI, data, user, getAllConversations }: Props) {
         {data.searchedUsers && data.searchedUsers.length > 0 && (
           <p className="conversations-title">Make new conversation with:</p>
         )}
-        {UI.loading && data.searchedUsers ? (
+        {UI.pending.search ? (
           <CircularProgress color="inherit" />
         ) : (
           data.searchedUsers?.map((searchedUser) => (
@@ -59,7 +59,7 @@ function ConversationsList({ UI, data, user, getAllConversations }: Props) {
           ))
         )}
         <p className="conversations-title">Your conversations:</p>
-        {(UI.loading && !data.conversations) || !user.authenticatedUser ? (
+        {UI.pending.conversations ? (
           <CircularProgress color="inherit" />
         ) : (
           data.conversations?.map((conversation, index) => (
