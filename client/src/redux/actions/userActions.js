@@ -143,6 +143,7 @@ exports.login = function (userData) { return function (dispatch) { return __awai
                 dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
                 dispatch({ type: types_1.SET_AUTHENTICATED_USER, payload: response.data });
                 dispatch({ type: types_1.SET_ERROR, payload: null });
+                localStorage.setItem("userId", response.data._id);
                 return [3 /*break*/, 5];
             case 3:
                 error_4 = _a.sent();
@@ -249,6 +250,7 @@ exports.externalLogin = function (data) { return function (dispatch) { return __
                 dispatch({ type: types_1.SET_AUTHENTICATED, payload: true });
                 dispatch({ type: types_1.SET_AUTHENTICATED_USER, payload: response.data });
                 dispatch({ type: types_1.SET_ERROR, payload: null });
+                localStorage.setItem("userId", response.data._id);
                 return [3 /*break*/, 5];
             case 3:
                 error_7 = _a.sent();

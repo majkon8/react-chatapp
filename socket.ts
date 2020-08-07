@@ -25,6 +25,7 @@ io.on("connection", (socket: Socket) => {
   socket.on("sendMessage", async (message: IMessage) => {
     try {
       let conversationId;
+      let newConversation;
       if (message.conversation.new) {
         const members = {
           ids: [
@@ -33,7 +34,7 @@ io.on("connection", (socket: Socket) => {
           ],
           usernames: [socket.user.username, message.conversation.username],
         };
-        const newConversation = await conversations.create(members);
+        newConversation = await conversations.create(members);
         conversationId = newConversation?._id;
       } else conversationId = message.conversation.id;
       const newMessage = {
@@ -42,11 +43,15 @@ io.on("connection", (socket: Socket) => {
         body: message.body,
       };
       const createdMessage = await messages.create(newMessage);
-      if (createdMessage)
+      if (createdMessage) {
         return io
           .in(message.conversation.userId)
           .in(socket.user._id)
-          .emit("receiveMessage", createdMessage);
+          .emit("receiveMessage", {
+            createdMessage,
+            newConversation: message.conversation.new ? newConversation : null,
+          });
+      }
     } catch (error) {
       console.error(error);
     }

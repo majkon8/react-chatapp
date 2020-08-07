@@ -49,8 +49,8 @@ function Conversation({
   useEffect(() => {
     if (isActive) {
       selectNewConversation(id);
-      getMessages(id);
-      handleChatOpen();
+      if (!isNew) getMessages(id);
+      else getMessages(null);
     }
   }, [isActive]);
 
@@ -62,6 +62,7 @@ function Conversation({
   };
 
   const handleClick = () => {
+    handleChatOpen();
     if (isActive) return;
     handleActive(id);
   };

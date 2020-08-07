@@ -9,6 +9,7 @@ import {
 import { Dispatch } from "redux";
 import axios from "axios";
 import { ISelectedConversation, IMessage } from "../reducers/dataReducer";
+import { INewConversation } from "../../components/Chat/Chat";
 
 export const searchForUsers = (username: string) => async (
   dispatch: Dispatch
@@ -47,13 +48,17 @@ export const getAllConversations = () => async (dispatch: Dispatch) => {
   }
 };
 
-export const getMessages = (conversationId: string) => async (
+export const getMessages = (conversationId: string | null) => async (
   dispatch: Dispatch
 ) => {
   dispatch({ type: SET_LOADING_UI, payload: true });
+  dispatch({ type: SET_MESSAGES, payload: null });
   try {
-    const response = await axios.get(`/messages/${conversationId}`);
-    dispatch({ type: SET_MESSAGES, payload: response.data });
+    if (conversationId === null) dispatch({ type: SET_MESSAGES, payload: [] });
+    else {
+      const response = await axios.get(`/messages/${conversationId}`);
+      dispatch({ type: SET_MESSAGES, payload: response.data });
+    }
   } catch (error) {
     console.error(error);
   } finally {
@@ -61,5 +66,8 @@ export const getMessages = (conversationId: string) => async (
   }
 };
 
-export const setNewMessage = (message: IMessage) => (dispatch: Dispatch) =>
-  dispatch({ type: SET_NEW_MESSAGE, payload: message });
+export const setNewMessage = (messageData: {
+  createdMessage: IMessage;
+  newConversation: INewConversation;
+}) => (dispatch: Dispatch) =>
+  dispatch({ type: SET_NEW_MESSAGE, payload: messageData });

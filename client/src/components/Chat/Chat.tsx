@@ -30,6 +30,13 @@ interface IMessage {
   authorId: string;
   body: string;
   createdAt: string;
+  newConversation: boolean;
+}
+
+export interface INewConversation {
+  members: { ids: string[]; usernames: string[] };
+  updatedAt: string;
+  _id: string;
 }
 
 interface IScrollElement extends HTMLDivElement {
@@ -41,10 +48,16 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
 
   useEffect(() => {
     scrollRef.current.getScrollElement().scrollTop = 10000;
-  }, [data.messages?.[0].conversationId]);
+  }, [data.messages?.[0]?.conversationId]);
 
   useEffect(() => {
-    socket?.on("receiveMessage", (message: IMessage) => setNewMessage(message));
+    socket?.on(
+      "receiveMessage",
+      (message: {
+        createdMessage: IMessage;
+        newConversation: INewConversation;
+      }) => setNewMessage(message)
+    );
     return () => {
       socket?.off("receiveMessage");
     };
@@ -57,7 +70,7 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
         ref={scrollRef}
         style={{ maxHeight: "calc(100vh - 140px)" }}
       >
-        {UI.loading && !data.messages ? (
+        {UI.loading && data.selectedConversation && !data.messages ? (
           <CircularProgress color="inherit" />
         ) : (
           data.messages?.map((message) => (

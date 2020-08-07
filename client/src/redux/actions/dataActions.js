@@ -107,25 +107,30 @@ exports.getMessages = function (conversationId) { return function (dispatch) { r
         switch (_a.label) {
             case 0:
                 dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                dispatch({ type: types_1.SET_MESSAGES, payload: null });
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 3, 4, 5]);
-                return [4 /*yield*/, axios_1.default.get("/messages/" + conversationId)];
-            case 2:
+                _a.trys.push([1, 5, 6, 7]);
+                if (!(conversationId === null)) return [3 /*break*/, 2];
+                dispatch({ type: types_1.SET_MESSAGES, payload: [] });
+                return [3 /*break*/, 4];
+            case 2: return [4 /*yield*/, axios_1.default.get("/messages/" + conversationId)];
+            case 3:
                 response = _a.sent();
                 dispatch({ type: types_1.SET_MESSAGES, payload: response.data });
-                return [3 /*break*/, 5];
-            case 3:
+                _a.label = 4;
+            case 4: return [3 /*break*/, 7];
+            case 5:
                 error_3 = _a.sent();
                 console.error(error_3);
-                return [3 /*break*/, 5];
-            case 4:
+                return [3 /*break*/, 7];
+            case 6:
                 dispatch({ type: types_1.SET_LOADING_UI, payload: false });
                 return [7 /*endfinally*/];
-            case 5: return [2 /*return*/];
+            case 7: return [2 /*return*/];
         }
     });
 }); }; };
-exports.setNewMessage = function (message) { return function (dispatch) {
-    return dispatch({ type: types_1.SET_NEW_MESSAGE, payload: message });
+exports.setNewMessage = function (messageData) { return function (dispatch) {
+    return dispatch({ type: types_1.SET_NEW_MESSAGE, payload: messageData });
 }; };

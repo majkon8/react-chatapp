@@ -64,12 +64,13 @@ index_1.io.use(auth_1.tokenAuthSocket);
 index_1.io.on("connection", function (socket) {
     socket.join(socket.user._id);
     socket.on("sendMessage", function (message) { return __awaiter(void 0, void 0, void 0, function () {
-        var conversationId, members, newConversation, newMessage, createdMessage, error_1;
+        var conversationId, newConversation, members, newMessage, createdMessage, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 5, , 6]);
                     conversationId = void 0;
+                    newConversation = void 0;
                     if (!message.conversation.new) return [3 /*break*/, 2];
                     members = {
                         ids: [
@@ -95,11 +96,15 @@ index_1.io.on("connection", function (socket) {
                     return [4 /*yield*/, messages.create(newMessage)];
                 case 4:
                     createdMessage = _a.sent();
-                    if (createdMessage)
+                    if (createdMessage) {
                         return [2 /*return*/, index_1.io
                                 .in(message.conversation.userId)
                                 .in(socket.user._id)
-                                .emit("receiveMessage", createdMessage)];
+                                .emit("receiveMessage", {
+                                createdMessage: createdMessage,
+                                newConversation: message.conversation.new ? newConversation : null,
+                            })];
+                    }
                     return [3 /*break*/, 6];
                 case 5:
                     error_1 = _a.sent();

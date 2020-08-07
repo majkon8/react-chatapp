@@ -86,6 +86,7 @@ export const login = (userData: IUserData) => async (dispatch: Dispatch) => {
     dispatch({ type: SET_AUTHENTICATED, payload: true });
     dispatch({ type: SET_AUTHENTICATED_USER, payload: response.data });
     dispatch({ type: SET_ERROR, payload: null });
+    localStorage.setItem("userId", response.data._id);
   } catch (error) {
     console.error(error);
     if (error.response.data.error)
@@ -157,6 +158,7 @@ export const externalLogin = (data: IUserData) => async (
     dispatch({ type: SET_AUTHENTICATED, payload: true });
     dispatch({ type: SET_AUTHENTICATED_USER, payload: response.data });
     dispatch({ type: SET_ERROR, payload: null });
+    localStorage.setItem("userId", response.data._id);
   } catch (error) {
     console.error(error);
     if (error.response.data.error)

@@ -28,6 +28,11 @@ function ConversationsList({ UI, data, user, getAllConversations }: Props) {
     getAllConversations();
   }, []);
 
+  useEffect(() => {
+    const id = data.selectedConversation?.id || "";
+    setActiveId(id);
+  }, [data.selectedConversation]);
+
   const handleActive = (id: string) => setActiveId(id);
 
   return (
@@ -67,7 +72,7 @@ function ConversationsList({ UI, data, user, getAllConversations }: Props) {
               username={
                 conversation.members.usernames.filter(
                   (username) => username != user.authenticatedUser?.username
-                )[0]
+                )[0] || conversation.members.usernames[0] // if user messaged himself
               }
               userId={
                 conversation.members.ids.filter(

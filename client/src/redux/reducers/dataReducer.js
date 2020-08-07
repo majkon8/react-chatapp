@@ -39,11 +39,26 @@ var initialState = {
     messages: null,
 };
 function default_1(state, action) {
-    var _a;
+    var _a, _b, _c;
     if (state === void 0) { state = initialState; }
     switch (action.type) {
         case types_1.SET_SEARCHED_USERS:
-            return __assign(__assign({}, state), { searchedUsers: action.payload });
+            return __assign(__assign({}, state), { 
+                // shows only users with whom we don't have conversation started
+                searchedUsers: action.payload.filter(function (user) {
+                    var _a, _b;
+                    // return (
+                    //   state.conversations?.every(
+                    //     (conversation) => !conversation.members.ids.includes(user._id)
+                    //   ) || user._id === localStorage.getItem("userId") && state.conversations
+                    // );
+                    if (user._id !== localStorage.getItem("userId"))
+                        return (_a = state.conversations) === null || _a === void 0 ? void 0 : _a.every(function (conversation) { return !conversation.members.ids.includes(user._id); });
+                    else
+                        return (_b = state.conversations) === null || _b === void 0 ? void 0 : _b.every(function (conversation) {
+                            return !conversation.members.ids.every(function (id) { return id === user._id; });
+                        });
+                }) });
         case types_1.SET_SELECTED_CONVERSATION:
             return __assign(__assign({}, state), { selectedConversation: action.payload });
         case types_1.SET_CONVERSATIONS:
@@ -51,8 +66,29 @@ function default_1(state, action) {
         case types_1.SET_MESSAGES:
             return __assign(__assign({}, state), { messages: action.payload });
         case types_1.SET_NEW_MESSAGE:
-            if (action.payload.conversationId === ((_a = state.selectedConversation) === null || _a === void 0 ? void 0 : _a.id))
-                return __assign(__assign({}, state), { messages: __spread(state.messages, [action.payload]) });
+            if (action.payload.newConversation) {
+                var isSender = action.payload.createdMessage.authorId ===
+                    localStorage.getItem("userId");
+                return __assign(__assign({}, state), { 
+                    // remove user whom we started new conversation with from searched
+                    searchedUsers: state.searchedUsers
+                        ? __spread(state.searchedUsers.filter(
+                        // when messsage starts a new conversation, the id of selectedConversation is id of a user with whom we are starting the conversation
+                        function (user) { var _a; return user._id !== ((_a = state.selectedConversation) === null || _a === void 0 ? void 0 : _a.id); })) : null, 
+                    // add just created conversation to our conversations list
+                    conversations: __spread([
+                        __assign(__assign({}, action.payload.newConversation), { lastMessage: action.payload.createdMessage })
+                    ], state.conversations), 
+                    // select the new conversation for sender
+                    selectedConversation: isSender
+                        ? __assign(__assign({}, state.selectedConversation), { new: false, id: action.payload.newConversation._id }) : state.selectedConversation, messages: isSender ? [action.payload.createdMessage] : state.messages });
+            }
+            if (action.payload.createdMessage.conversationId === ((_a = state.selectedConversation) === null || _a === void 0 ? void 0 : _a.id)) {
+                return __assign(__assign({}, state), { conversations: __spread((_b = state.conversations) === null || _b === void 0 ? void 0 : _b.filter(function (conversation) { var _a; return conversation._id === ((_a = state.selectedConversation) === null || _a === void 0 ? void 0 : _a.id); }).map(function (conversation) {
+                        conversation.lastMessage = action.payload.createdMessage;
+                        return conversation;
+                    }), (_c = state.conversations) === null || _c === void 0 ? void 0 : _c.filter(function (conversation) { var _a; return conversation._id !== ((_a = state.selectedConversation) === null || _a === void 0 ? void 0 : _a.id); })), messages: __spread(state.messages, [action.payload.createdMessage]) });
+            }
         default:
             return state;
     }

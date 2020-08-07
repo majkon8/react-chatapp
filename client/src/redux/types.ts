@@ -4,6 +4,7 @@ import {
   IConversation,
   IMessage,
 } from "./reducers/dataReducer";
+import { INewConversation } from "../components/Chat/Chat";
 
 // user reducer types
 export const SET_AUTHENTICATED = "SET_AUTHENTICATED";
@@ -95,7 +96,10 @@ interface ISetMessagesAction {
 }
 interface ISetNewMessageAction {
   type: typeof SET_NEW_MESSAGE;
-  payload: IMessage;
+  payload: {
+    createdMessage: IMessage;
+    newConversation: INewConversation;
+  };
 }
 
 export type DataActionTypes =

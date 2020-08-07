@@ -39,10 +39,6 @@ function Main({ UI, user, getAuthenticatedUser }: Props) {
       newSocket.on("disconnect", () => {
         setSocket(null);
         setTimeout(setupSocket, 3000);
-        console.log("socket disconected");
-      });
-      newSocket.on("connect", () => {
-        console.log("socket connected");
       });
       setSocket(newSocket);
     }

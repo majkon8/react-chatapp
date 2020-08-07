@@ -38,8 +38,10 @@ function Conversation(_a) {
     react_1.useEffect(function () {
         if (isActive) {
             selectNewConversation(id);
-            getMessages(id);
-            handleChatOpen();
+            if (!isNew)
+                getMessages(id);
+            else
+                getMessages(null);
         }
     }, [isActive]);
     var handleChatOpen = function () { return setIsChatOpen(true); };
@@ -48,6 +50,7 @@ function Conversation(_a) {
         setSelectedConversation(conversation);
     };
     var handleClick = function () {
+        handleChatOpen();
         if (isActive)
             return;
         handleActive(id);

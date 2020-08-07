@@ -70,10 +70,6 @@ function Main(_a) {
             newSocket.on("disconnect", function () {
                 setSocket(null);
                 setTimeout(setupSocket, 3000);
-                console.log("socket disconected");
-            });
-            newSocket.on("connect", function () {
-                console.log("socket connected");
             });
             setSocket(newSocket);
         }
