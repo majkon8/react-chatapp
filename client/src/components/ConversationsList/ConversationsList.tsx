@@ -8,6 +8,7 @@ import { CircularProgress } from "@material-ui/core";
 import { connect, ConnectedProps } from "react-redux";
 import { getAllConversations } from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
+import { IConversation } from "../../redux/reducers/dataReducer";
 
 const mapStateToProps = (state: IState) => ({
   UI: state.UI,
@@ -23,6 +24,9 @@ type Props = PropsFromRedux;
 
 function ConversationsList({ UI, data, user, getAllConversations }: Props) {
   const [activeId, setActiveId] = useState("");
+  const [filteredConversations, setFilteredConversations] = useState<
+    IConversation[] | undefined
+  >([]);
 
   useEffect(() => {
     getAllConversations();
@@ -32,6 +36,19 @@ function ConversationsList({ UI, data, user, getAllConversations }: Props) {
     const id = data.selectedConversation?.id || "";
     setActiveId(id);
   }, [data.selectedConversation]);
+
+  useEffect(() => {
+    const filtered = data.conversations?.filter((conversation) => {
+      const searchString = data.searchConversations.toLowerCase();
+      const username =
+        conversation.members.usernames.filter(
+          (username) => username != user.authenticatedUser?.username
+        )[0] || conversation.members.usernames[0];
+      if (username.toLowerCase().includes(searchString)) return true;
+      return false;
+    });
+    setFilteredConversations(filtered);
+  }, [data.conversations, data.searchConversations]);
 
   const handleActive = (id: string) => setActiveId(id);
 
@@ -62,7 +79,7 @@ function ConversationsList({ UI, data, user, getAllConversations }: Props) {
         {UI.pending.conversations ? (
           <CircularProgress color="inherit" />
         ) : (
-          data.conversations?.map((conversation, index) => (
+          filteredConversations?.map((conversation, index) => (
             <Conversation
               isActive={
                 activeId === "" ? index === 0 : activeId === conversation._id

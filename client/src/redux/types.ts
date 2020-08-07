@@ -23,6 +23,7 @@ export const SET_SELECTED_CONVERSATION = "SET_SELECTED_CONVERSATION";
 export const SET_CONVERSATIONS = "SET_CONVERSATIONS";
 export const SET_MESSAGES = "SET_MESSAGES";
 export const SET_NEW_MESSAGE = "SET_NEW_MESSAGE";
+export const SEARCH_CONVERSATIONS = "SEARCH_CONVERSATIONS";
 
 // user interfaces
 interface ISetAuthenticatedAction {
@@ -101,10 +102,15 @@ interface ISetNewMessageAction {
     newConversation: INewConversation;
   };
 }
+interface ISearchConversationsAction {
+  type: typeof SEARCH_CONVERSATIONS;
+  payload: string;
+}
 
 export type DataActionTypes =
   | ISetSearchedUsersAction
   | ISetSelectedConversationAction
   | ISetConversationsAction
   | ISetMessagesAction
-  | ISetNewMessageAction;
+  | ISetNewMessageAction
+  | ISearchConversationsAction;

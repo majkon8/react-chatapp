@@ -13,7 +13,12 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = require("../types");
 var initialState = {
-    loading: false,
+    pending: {
+        auth: false,
+        search: false,
+        conversations: false,
+        messages: false,
+    },
     error: null,
     success: null,
     theme: localStorage.getItem("theme") || "dark",
@@ -28,8 +33,8 @@ function default_1(state, action) {
             return __assign(__assign({}, state), { error: action.payload, success: null });
         case types_1.SET_SUCCESS:
             return __assign(__assign({}, state), { success: action.payload, error: null });
-        case types_1.SET_LOADING_UI:
-            return __assign(__assign({}, state), { loading: action.payload });
+        case types_1.SET_PENDING:
+            return __assign(__assign({}, state), { pending: __assign(__assign({}, state.pending), action.payload) });
         case types_1.SET_THEME:
             return __assign(__assign({}, state), { theme: action.payload });
         case types_1.SET_COLOR:

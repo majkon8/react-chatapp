@@ -104,7 +104,7 @@ function LoginForm(_a) {
             }) }),
         react_1.default.createElement("span", { className: "is-pulled-left forgot info" },
             react_1.default.createElement("a", { onClick: handleForgotPassword }, "Forgot password?")),
-        react_1.default.createElement(SubmitButton_1.default, { hasMarginTop: true, text: "Sign in", disabled: !dirtyFields.email || !dirtyFields.password, loading: UI.loading }),
+        react_1.default.createElement(SubmitButton_1.default, { hasMarginTop: true, text: "Sign in", disabled: !dirtyFields.email || !dirtyFields.password, loading: UI.pending.auth }),
         react_1.default.createElement("span", { className: "is-pulled-left info" },
             "Don't have an account? ",
             react_1.default.createElement(react_router_dom_1.NavLink, { to: "/register" }, "Sign up")),

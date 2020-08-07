@@ -2,6 +2,7 @@ import {
   SET_SEARCHED_USERS,
   SET_PENDING,
   SET_SELECTED_CONVERSATION,
+  SEARCH_CONVERSATIONS,
   SET_CONVERSATIONS,
   SET_MESSAGES,
   SET_NEW_MESSAGE,
@@ -29,6 +30,10 @@ export const searchForUsers = (username: string) => async (
     dispatch({ type: SET_PENDING, payload: { search: false } });
   }
 };
+
+export const setSearchConversations = (username: string) => (
+  dispatch: Dispatch
+) => dispatch({ type: SEARCH_CONVERSATIONS, payload: username });
 
 export const setSelectedConversation = (
   conversation: ISelectedConversation

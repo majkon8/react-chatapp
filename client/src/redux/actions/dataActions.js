@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setNewMessage = exports.getMessages = exports.getAllConversations = exports.setSelectedConversation = exports.searchForUsers = void 0;
+exports.setNewMessage = exports.getMessages = exports.getAllConversations = exports.setSelectedConversation = exports.setSearchConversations = exports.searchForUsers = void 0;
 var types_1 = require("../types");
 var axios_1 = __importDefault(require("axios"));
 exports.searchForUsers = function (username) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
@@ -49,7 +49,7 @@ exports.searchForUsers = function (username) { return function (dispatch) { retu
             case 0:
                 if (username.length > 0 && username.length < 3)
                     return [2 /*return*/];
-                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                dispatch({ type: types_1.SET_PENDING, payload: { search: true } });
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 5, 6, 7]);
@@ -67,12 +67,13 @@ exports.searchForUsers = function (username) { return function (dispatch) { retu
                 console.error(error_1);
                 return [3 /*break*/, 7];
             case 6:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                dispatch({ type: types_1.SET_PENDING, payload: { search: false } });
                 return [7 /*endfinally*/];
             case 7: return [2 /*return*/];
         }
     });
 }); }; };
+exports.setSearchConversations = function (username) { return function (dispatch) { return dispatch({ type: types_1.SEARCH_CONVERSATIONS, payload: username }); }; };
 exports.setSelectedConversation = function (conversation) { return function (dispatch) {
     dispatch({ type: types_1.SET_SELECTED_CONVERSATION, payload: conversation });
 }; };
@@ -81,7 +82,7 @@ exports.getAllConversations = function () { return function (dispatch) { return 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                dispatch({ type: types_1.SET_PENDING, payload: { conversations: true } });
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, 4, 5]);
@@ -95,7 +96,7 @@ exports.getAllConversations = function () { return function (dispatch) { return 
                 console.error(error_2);
                 return [3 /*break*/, 5];
             case 4:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                dispatch({ type: types_1.SET_PENDING, payload: { conversations: false } });
                 return [7 /*endfinally*/];
             case 5: return [2 /*return*/];
         }
@@ -106,8 +107,7 @@ exports.getMessages = function (conversationId) { return function (dispatch) { r
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
-                dispatch({ type: types_1.SET_MESSAGES, payload: null });
+                dispatch({ type: types_1.SET_PENDING, payload: { messages: true } });
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 5, 6, 7]);
@@ -125,7 +125,7 @@ exports.getMessages = function (conversationId) { return function (dispatch) { r
                 console.error(error_3);
                 return [3 /*break*/, 7];
             case 6:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                dispatch({ type: types_1.SET_PENDING, payload: { messages: false } });
                 return [7 /*endfinally*/];
             case 7: return [2 /*return*/];
         }

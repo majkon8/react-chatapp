@@ -43,7 +43,7 @@ function ResetPasswordForm(_a) {
                     return value === getValues("password") ? true : "Passwords must match";
                 },
             }) }),
-        react_1.default.createElement(SubmitButton_1.default, { hasMarginTop: false, text: "Reset password", disabled: !dirtyFields.password || !dirtyFields.confirm_password, loading: UI.loading }),
+        react_1.default.createElement(SubmitButton_1.default, { hasMarginTop: false, text: "Reset password", disabled: !dirtyFields.password || !dirtyFields.confirm_password, loading: UI.pending.auth }),
         react_1.default.createElement("span", { className: "is-pulled-left info" },
             react_1.default.createElement(react_router_dom_1.NavLink, { to: "/login" }, "Sign in")),
         react_1.default.createElement(ErrorSuccessInfo_1.default, { error: UI.error, success: UI.success })));

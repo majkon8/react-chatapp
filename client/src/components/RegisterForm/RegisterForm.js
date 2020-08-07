@@ -158,7 +158,7 @@ function RegisterForm(_a) {
             "I agree to the ",
             react_1.default.createElement("a", { href: "/terms" }, "terms and conditions")),
         react_1.default.createElement(SubmitButton_1.default, { hasMarginTop: false, text: "Sign up", disabled: Object.keys(dirtyFields).length === 0 ||
-                Object.keys(dirtyFields).length !== Object.keys(getValues()).length, loading: UI.loading }),
+                Object.keys(dirtyFields).length !== Object.keys(getValues()).length, loading: UI.pending.auth }),
         react_1.default.createElement("span", { className: "is-pulled-left info" },
             react_1.default.createElement(react_router_dom_1.NavLink, { to: "/login" }, "Already signed up?")),
         react_1.default.createElement(ErrorSuccessInfo_1.default, { error: UI.error, success: UI.success })));

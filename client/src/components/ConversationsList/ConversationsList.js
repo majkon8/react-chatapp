@@ -55,9 +55,10 @@ var mapStateToProps = function (state) { return ({
 var mapActionsToProps = { getAllConversations: dataActions_1.getAllConversations };
 var connector = react_redux_1.connect(mapStateToProps, mapActionsToProps);
 function ConversationsList(_a) {
-    var _b, _c;
+    var _b;
     var UI = _a.UI, data = _a.data, user = _a.user, getAllConversations = _a.getAllConversations;
-    var _d = __read(react_1.useState(""), 2), activeId = _d[0], setActiveId = _d[1];
+    var _c = __read(react_1.useState(""), 2), activeId = _c[0], setActiveId = _c[1];
+    var _d = __read(react_1.useState([]), 2), filteredConversations = _d[0], setFilteredConversations = _d[1];
     react_1.useEffect(function () {
         getAllConversations();
     }, []);
@@ -66,13 +67,24 @@ function ConversationsList(_a) {
         var id = ((_a = data.selectedConversation) === null || _a === void 0 ? void 0 : _a.id) || "";
         setActiveId(id);
     }, [data.selectedConversation]);
+    react_1.useEffect(function () {
+        var _a;
+        var filtered = (_a = data.conversations) === null || _a === void 0 ? void 0 : _a.filter(function (conversation) {
+            var searchString = data.searchConversations.toLowerCase();
+            var username = conversation.members.usernames.filter(function (username) { var _a; return username != ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a.username); })[0] || conversation.members.usernames[0];
+            if (username.toLowerCase().includes(searchString))
+                return true;
+            return false;
+        });
+        setFilteredConversations(filtered);
+    }, [data.conversations, data.searchConversations]);
     var handleActive = function (id) { return setActiveId(id); };
     return (react_1.default.createElement("ul", { className: "conversations-list-container " + (UI.isChatOpen && "is-closed") },
         react_1.default.createElement(simplebar_react_1.default, { style: { maxHeight: "calc(100vh - 70px)" } },
             data.searchedUsers && data.searchedUsers.length > 0 && (react_1.default.createElement("p", { className: "conversations-title" }, "Make new conversation with:")),
-            UI.loading && data.searchedUsers ? (react_1.default.createElement(core_1.CircularProgress, { color: "inherit" })) : ((_b = data.searchedUsers) === null || _b === void 0 ? void 0 : _b.map(function (searchedUser) { return (react_1.default.createElement(Conversation_1.default, { isActive: activeId === searchedUser._id, key: searchedUser._id, isNew: true, username: searchedUser.username, userId: searchedUser._id, id: searchedUser._id, handleActive: handleActive })); })),
+            UI.pending.search ? (react_1.default.createElement(core_1.CircularProgress, { color: "inherit" })) : ((_b = data.searchedUsers) === null || _b === void 0 ? void 0 : _b.map(function (searchedUser) { return (react_1.default.createElement(Conversation_1.default, { isActive: activeId === searchedUser._id, key: searchedUser._id, isNew: true, username: searchedUser.username, userId: searchedUser._id, id: searchedUser._id, handleActive: handleActive })); })),
             react_1.default.createElement("p", { className: "conversations-title" }, "Your conversations:"),
-            (UI.loading && !data.conversations) || !user.authenticatedUser ? (react_1.default.createElement(core_1.CircularProgress, { color: "inherit" })) : ((_c = data.conversations) === null || _c === void 0 ? void 0 : _c.map(function (conversation, index) { return (react_1.default.createElement(Conversation_1.default, { isActive: activeId === "" ? index === 0 : activeId === conversation._id, key: conversation._id, isNew: false, username: conversation.members.usernames.filter(function (username) { var _a; return username != ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a.username); })[0] || conversation.members.usernames[0] // if user messaged himself
+            UI.pending.conversations ? (react_1.default.createElement(core_1.CircularProgress, { color: "inherit" })) : (filteredConversations === null || filteredConversations === void 0 ? void 0 : filteredConversations.map(function (conversation, index) { return (react_1.default.createElement(Conversation_1.default, { isActive: activeId === "" ? index === 0 : activeId === conversation._id, key: conversation._id, isNew: false, username: conversation.members.usernames.filter(function (username) { var _a; return username != ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a.username); })[0] || conversation.members.usernames[0] // if user messaged himself
                 , userId: conversation.members.ids.filter(function (id) { var _a; return id != ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a._id); })[0], id: conversation._id, message: conversation.lastMessage.body, createdAt: conversation.lastMessage.createdAt, handleActive: handleActive })); })))));
 }
 exports.default = connector(ConversationsList);

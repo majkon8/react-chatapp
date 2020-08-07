@@ -68,7 +68,7 @@ exports.signup = function (userData) { return function (dispatch) { return __awa
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                dispatch({ type: types_1.SET_PENDING, payload: { auth: true } });
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, 4, 5]);
@@ -92,7 +92,7 @@ exports.signup = function (userData) { return function (dispatch) { return __awa
                     });
                 return [3 /*break*/, 5];
             case 4:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                dispatch({ type: types_1.SET_PENDING, payload: { auth: false } });
                 return [7 /*endfinally*/];
             case 5: return [2 /*return*/];
         }
@@ -129,7 +129,7 @@ exports.login = function (userData) { return function (dispatch) { return __awai
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                dispatch({ type: types_1.SET_PENDING, payload: { auth: true } });
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, 4, 5]);
@@ -157,7 +157,7 @@ exports.login = function (userData) { return function (dispatch) { return __awai
                     });
                 return [3 /*break*/, 5];
             case 4:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                dispatch({ type: types_1.SET_PENDING, payload: { auth: false } });
                 return [7 /*endfinally*/];
             case 5: return [2 /*return*/];
         }
@@ -168,7 +168,7 @@ exports.forgotPassword = function (email) { return function (dispatch) { return 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                dispatch({ type: types_1.SET_PENDING, payload: { auth: true } });
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, 4, 5]);
@@ -192,7 +192,7 @@ exports.forgotPassword = function (email) { return function (dispatch) { return 
                     });
                 return [3 /*break*/, 5];
             case 4:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                dispatch({ type: types_1.SET_PENDING, payload: { auth: false } });
                 return [7 /*endfinally*/];
             case 5: return [2 /*return*/];
         }
@@ -203,7 +203,7 @@ exports.resetPassword = function (data) { return function (dispatch) { return __
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                dispatch({ type: types_1.SET_PENDING, payload: { auth: true } });
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, 4, 5]);
@@ -224,7 +224,7 @@ exports.resetPassword = function (data) { return function (dispatch) { return __
                 });
                 return [3 /*break*/, 5];
             case 4:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                dispatch({ type: types_1.SET_PENDING, payload: { auth: false } });
                 return [7 /*endfinally*/];
             case 5: return [2 /*return*/];
         }
@@ -236,7 +236,7 @@ exports.externalLogin = function (data) { return function (dispatch) { return __
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: true });
+                dispatch({ type: types_1.SET_PENDING, payload: { auth: true } });
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, 4, 5]);
@@ -264,7 +264,7 @@ exports.externalLogin = function (data) { return function (dispatch) { return __
                     });
                 return [3 /*break*/, 5];
             case 4:
-                dispatch({ type: types_1.SET_LOADING_UI, payload: false });
+                dispatch({ type: types_1.SET_PENDING, payload: { auth: false } });
                 return [7 /*endfinally*/];
             case 5: return [2 /*return*/];
         }

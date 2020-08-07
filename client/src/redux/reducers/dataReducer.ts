@@ -1,10 +1,11 @@
 import {
   SET_SEARCHED_USERS,
-  DataActionTypes,
+  SEARCH_CONVERSATIONS,
   SET_SELECTED_CONVERSATION,
   SET_CONVERSATIONS,
   SET_MESSAGES,
   SET_NEW_MESSAGE,
+  DataActionTypes,
 } from "../types";
 import { IUser } from "./userReducer";
 
@@ -38,6 +39,7 @@ export interface IDataState {
   searchedUsers: IUser[] | null;
   selectedConversation: ISelectedConversation | null;
   conversations: IConversation[] | null;
+  searchConversations: string;
   messages: IMessage[] | null;
 }
 
@@ -45,6 +47,7 @@ const initialState: IDataState = {
   searchedUsers: null,
   selectedConversation: null,
   conversations: null,
+  searchConversations: "",
   messages: null,
 };
 
@@ -70,7 +73,12 @@ export default function (state = initialState, action: DataActionTypes) {
     case SET_SELECTED_CONVERSATION:
       return { ...state, selectedConversation: action.payload };
     case SET_CONVERSATIONS:
-      return { ...state, conversations: action.payload };
+      return {
+        ...state,
+        conversations: action.payload,
+      };
+    case SEARCH_CONVERSATIONS:
+      return { ...state, searchConversations: action.payload };
     case SET_MESSAGES:
       return { ...state, messages: action.payload };
     case SET_NEW_MESSAGE:
@@ -83,10 +91,13 @@ export default function (state = initialState, action: DataActionTypes) {
           // remove user whom we started new conversation with from searched
           searchedUsers: state.searchedUsers
             ? [
-                ...state.searchedUsers.filter(
-                  // when messsage starts a new conversation, the id of selectedConversation is id of a user with whom we are starting the conversation
-                  (user) => user._id !== state.selectedConversation?.id
-                ),
+                ...state.searchedUsers.filter((user) => {
+                  if (isSender)
+                    // when messsage starts a new conversation, the id of selectedConversation is id of a user with whom we are starting the conversation
+                    return user._id !== state.selectedConversation?.id;
+                  else
+                    return user._id !== action.payload.createdMessage.authorId;
+                }),
               ]
             : null,
           // add just created conversation to our conversations list
