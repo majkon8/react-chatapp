@@ -47,19 +47,25 @@ exports.getAuthenticatedUser = function () { return function (dispatch) { return
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                dispatch({ type: types_1.SET_PENDING, payload: { auth: true } });
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, 4, 5]);
                 return [4 /*yield*/, axios_1.default.get("/users", {
                         headers: { "x-refresh-token": localStorage.getItem("refreshToken") },
                     })];
-            case 1:
+            case 2:
                 response = _a.sent();
                 dispatch({ type: types_1.SET_AUTHENTICATED_USER, payload: response.data });
-                return [3 /*break*/, 3];
-            case 2:
+                return [3 /*break*/, 5];
+            case 3:
                 error_1 = _a.sent();
                 console.error(error_1);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 5];
+            case 4:
+                dispatch({ type: types_1.SET_PENDING, payload: { auth: false } });
+                return [7 /*endfinally*/];
+            case 5: return [2 /*return*/];
         }
     });
 }); }; };

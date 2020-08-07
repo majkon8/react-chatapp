@@ -5,6 +5,7 @@ import {
   IMessage,
 } from "./reducers/dataReducer";
 import { INewConversation } from "../components/Chat/Chat";
+import { IPending } from "./reducers/uiReducer";
 
 // user reducer types
 export const SET_AUTHENTICATED = "SET_AUTHENTICATED";
@@ -55,7 +56,7 @@ interface ISetSuccessAction {
 }
 interface ISetPendingAction {
   type: typeof SET_PENDING;
-  payload: any;
+  payload: IPending;
 }
 interface ISetThemeAction {
   type: typeof SET_THEME;

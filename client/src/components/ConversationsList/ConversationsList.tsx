@@ -57,9 +57,6 @@ function ConversationsList({ UI, data, user, getAllConversations }: Props) {
       className={`conversations-list-container ${UI.isChatOpen && "is-closed"}`}
     >
       <SimpleBar style={{ maxHeight: "calc(100vh - 70px)" }}>
-        {data.searchedUsers && data.searchedUsers.length > 0 && (
-          <p className="conversations-title">Make new conversation with:</p>
-        )}
         {UI.pending.search ? (
           <CircularProgress color="inherit" />
         ) : (
@@ -75,8 +72,7 @@ function ConversationsList({ UI, data, user, getAllConversations }: Props) {
             />
           ))
         )}
-        <p className="conversations-title">Your conversations:</p>
-        {UI.pending.conversations ? (
+        {UI.pending.conversations || UI.pending.auth ? (
           <CircularProgress color="inherit" />
         ) : (
           filteredConversations?.map((conversation, index) => (

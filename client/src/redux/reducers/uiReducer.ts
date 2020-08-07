@@ -8,7 +8,7 @@ import {
   SET_PENDING,
 } from "../types";
 
-interface IPending {
+export interface IPending {
   // auth is for signup/login/forgot password/reset password
   auth: boolean;
   search: boolean;

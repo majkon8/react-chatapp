@@ -27,6 +27,7 @@ interface ITokens {
 }
 
 export const getAuthenticatedUser = () => async (dispatch: Dispatch) => {
+  dispatch({ type: SET_PENDING, payload: { auth: true } });
   try {
     const response = await axios.get("/users", {
       headers: { "x-refresh-token": localStorage.getItem("refreshToken") },
@@ -34,6 +35,8 @@ export const getAuthenticatedUser = () => async (dispatch: Dispatch) => {
     dispatch({ type: SET_AUTHENTICATED_USER, payload: response.data });
   } catch (error) {
     console.error(error);
+  } finally {
+    dispatch({ type: SET_PENDING, payload: { auth: false } });
   }
 };
 
