@@ -24,6 +24,10 @@ $theme-light: #eee;
   color: $text-dark;
   transition: background-color 0.5s, color 0.5s;
 
+  .chat-search-container {
+    background-color: white;
+  }
+
   .chat-input-container {
     .input {
       background-color: $theme-light;

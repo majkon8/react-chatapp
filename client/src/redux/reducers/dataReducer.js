@@ -47,13 +47,9 @@ function default_1(state, action) {
                 // shows only users with whom we don't have conversation started
                 searchedUsers: action.payload.filter(function (user) {
                     var _a, _b;
-                    // return (
-                    //   state.conversations?.every(
-                    //     (conversation) => !conversation.members.ids.includes(user._id)
-                    //   ) || user._id === localStorage.getItem("userId") && state.conversations
-                    // );
                     if (user._id !== localStorage.getItem("userId"))
                         return (_a = state.conversations) === null || _a === void 0 ? void 0 : _a.every(function (conversation) { return !conversation.members.ids.includes(user._id); });
+                    // else case is when user search for himself
                     else
                         return (_b = state.conversations) === null || _b === void 0 ? void 0 : _b.every(function (conversation) {
                             return !conversation.members.ids.every(function (id) { return id === user._id; });
