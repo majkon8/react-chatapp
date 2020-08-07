@@ -8,6 +8,8 @@ import { CircularProgress } from "@material-ui/core";
 import { connect, ConnectedProps } from "react-redux";
 import { setNewMessage } from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
+// Assets
+const notificationSound = require("../../assets/notification_sound.mp3");
 
 const mapStateToProps = (state: IState) => ({
   UI: state.UI,
@@ -62,7 +64,11 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
       (message: {
         createdMessage: IMessage;
         newConversation: INewConversation;
-      }) => setNewMessage(message)
+      }) => {
+        const audio = new Audio(notificationSound);
+        audio.play();
+        setNewMessage(message);
+      }
     );
     return () => {
       socket?.off("receiveMessage");

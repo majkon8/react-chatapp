@@ -47,6 +47,8 @@ var core_1 = require("@material-ui/core");
 // redux
 var react_redux_1 = require("react-redux");
 var dataActions_1 = require("../../redux/actions/dataActions");
+// Assets
+var notificationSound = require("../../assets/notification_sound.mp3");
 var mapStateToProps = function (state) { return ({
     UI: state.UI,
     data: state.data,
@@ -66,7 +68,11 @@ function Chat(_a) {
         scrollRef.current.getScrollElement().scrollTop = height;
     }, [data.messages]);
     react_1.useEffect(function () {
-        socket === null || socket === void 0 ? void 0 : socket.on("receiveMessage", function (message) { return setNewMessage(message); });
+        socket === null || socket === void 0 ? void 0 : socket.on("receiveMessage", function (message) {
+            var audio = new Audio(notificationSound);
+            audio.play();
+            setNewMessage(message);
+        });
         return function () {
             socket === null || socket === void 0 ? void 0 : socket.off("receiveMessage");
         };
