@@ -14,7 +14,7 @@ interface IMailOptions {
   text: string;
 }
 
-interface IUserDocument extends Document {
+export interface IUserDocument extends Document {
   email: string;
   username: string;
   password: string;

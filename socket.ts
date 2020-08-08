@@ -3,6 +3,8 @@ import * as messages from "./controlers/message.controller";
 import * as conversations from "./controlers/conversation.controller";
 import { tokenAuthSocket, IDecodedUser } from "./middlewares/auth";
 import { mongoose } from "./mongoose";
+import { User, IUserDocument } from "./models/user.model";
+import { IConversationDocument } from "./models/conversation.model";
 
 interface IConversation {
   new: boolean;
@@ -24,14 +26,13 @@ io.on("connection", (socket: Socket) => {
   socket.join(socket.user._id);
   socket.on("sendMessage", async (message: IMessage) => {
     try {
-      let conversationId;
-      let newConversation;
-      // if message starts a new conversation
+      let conversationId: string;
+      let newConversation: IConversationDocument | undefined;
+      // first if message starts a new conversation
       if (message.conversation.new) {
         const members = {
           ids: [
             mongoose.Types.ObjectId(socket.user._id),
-            // conversation id was a second user id
             mongoose.Types.ObjectId(message.conversation.userId),
           ],
           usernames: [socket.user.username, message.conversation.username],
@@ -47,6 +48,13 @@ io.on("connection", (socket: Socket) => {
       };
       const createdMessage = await messages.create(newMessage);
       if (createdMessage) {
+        let sender: IUserDocument | null | undefined;
+        let receiver: IUserDocument | null | undefined;
+        if (message.conversation.new) {
+          // now we need to get both users from conversations to send them back and set to conversation
+          sender = await User.findById(socket.user._id);
+          receiver = await User.findById(message.conversation.userId);
+        }
         return (
           io
             //emit created message both to sender and receiver
@@ -57,6 +65,8 @@ io.on("connection", (socket: Socket) => {
               newConversation: message.conversation.new
                 ? newConversation
                 : null,
+              sender,
+              receiver,
             })
         );
       }

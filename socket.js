@@ -60,22 +60,22 @@ var messages = __importStar(require("./controlers/message.controller"));
 var conversations = __importStar(require("./controlers/conversation.controller"));
 var auth_1 = require("./middlewares/auth");
 var mongoose_1 = require("./mongoose");
+var user_model_1 = require("./models/user.model");
 index_1.io.use(auth_1.tokenAuthSocket);
 index_1.io.on("connection", function (socket) {
     socket.join(socket.user._id);
     socket.on("sendMessage", function (message) { return __awaiter(void 0, void 0, void 0, function () {
-        var conversationId, newConversation, members, newMessage, createdMessage, error_1;
+        var conversationId, newConversation, members, newMessage, createdMessage, sender, receiver, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 5, , 6]);
+                    _a.trys.push([0, 9, , 10]);
                     conversationId = void 0;
                     newConversation = void 0;
                     if (!message.conversation.new) return [3 /*break*/, 2];
                     members = {
                         ids: [
                             mongoose_1.mongoose.Types.ObjectId(socket.user._id),
-                            // conversation id was a second user id
                             mongoose_1.mongoose.Types.ObjectId(message.conversation.userId),
                         ],
                         usernames: [socket.user.username, message.conversation.username],
@@ -98,24 +98,36 @@ index_1.io.on("connection", function (socket) {
                     return [4 /*yield*/, messages.create(newMessage)];
                 case 4:
                     createdMessage = _a.sent();
-                    if (createdMessage) {
-                        return [2 /*return*/, (index_1.io
-                                //emit created message both to sender and receiver
-                                .in(message.conversation.userId)
-                                .in(socket.user._id)
-                                .emit("receiveMessage", {
-                                createdMessage: createdMessage,
-                                newConversation: message.conversation.new
-                                    ? newConversation
-                                    : null,
-                            }))];
-                    }
-                    return [3 /*break*/, 6];
+                    if (!createdMessage) return [3 /*break*/, 8];
+                    sender = void 0;
+                    receiver = void 0;
+                    if (!message.conversation.new) return [3 /*break*/, 7];
+                    return [4 /*yield*/, user_model_1.User.findById(socket.user._id)];
                 case 5:
+                    // now we need to get both users from conversations to send them back and set to conversation
+                    sender = _a.sent();
+                    return [4 /*yield*/, user_model_1.User.findById(message.conversation.userId)];
+                case 6:
+                    receiver = _a.sent();
+                    _a.label = 7;
+                case 7: return [2 /*return*/, (index_1.io
+                        //emit created message both to sender and receiver
+                        .in(message.conversation.userId)
+                        .in(socket.user._id)
+                        .emit("receiveMessage", {
+                        createdMessage: createdMessage,
+                        newConversation: message.conversation.new
+                            ? newConversation
+                            : null,
+                        sender: sender,
+                        receiver: receiver,
+                    }))];
+                case 8: return [3 /*break*/, 10];
+                case 9:
                     error_1 = _a.sent();
                     console.error(error_1);
-                    return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
+                    return [3 /*break*/, 10];
+                case 10: return [2 /*return*/];
             }
         });
     }); });

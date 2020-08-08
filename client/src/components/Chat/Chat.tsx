@@ -8,6 +8,7 @@ import { CircularProgress } from "@material-ui/core";
 import { connect, ConnectedProps } from "react-redux";
 import { setNewMessage } from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
+import { IUser } from "../../redux/reducers/userReducer";
 // Assets
 const notificationSound = require("../../assets/notification_sound.mp3");
 
@@ -72,12 +73,30 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
       (message: {
         createdMessage: IMessage;
         newConversation: INewConversation;
+        receiver: IUser;
+        sender: IUser;
       }) => {
         if (message.createdMessage.authorId !== user.authenticatedUser?._id) {
           const audio = new Audio(notificationSound);
           audio.play();
         }
-        setNewMessage(message);
+        // if the message started new conversation
+        if (message.sender && message.receiver) {
+          // if the user is a sender, then set another user (receiver) to conversation and vice versa
+          const conversationUser =
+            message.sender._id === user.authenticatedUser?._id
+              ? message.receiver
+              : message.sender;
+          const messageData = {
+            createdMessage: message.createdMessage,
+            // set user to newConversation
+            newConversation: {
+              ...message.newConversation,
+              user: conversationUser,
+            },
+          };
+          setNewMessage(messageData);
+        } else setNewMessage(message);
       }
     );
     return () => {

@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -81,12 +92,26 @@ function Chat(_a) {
     }, [data.messages, UI.pending.messages]);
     react_1.useEffect(function () {
         socket === null || socket === void 0 ? void 0 : socket.on("receiveMessage", function (message) {
-            var _a;
+            var _a, _b;
             if (message.createdMessage.authorId !== ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a._id)) {
                 var audio = new Audio(notificationSound);
                 audio.play();
             }
-            setNewMessage(message);
+            // if the message started new conversation
+            if (message.sender && message.receiver) {
+                // if the user is a sender, then set another user (receiver) to conversation and vice versa
+                var conversationUser = message.sender._id === ((_b = user.authenticatedUser) === null || _b === void 0 ? void 0 : _b._id)
+                    ? message.receiver
+                    : message.sender;
+                var messageData = {
+                    createdMessage: message.createdMessage,
+                    // set user to newConversation
+                    newConversation: __assign(__assign({}, message.newConversation), { user: conversationUser }),
+                };
+                setNewMessage(messageData);
+            }
+            else
+                setNewMessage(message);
         });
         return function () {
             socket === null || socket === void 0 ? void 0 : socket.off("receiveMessage");

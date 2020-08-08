@@ -29,6 +29,7 @@ export interface IConversation {
   _id: string;
   lastMessage: IMessage;
   isDisplayed: boolean;
+  user: IUser;
 }
 
 export interface ISelectedConversation {
@@ -60,17 +61,12 @@ export default function (state = initialState, action: DataActionTypes) {
         ...state,
         // shows only users with whom we don't have conversation started
         searchedUsers: action.payload.filter((user) => {
-          // in localStoreage there is saved id of logged in user
-          if (user._id !== localStorage.getItem("userId"))
-            return state.conversations?.every(
-              (conversation) => !conversation.members.ids.includes(user._id)
-            );
-          // else case is when user search for himself
-          else
-            return state.conversations?.every(
-              (conversation) =>
-                !conversation.members.ids.every((id) => id === user._id)
-            );
+          // first if user search for himself
+          // in localStorage there is saved id of a logged in user
+
+          return state.conversations?.every(
+            (conversation) => conversation.user._id !== user._id
+          );
         }),
       };
     case SET_SELECTED_CONVERSATION:

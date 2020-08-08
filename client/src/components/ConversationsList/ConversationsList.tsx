@@ -101,16 +101,8 @@ function ConversationsList({
               }
               key={conversation._id}
               isNew={false}
-              username={
-                conversation.members.usernames.filter(
-                  (username) => username != user.authenticatedUser?.username
-                )[0] || conversation.members.usernames[0] // if user messaged himself
-              }
-              userId={
-                conversation.members.ids.filter(
-                  (id) => id != user.authenticatedUser?._id
-                )[0]
-              }
+              username={conversation.user.username}
+              userId={conversation.user._id}
               id={conversation._id}
               message={conversation.lastMessage.body}
               createdAt={conversation.lastMessage.createdAt}

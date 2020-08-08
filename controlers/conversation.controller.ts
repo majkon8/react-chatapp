@@ -1,8 +1,13 @@
 import { mongoose } from "../mongoose";
-import { Conversation, IMembers } from "../models/conversation.model";
+import {
+  Conversation,
+  IMembers,
+  IConversationDocument,
+} from "../models/conversation.model";
 import { IMessageDocument } from "../models/message.model";
 import { Response } from "express";
 import { Req } from "../middlewares/auth";
+import { User, IUserDocument } from "../models/user.model";
 
 // CREATE CONVERSATION
 export const create = async (members: IMembers) => {
@@ -44,6 +49,10 @@ export const displayLastMessage = async (conversationId: string) => {
   }
 };
 
+export interface IConversationWithUsers extends IConversationDocument {
+  user: IUserDocument | null;
+}
+
 // GET ALL USERS'S CONVERSATIONS
 export const getAll = async (req: Req, res: Response) => {
   try {
@@ -51,7 +60,20 @@ export const getAll = async (req: Req, res: Response) => {
     const conversations = await Conversation.find({
       "members.ids": mongoose.Types.ObjectId(user?._id),
     }).sort({ updatedAt: "descending" });
-    res.send(conversations);
+    const conversationsAndUsers = <IConversationWithUsers[]>[
+      ...conversations.map((conversation) => conversation.toObject()),
+    ];
+    for (const conversation of conversationsAndUsers) {
+      const otherUserId =
+        conversation.members.ids.filter(
+          (id) => id.toHexString() !== user?._id
+        )[0] ||
+        // then it is a conversation with user himself
+        user?._id;
+      const conversationUser = await User.findById(otherUserId);
+      conversation.user = conversationUser;
+    }
+    res.send(conversationsAndUsers);
   } catch (error) {
     console.error(error);
     res.status(400).send(error);

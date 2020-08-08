@@ -47,15 +47,10 @@ function default_1(state, action) {
             return __assign(__assign({}, state), { 
                 // shows only users with whom we don't have conversation started
                 searchedUsers: action.payload.filter(function (user) {
-                    var _a, _b;
-                    // in localStoreage there is saved id of logged in user
-                    if (user._id !== localStorage.getItem("userId"))
-                        return (_a = state.conversations) === null || _a === void 0 ? void 0 : _a.every(function (conversation) { return !conversation.members.ids.includes(user._id); });
-                    // else case is when user search for himself
-                    else
-                        return (_b = state.conversations) === null || _b === void 0 ? void 0 : _b.every(function (conversation) {
-                            return !conversation.members.ids.every(function (id) { return id === user._id; });
-                        });
+                    // first if user search for himself
+                    // in localStorage there is saved id of a logged in user
+                    var _a;
+                    return (_a = state.conversations) === null || _a === void 0 ? void 0 : _a.every(function (conversation) { return conversation.user._id !== user._id; });
                 }) });
         case types_1.SET_SELECTED_CONVERSATION:
             return __assign(__assign({}, state), { selectedConversation: action.payload });

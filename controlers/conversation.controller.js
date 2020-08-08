@@ -35,10 +35,42 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAll = exports.displayLastMessage = exports.updateLastMessage = exports.create = void 0;
 var mongoose_1 = require("../mongoose");
 var conversation_model_1 = require("../models/conversation.model");
+var user_model_1 = require("../models/user.model");
 // CREATE CONVERSATION
 exports.create = function (members) { return __awaiter(void 0, void 0, void 0, function () {
     var newConversation, error_1;
@@ -106,25 +138,62 @@ exports.displayLastMessage = function (conversationId) { return __awaiter(void 0
 }); };
 // GET ALL USERS'S CONVERSATIONS
 exports.getAll = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, conversations, error_4;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var user_1, conversations, conversationsAndUsers, conversationsAndUsers_1, conversationsAndUsers_1_1, conversation, otherUserId, conversationUser, e_1_1, error_4;
+    var e_1, _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                user = req.user;
+                _b.trys.push([0, 10, , 11]);
+                user_1 = req.user;
                 return [4 /*yield*/, conversation_model_1.Conversation.find({
-                        "members.ids": mongoose_1.mongoose.Types.ObjectId(user === null || user === void 0 ? void 0 : user._id),
+                        "members.ids": mongoose_1.mongoose.Types.ObjectId(user_1 === null || user_1 === void 0 ? void 0 : user_1._id),
                     }).sort({ updatedAt: "descending" })];
             case 1:
-                conversations = _a.sent();
-                res.send(conversations);
-                return [3 /*break*/, 3];
+                conversations = _b.sent();
+                conversationsAndUsers = __spread(conversations.map(function (conversation) { return conversation.toObject(); }));
+                _b.label = 2;
             case 2:
-                error_4 = _a.sent();
+                _b.trys.push([2, 7, 8, 9]);
+                conversationsAndUsers_1 = __values(conversationsAndUsers), conversationsAndUsers_1_1 = conversationsAndUsers_1.next();
+                _b.label = 3;
+            case 3:
+                if (!!conversationsAndUsers_1_1.done) return [3 /*break*/, 6];
+                conversation = conversationsAndUsers_1_1.value;
+                otherUserId = conversation.members.ids.filter(function (id) { return id.toHexString() !== (user_1 === null || user_1 === void 0 ? void 0 : user_1._id); })[0] || (
+                // then it is a conversation with user himself
+                user_1 === null || 
+                // then it is a conversation with user himself
+                user_1 === void 0 ? void 0 : 
+                // then it is a conversation with user himself
+                user_1._id);
+                return [4 /*yield*/, user_model_1.User.findById(otherUserId)];
+            case 4:
+                conversationUser = _b.sent();
+                conversation.user = conversationUser;
+                _b.label = 5;
+            case 5:
+                conversationsAndUsers_1_1 = conversationsAndUsers_1.next();
+                return [3 /*break*/, 3];
+            case 6: return [3 /*break*/, 9];
+            case 7:
+                e_1_1 = _b.sent();
+                e_1 = { error: e_1_1 };
+                return [3 /*break*/, 9];
+            case 8:
+                try {
+                    if (conversationsAndUsers_1_1 && !conversationsAndUsers_1_1.done && (_a = conversationsAndUsers_1.return)) _a.call(conversationsAndUsers_1);
+                }
+                finally { if (e_1) throw e_1.error; }
+                return [7 /*endfinally*/];
+            case 9:
+                res.send(conversationsAndUsers);
+                return [3 /*break*/, 11];
+            case 10:
+                error_4 = _b.sent();
                 console.error(error_4);
                 res.status(400).send(error_4);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 11];
+            case 11: return [2 /*return*/];
         }
     });
 }); };
