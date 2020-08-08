@@ -14,6 +14,7 @@ export interface IMembers {
 export interface IConversationDocument extends Document {
   members: IMembers;
   lastMessage: ILastMessage;
+  isDisplayed: boolean;
 }
 
 export interface IConversationModel extends Model<IConversationDocument> {}
@@ -29,6 +30,7 @@ const conversationSchema: Schema = new Schema(
       createdAt: Date,
       authorId: Schema.Types.ObjectId,
     },
+    isDisplayed: { type: Boolean, required: true, default: false },
   },
   { timestamps: { createdAt: false, updatedAt: true } }
 );

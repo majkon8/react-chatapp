@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setNewMessage = exports.getMessages = exports.getAllConversations = exports.setSelectedConversation = exports.setSearchConversations = exports.searchForUsers = void 0;
+exports.displayMessage = exports.setNewMessage = exports.getMessages = exports.getAllConversations = exports.setSelectedConversation = exports.setSearchConversations = exports.searchForUsers = void 0;
 var types_1 = require("../types");
 var axios_1 = __importDefault(require("axios"));
 exports.searchForUsers = function (username) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
@@ -134,3 +134,4 @@ exports.getMessages = function (conversationId) { return function (dispatch) { r
 exports.setNewMessage = function (messageData) { return function (dispatch) {
     return dispatch({ type: types_1.SET_NEW_MESSAGE, payload: messageData });
 }; };
+exports.displayMessage = function (conversation) { return function (dispatch) { return dispatch({ type: types_1.DISPLAY_MESSAGE, payload: conversation }); }; };

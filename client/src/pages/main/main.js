@@ -81,7 +81,7 @@ function Main(_a) {
     }, [user.accessToken]);
     return (react_1.default.createElement(framer_motion_1.motion.div, { className: "main-container " + (UI.theme === "light" && "theme-light"), initial: "initial", animate: "in", exit: "out", variants: home_1.pageVariants, transition: home_1.pageTransition },
         react_1.default.createElement(ChatSearch_1.default, null),
-        react_1.default.createElement(ConversationsList_1.default, null),
+        react_1.default.createElement(ConversationsList_1.default, { socket: socket }),
         react_1.default.createElement(ChatBar_1.default, null),
         react_1.default.createElement(Chat_1.default, { socket: socket }),
         react_1.default.createElement(ChatForm_1.default, { socket: socket })));

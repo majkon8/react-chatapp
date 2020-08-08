@@ -34,7 +34,7 @@ var mapActionsToProps = {
 };
 var connector = react_redux_1.connect(mapStateToProps, mapActionsToProps);
 function Conversation(_a) {
-    var isActive = _a.isActive, isNew = _a.isNew, username = _a.username, userId = _a.userId, id = _a.id, message = _a.message, createdAt = _a.createdAt, handleActive = _a.handleActive, setIsChatOpen = _a.setIsChatOpen, setSelectedConversation = _a.setSelectedConversation, getMessages = _a.getMessages;
+    var isActive = _a.isActive, isNew = _a.isNew, username = _a.username, userId = _a.userId, id = _a.id, message = _a.message, createdAt = _a.createdAt, isDisplayed = _a.isDisplayed, handleActive = _a.handleActive, setIsChatOpen = _a.setIsChatOpen, setSelectedConversation = _a.setSelectedConversation, getMessages = _a.getMessages;
     react_1.useEffect(function () {
         if (isActive) {
             selectNewConversation(id);
@@ -58,8 +58,10 @@ function Conversation(_a) {
     return (react_1.default.createElement("div", { onClick: handleClick, className: "conversation-container " + (isActive && "active-conversation") },
         react_1.default.createElement("img", { src: "https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png", alt: "user" }),
         react_1.default.createElement("div", { className: "title-message-container" },
-            react_1.default.createElement("span", { className: "conversation-title" }, username),
-            !isNew && createdAt && (react_1.default.createElement("span", { className: "conversation-message" },
+            react_1.default.createElement("span", { style: { fontWeight: isDisplayed || isNew ? "normal" : "bold" }, className: "conversation-title" }, username),
+            !isNew && createdAt && (react_1.default.createElement("span", { className: isDisplayed
+                    ? "conversation-message"
+                    : "conversation-message-not-displayed" },
                 message,
                 react_1.default.createElement("span", null,
                     " \u00B7 ",

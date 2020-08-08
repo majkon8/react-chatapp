@@ -75,6 +75,7 @@ index_1.io.on("connection", function (socket) {
                     members = {
                         ids: [
                             mongoose_1.mongoose.Types.ObjectId(socket.user._id),
+                            // conversation id was a second user id
                             mongoose_1.mongoose.Types.ObjectId(message.conversation.userId),
                         ],
                         usernames: [socket.user.username, message.conversation.username],
@@ -82,6 +83,7 @@ index_1.io.on("connection", function (socket) {
                     return [4 /*yield*/, conversations.create(members)];
                 case 1:
                     newConversation = _a.sent();
+                    // we need the conversationId in order to save message to database
                     conversationId = newConversation === null || newConversation === void 0 ? void 0 : newConversation._id;
                     return [3 /*break*/, 3];
                 case 2:
@@ -97,13 +99,16 @@ index_1.io.on("connection", function (socket) {
                 case 4:
                     createdMessage = _a.sent();
                     if (createdMessage) {
-                        return [2 /*return*/, index_1.io
+                        return [2 /*return*/, (index_1.io
+                                //emit created message both to sender and receiver
                                 .in(message.conversation.userId)
                                 .in(socket.user._id)
                                 .emit("receiveMessage", {
                                 createdMessage: createdMessage,
-                                newConversation: message.conversation.new ? newConversation : null,
-                            })];
+                                newConversation: message.conversation.new
+                                    ? newConversation
+                                    : null,
+                            }))];
                     }
                     return [3 /*break*/, 6];
                 case 5:
@@ -111,6 +116,27 @@ index_1.io.on("connection", function (socket) {
                     console.error(error_1);
                     return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
+            }
+        });
+    }); });
+    socket.on("displayMessage", function (conversationId) { return __awaiter(void 0, void 0, void 0, function () {
+        var updatedConversation, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, conversations.displayLastMessage(conversationId)];
+                case 1:
+                    updatedConversation = _a.sent();
+                    return [2 /*return*/, index_1.io
+                            .in(updatedConversation === null || updatedConversation === void 0 ? void 0 : updatedConversation.members.ids[0])
+                            .in(updatedConversation === null || updatedConversation === void 0 ? void 0 : updatedConversation.members.ids[1])
+                            .emit("messageDisplayed", updatedConversation)];
+                case 2:
+                    error_2 = _a.sent();
+                    console.error(error_2);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     }); });

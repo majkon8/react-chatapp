@@ -2,6 +2,7 @@ import { mongoose } from "../mongoose";
 import { Message } from "../models/message.model";
 import { updateLastMessage } from "../controlers/conversation.controller";
 import { Request, Response } from "express";
+import { Conversation } from "../models/conversation.model";
 
 export interface IMessage {
   conversationId: mongoose.Types.ObjectId;
@@ -15,6 +16,9 @@ export const create = async (message: IMessage) => {
     const newMessage = new Message(message);
     await newMessage.save();
     await updateLastMessage(newMessage);
+    await Conversation.findByIdAndUpdate(newMessage.conversationId, {
+      isDisplayed: false,
+    });
     return newMessage;
   } catch (error) {
     console.error(error);

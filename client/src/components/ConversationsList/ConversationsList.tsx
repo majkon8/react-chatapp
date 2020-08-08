@@ -4,25 +4,35 @@ import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import Conversation from "../Conversation/Conversation";
 import { CircularProgress } from "@material-ui/core";
+import { IConversation } from "../../redux/reducers/dataReducer";
 // redux
 import { connect, ConnectedProps } from "react-redux";
-import { getAllConversations } from "../../redux/actions/dataActions";
+import {
+  getAllConversations,
+  displayMessage,
+} from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
-import { IConversation } from "../../redux/reducers/dataReducer";
 
 const mapStateToProps = (state: IState) => ({
   UI: state.UI,
   data: state.data,
   user: state.user,
 });
-const mapActionsToProps = { getAllConversations };
+const mapActionsToProps = { getAllConversations, displayMessage };
 const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = PropsFromRedux;
+type Props = PropsFromRedux & { socket: SocketIOClient.Socket | null };
 
-function ConversationsList({ UI, data, user, getAllConversations }: Props) {
+function ConversationsList({
+  socket,
+  UI,
+  data,
+  user,
+  getAllConversations,
+  displayMessage,
+}: Props) {
   const [activeId, setActiveId] = useState("");
   const [filteredConversations, setFilteredConversations] = useState<
     IConversation[] | undefined
@@ -31,6 +41,15 @@ function ConversationsList({ UI, data, user, getAllConversations }: Props) {
   useEffect(() => {
     getAllConversations();
   }, []);
+
+  useEffect(() => {
+    socket?.on("messageDisplayed", (updatedConversation: IConversation) =>
+      displayMessage(updatedConversation)
+    );
+    return () => {
+      socket?.off("messageDisplayed");
+    };
+  }, [socket, user.authenticatedUser]);
 
   useEffect(() => {
     const id = data.selectedConversation?.id || "";
@@ -96,6 +115,11 @@ function ConversationsList({ UI, data, user, getAllConversations }: Props) {
               message={conversation.lastMessage.body}
               createdAt={conversation.lastMessage.createdAt}
               handleActive={handleActive}
+              isDisplayed={
+                conversation.isDisplayed ||
+                conversation.lastMessage.authorId ===
+                  user.authenticatedUser?._id
+              }
             />
           ))
         )}

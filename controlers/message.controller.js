@@ -39,13 +39,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getConversationMessages = exports.create = void 0;
 var message_model_1 = require("../models/message.model");
 var conversation_controller_1 = require("../controlers/conversation.controller");
+var conversation_model_1 = require("../models/conversation.model");
 // CREATE MESSAGE
 exports.create = function (message) { return __awaiter(void 0, void 0, void 0, function () {
     var newMessage, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 4, , 5]);
                 newMessage = new message_model_1.Message(message);
                 return [4 /*yield*/, newMessage.save()];
             case 1:
@@ -53,12 +54,17 @@ exports.create = function (message) { return __awaiter(void 0, void 0, void 0, f
                 return [4 /*yield*/, conversation_controller_1.updateLastMessage(newMessage)];
             case 2:
                 _a.sent();
-                return [2 /*return*/, newMessage];
+                return [4 /*yield*/, conversation_model_1.Conversation.findByIdAndUpdate(newMessage.conversationId, {
+                        isDisplayed: false,
+                    })];
             case 3:
+                _a.sent();
+                return [2 /*return*/, newMessage];
+            case 4:
                 error_1 = _a.sent();
                 console.error(error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

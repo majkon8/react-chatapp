@@ -62,27 +62,42 @@ function Chat(_a) {
     var _c = __read(react_1.useState(false), 2), isScrolling = _c[0], setIsScrolling = _c[1];
     var scrollRef = react_1.useRef();
     react_1.useEffect(function () {
+        var _a, _b, _c;
+        if ((_a = data.selectedConversation) === null || _a === void 0 ? void 0 : _a.new)
+            return;
+        // gets conversation which is selected
+        var conversation = (_b = data.conversations) === null || _b === void 0 ? void 0 : _b.filter(function (conversation) { var _a; return conversation._id === ((_a = data.selectedConversation) === null || _a === void 0 ? void 0 : _a.id); })[0];
+        if (conversation === null || conversation === void 0 ? void 0 : conversation.isDisplayed)
+            return;
+        if ((conversation === null || conversation === void 0 ? void 0 : conversation.lastMessage.authorId) !== ((_c = user.authenticatedUser) === null || _c === void 0 ? void 0 : _c._id)) {
+            socket === null || socket === void 0 ? void 0 : socket.emit("displayMessage", conversation === null || conversation === void 0 ? void 0 : conversation._id);
+        }
+    }, [data.selectedConversation, data.messages]);
+    react_1.useEffect(function () {
         if (isScrolling)
             return;
         var height = scrollRef.current.el.getElementsByClassName("simplebar-content-wrapper")[0].scrollHeight;
         scrollRef.current.getScrollElement().scrollTop = height;
-    }, [data.messages]);
+    }, [data.messages, UI.pending.messages]);
     react_1.useEffect(function () {
         socket === null || socket === void 0 ? void 0 : socket.on("receiveMessage", function (message) {
-            var audio = new Audio(notificationSound);
-            audio.play();
+            var _a;
+            if (message.createdMessage.authorId !== ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a._id)) {
+                var audio = new Audio(notificationSound);
+                audio.play();
+            }
             setNewMessage(message);
         });
         return function () {
             socket === null || socket === void 0 ? void 0 : socket.off("receiveMessage");
         };
-    }, [socket]);
+    }, [socket, user.authenticatedUser]);
     var handleScroll = function () {
         var scrollTop = scrollRef.current.getScrollElement().scrollTop;
         var height = scrollRef.current.el.getElementsByClassName("simplebar-content-wrapper")[0].scrollHeight;
         var scrollHeight = scrollRef.current.getScrollElement().clientHeight;
         var scrollBottom = height - (scrollTop + scrollHeight);
-        if (scrollBottom > 100)
+        if (scrollBottom > 300)
             setIsScrolling(true);
         else
             setIsScrolling(false);

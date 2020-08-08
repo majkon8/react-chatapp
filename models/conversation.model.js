@@ -31,5 +31,6 @@ var conversationSchema = new mongoose_1.Schema({
         createdAt: Date,
         authorId: mongoose_1.Schema.Types.ObjectId,
     },
+    isDisplayed: { type: Boolean, required: true, default: false },
 }, { timestamps: { createdAt: false, updatedAt: true } });
 exports.Conversation = mongoose_1.default.model("Conversation", conversationSchema);

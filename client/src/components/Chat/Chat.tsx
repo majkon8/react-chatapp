@@ -21,11 +21,7 @@ const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-interface IProps {
-  socket: SocketIOClient.Socket | null;
-}
-
-type Props = PropsFromRedux & IProps;
+type Props = PropsFromRedux & { socket: SocketIOClient.Socket | null };
 
 interface IMessage {
   conversationId: string;
@@ -51,12 +47,24 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
   const scrollRef = useRef() as MutableRefObject<IScrollElement>;
 
   useEffect(() => {
+    if (data.selectedConversation?.new) return;
+    // gets conversation which is selected
+    const conversation = data.conversations?.filter(
+      (conversation) => conversation._id === data.selectedConversation?.id
+    )[0];
+    if (conversation?.isDisplayed) return;
+    if (conversation?.lastMessage.authorId !== user.authenticatedUser?._id) {
+      socket?.emit("displayMessage", conversation?._id);
+    }
+  }, [data.selectedConversation, data.messages]);
+
+  useEffect(() => {
     if (isScrolling) return;
     const height = scrollRef.current.el.getElementsByClassName(
       "simplebar-content-wrapper"
     )[0].scrollHeight;
     scrollRef.current.getScrollElement().scrollTop = height;
-  }, [data.messages]);
+  }, [data.messages, UI.pending.messages]);
 
   useEffect(() => {
     socket?.on(
@@ -65,15 +73,17 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
         createdMessage: IMessage;
         newConversation: INewConversation;
       }) => {
-        const audio = new Audio(notificationSound);
-        audio.play();
+        if (message.createdMessage.authorId !== user.authenticatedUser?._id) {
+          const audio = new Audio(notificationSound);
+          audio.play();
+        }
         setNewMessage(message);
       }
     );
     return () => {
       socket?.off("receiveMessage");
     };
-  }, [socket]);
+  }, [socket, user.authenticatedUser]);
 
   const handleScroll = () => {
     const scrollTop = scrollRef.current.getScrollElement().scrollTop;
@@ -82,7 +92,7 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
     )[0].scrollHeight;
     const scrollHeight = scrollRef.current.getScrollElement().clientHeight;
     const scrollBottom = height - (scrollTop + scrollHeight);
-    if (scrollBottom > 100) setIsScrolling(true);
+    if (scrollBottom > 300) setIsScrolling(true);
     else setIsScrolling(false);
   };
 

@@ -31,6 +31,19 @@ export const updateLastMessage = async (message: IMessageDocument) => {
   }
 };
 
+// SET CONVERSATION TO DISPLAYED
+export const displayLastMessage = async (conversationId: string) => {
+  try {
+    const updatedConversation = await Conversation.findByIdAndUpdate(
+      conversationId,
+      { isDisplayed: true }
+    );
+    return updatedConversation;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 // GET ALL USERS'S CONVERSATIONS
 export const getAll = async (req: Req, res: Response) => {
   try {

@@ -59,7 +59,7 @@ function Main({ UI, user, getAuthenticatedUser }: Props) {
       transition={pageTransition}
     >
       <ChatSearch />
-      <ConversationsList />
+      <ConversationsList socket={socket} />
       <ChatBar />
       <Chat socket={socket} />
       <ChatForm socket={socket} />

@@ -26,15 +26,18 @@ io.on("connection", (socket: Socket) => {
     try {
       let conversationId;
       let newConversation;
+      // if message starts a new conversation
       if (message.conversation.new) {
         const members = {
           ids: [
             mongoose.Types.ObjectId(socket.user._id),
+            // conversation id was a second user id
             mongoose.Types.ObjectId(message.conversation.userId),
           ],
           usernames: [socket.user.username, message.conversation.username],
         };
         newConversation = await conversations.create(members);
+        // we need the conversationId in order to save message to database
         conversationId = newConversation?._id;
       } else conversationId = message.conversation.id;
       const newMessage = {
@@ -44,14 +47,33 @@ io.on("connection", (socket: Socket) => {
       };
       const createdMessage = await messages.create(newMessage);
       if (createdMessage) {
-        return io
-          .in(message.conversation.userId)
-          .in(socket.user._id)
-          .emit("receiveMessage", {
-            createdMessage,
-            newConversation: message.conversation.new ? newConversation : null,
-          });
+        return (
+          io
+            //emit created message both to sender and receiver
+            .in(message.conversation.userId)
+            .in(socket.user._id)
+            .emit("receiveMessage", {
+              createdMessage,
+              newConversation: message.conversation.new
+                ? newConversation
+                : null,
+            })
+        );
       }
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  socket.on("displayMessage", async (conversationId: string) => {
+    try {
+      const updatedConversation = await conversations.displayLastMessage(
+        conversationId
+      );
+      return io
+        .in(updatedConversation?.members.ids[0])
+        .in(updatedConversation?.members.ids[1])
+        .emit("messageDisplayed", updatedConversation);
     } catch (error) {
       console.error(error);
     }

@@ -25,6 +25,7 @@ export const SET_CONVERSATIONS = "SET_CONVERSATIONS";
 export const SET_MESSAGES = "SET_MESSAGES";
 export const SET_NEW_MESSAGE = "SET_NEW_MESSAGE";
 export const SEARCH_CONVERSATIONS = "SEARCH_CONVERSATIONS";
+export const DISPLAY_MESSAGE = "DISPLAY_MESSAGE";
 
 // user interfaces
 interface ISetAuthenticatedAction {
@@ -107,6 +108,10 @@ interface ISearchConversationsAction {
   type: typeof SEARCH_CONVERSATIONS;
   payload: string;
 }
+interface IDisplayMessageAction {
+  type: typeof DISPLAY_MESSAGE;
+  payload: IConversation;
+}
 
 export type DataActionTypes =
   | ISetSearchedUsersAction
@@ -114,4 +119,5 @@ export type DataActionTypes =
   | ISetConversationsAction
   | ISetMessagesAction
   | ISetNewMessageAction
-  | ISearchConversationsAction;
+  | ISearchConversationsAction
+  | IDisplayMessageAction;

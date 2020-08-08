@@ -28,6 +28,7 @@ interface IProps {
   id: string;
   message?: string;
   createdAt?: string;
+  isDisplayed?: boolean;
   handleActive(id: string): void;
 }
 
@@ -41,6 +42,7 @@ function Conversation({
   id,
   message,
   createdAt,
+  isDisplayed,
   handleActive,
   setIsChatOpen,
   setSelectedConversation,
@@ -77,9 +79,20 @@ function Conversation({
         alt="user"
       />
       <div className="title-message-container">
-        <span className="conversation-title">{username}</span>
+        <span
+          style={{ fontWeight: isDisplayed || isNew ? "normal" : "bold" }}
+          className="conversation-title"
+        >
+          {username}
+        </span>
         {!isNew && createdAt && (
-          <span className="conversation-message">
+          <span
+            className={
+              isDisplayed
+                ? "conversation-message"
+                : "conversation-message-not-displayed"
+            }
+          >
             {message}
             <span> &middot; {formatDate(createdAt)}</span>
           </span>

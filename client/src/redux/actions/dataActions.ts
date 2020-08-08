@@ -6,10 +6,15 @@ import {
   SET_CONVERSATIONS,
   SET_MESSAGES,
   SET_NEW_MESSAGE,
+  DISPLAY_MESSAGE,
 } from "../types";
 import { Dispatch } from "redux";
 import axios from "axios";
-import { ISelectedConversation, IMessage } from "../reducers/dataReducer";
+import {
+  ISelectedConversation,
+  IMessage,
+  IConversation,
+} from "../reducers/dataReducer";
 import { INewConversation } from "../../components/Chat/Chat";
 
 export const searchForUsers = (username: string) => async (
@@ -75,3 +80,7 @@ export const setNewMessage = (messageData: {
   newConversation: INewConversation;
 }) => (dispatch: Dispatch) =>
   dispatch({ type: SET_NEW_MESSAGE, payload: messageData });
+
+export const displayMessage = (conversation: IConversation) => (
+  dispatch: Dispatch
+) => dispatch({ type: DISPLAY_MESSAGE, payload: conversation });
