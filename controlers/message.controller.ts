@@ -29,10 +29,11 @@ export const create = async (message: IMessage) => {
 export const getConversationMessages = async (req: Request, res: Response) => {
   try {
     const conversationId = req.params.conversationId;
-    const messages = await Message.find({ conversationId }).sort({
-      createdAt: "ascending",
+    const count = +req.params.count;
+    const messages = await Message.find({ conversationId }).limit(count).sort({
+      createdAt: "descending",
     });
-    res.json(messages);
+    res.json(messages.reverse());
   } catch (error) {
     console.error(error);
     res.status(400).json(error);

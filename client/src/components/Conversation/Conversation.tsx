@@ -51,7 +51,7 @@ function Conversation({
   useEffect(() => {
     if (isActive) {
       selectNewConversation(id);
-      if (!isNew) getMessages(id);
+      if (!isNew) getMessages(id, 20);
       else getMessages(null);
     }
   }, [isActive]);

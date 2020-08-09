@@ -3,6 +3,22 @@
   flex-direction: column-reverse;
   padding-left: 20px;
   overflow-y: hidden;
+  position: relative;
+
+  .scroll-down-button {
+    width: 35px;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    height: 35px;
+    margin: 0 auto;
+    background-color: rgb(40, 40, 40);
+    border: none;
+    transition: all 0.5s;
+    position: absolute;
+    bottom: 10px;
+    left: calc(50% + 10px);
+    transform: translateX(-50%);
+  }
 
   @media screen and (max-width: 768px) {
     grid-column: span 2;

@@ -39,7 +39,7 @@ function Conversation(_a) {
         if (isActive) {
             selectNewConversation(id);
             if (!isNew)
-                getMessages(id);
+                getMessages(id, 20);
             else
                 getMessages(null);
         }

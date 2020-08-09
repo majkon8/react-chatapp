@@ -30,14 +30,19 @@ function Main({ UI, user, data, getAuthenticatedUser }: Props) {
 
   useEffect(() => {
     const undisplayedConversations = data.conversations?.filter(
-      (conversation) =>
-        !conversation.isDisplayed &&
-        conversation.lastMessage.authorId !== user.authenticatedUser?._id
+      (conversation) => !conversation.isDisplayed
     );
-    if (undisplayedConversations && undisplayedConversations.length > 0)
+    if (
+      undisplayedConversations &&
+      undisplayedConversations.length > 0 &&
+      undisplayedConversations.some(
+        (conversation) =>
+          conversation.lastMessage.authorId !== user.authenticatedUser?._id
+      )
+    )
       document.title = "(!) Chat App";
     else document.title = "Chat App";
-  }, [data.conversations]);
+  }, [data.conversations, user.authenticatedUser]);
 
   useEffect(() => {
     getAuthenticatedUser();

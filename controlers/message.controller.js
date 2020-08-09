@@ -70,18 +70,19 @@ exports.create = function (message) { return __awaiter(void 0, void 0, void 0, f
 }); };
 // GET MESSAGES OF CONVERSATION
 exports.getConversationMessages = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var conversationId, messages, error_2;
+    var conversationId, count, messages, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 conversationId = req.params.conversationId;
-                return [4 /*yield*/, message_model_1.Message.find({ conversationId: conversationId }).sort({
-                        createdAt: "ascending",
+                count = +req.params.count;
+                return [4 /*yield*/, message_model_1.Message.find({ conversationId: conversationId }).limit(count).sort({
+                        createdAt: "descending",
                     })];
             case 1:
                 messages = _a.sent();
-                res.json(messages);
+                res.json(messages.reverse());
                 return [3 /*break*/, 3];
             case 2:
                 error_2 = _a.sent();

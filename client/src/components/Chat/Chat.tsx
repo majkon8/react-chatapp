@@ -6,7 +6,7 @@ import Message from "../Message/Message";
 import { CircularProgress } from "@material-ui/core";
 // redux
 import { connect, ConnectedProps } from "react-redux";
-import { setNewMessage } from "../../redux/actions/dataActions";
+import { setNewMessage, getMessages } from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
 import { IUser } from "../../redux/reducers/userReducer";
 // Assets
@@ -17,7 +17,7 @@ const mapStateToProps = (state: IState) => ({
   data: state.data,
   user: state.user,
 });
-const mapActionsToProps = { setNewMessage };
+const mapActionsToProps = { setNewMessage, getMessages };
 const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -43,8 +43,9 @@ interface IScrollElement extends HTMLDivElement {
   el: any;
 }
 
-function Chat({ socket, UI, data, user, setNewMessage }: Props) {
+function Chat({ socket, UI, data, user, setNewMessage, getMessages }: Props) {
   const [isScrolling, setIsScrolling] = useState(false);
+  const [page, setPage] = useState(2);
   const scrollRef = useRef() as MutableRefObject<IScrollElement>;
 
   useEffect(() => {
@@ -59,12 +60,13 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
     }
   }, [data.selectedConversation, data.messages]);
 
+  // scroll chat to bottom when getting new message or selecting new conversation
   useEffect(() => {
-    if (isScrolling) return;
-    const height = scrollRef.current.el.getElementsByClassName(
-      "simplebar-content-wrapper"
-    )[0].scrollHeight;
-    scrollRef.current.getScrollElement().scrollTop = height;
+    if (isScrolling) {
+      // if getting more messages then scroll a little bit down
+      if (scrollRef.current.getScrollElement().scrollTop === 0)
+        scrollRef.current.getScrollElement().scrollTop = 100;
+    } else scrollToBottom();
   }, [data.messages, UI.pending.messages]);
 
   useEffect(() => {
@@ -104,6 +106,20 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
     };
   }, [socket, user.authenticatedUser]);
 
+  useEffect(() => {
+    if (data.selectedConversation?.id) {
+      const messagesCount = data.messages?.length || 0;
+      const newMessagesSinceLastMessagesFetch = (page - 1) * 10;
+      const count =
+        page * 10 + messagesCount - newMessagesSinceLastMessagesFetch;
+      getMessages(data.selectedConversation.id, count);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [data.selectedConversation]);
+
   const handleScroll = () => {
     const scrollTop = scrollRef.current.getScrollElement().scrollTop;
     const height = scrollRef.current.el.getElementsByClassName(
@@ -111,8 +127,19 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
     )[0].scrollHeight;
     const scrollHeight = scrollRef.current.getScrollElement().clientHeight;
     const scrollBottom = height - (scrollTop + scrollHeight);
-    if (scrollBottom > 300) setIsScrolling(true);
+    if (scrollBottom > 50) setIsScrolling(true);
     else setIsScrolling(false);
+    if (data.selectedConversation?.new) return;
+    if (scrollTop === 0 && scrollBottom > 0) {
+      setPage(page + 1);
+    }
+  };
+
+  const scrollToBottom = () => {
+    const height = scrollRef.current.el.getElementsByClassName(
+      "simplebar-content-wrapper"
+    )[0].scrollHeight;
+    scrollRef.current.getScrollElement().scrollTop = height;
   };
 
   return (
@@ -137,6 +164,17 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
           ))
         )}
       </SimpleBar>
+      <button
+        onClick={scrollToBottom}
+        style={{
+          color: UI.color,
+          opacity: isScrolling ? 1 : 0,
+          cursor: isScrolling ? "pointer" : "auto",
+        }}
+        className="button is-rounded scroll-down-button"
+      >
+        <i className="fas fa-arrow-down"></i>
+      </button>
     </div>
   );
 }

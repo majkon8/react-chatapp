@@ -63,16 +63,14 @@ function Main(_a) {
     var _b = __read(react_1.useState(null), 2), socket = _b[0], setSocket = _b[1];
     react_1.useEffect(function () {
         var _a;
-        var undisplayedConversations = (_a = data.conversations) === null || _a === void 0 ? void 0 : _a.filter(function (conversation) {
-            var _a;
-            return !conversation.isDisplayed &&
-                conversation.lastMessage.authorId !== ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a._id);
-        });
-        if (undisplayedConversations && undisplayedConversations.length > 0)
+        var undisplayedConversations = (_a = data.conversations) === null || _a === void 0 ? void 0 : _a.filter(function (conversation) { return !conversation.isDisplayed; });
+        if (undisplayedConversations &&
+            undisplayedConversations.length > 0 &&
+            undisplayedConversations.some(function (conversation) { var _a; return conversation.lastMessage.authorId !== ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a._id); }))
             document.title = "(!) Chat App";
         else
             document.title = "Chat App";
-    }, [data.conversations]);
+    }, [data.conversations, user.authenticatedUser]);
     react_1.useEffect(function () {
         getAuthenticatedUser();
     }, []);

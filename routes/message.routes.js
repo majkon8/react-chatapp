@@ -23,6 +23,6 @@ var express = __importStar(require("express"));
 var messages = __importStar(require("../controlers/message.controller"));
 var auth_1 = require("../middlewares/auth");
 var router = express.Router();
-/* GET /messages/:conversationId */
-router.get("/:conversationId", auth_1.tokenAuth, messages.getConversationMessages);
+/* GET /messages/:conversationId/:count */
+router.get("/:conversationId/:count", auth_1.tokenAuth, messages.getConversationMessages);
 module.exports = router;

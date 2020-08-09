@@ -58,14 +58,15 @@ export const getAllConversations = () => async (dispatch: Dispatch) => {
   }
 };
 
-export const getMessages = (conversationId: string | null) => async (
-  dispatch: Dispatch
-) => {
+export const getMessages = (
+  conversationId: string | null,
+  count?: number
+) => async (dispatch: Dispatch) => {
   dispatch({ type: SET_PENDING, payload: { messages: true } });
   try {
     if (conversationId === null) dispatch({ type: SET_MESSAGES, payload: [] });
     else {
-      const response = await axios.get(`/messages/${conversationId}`);
+      const response = await axios.get(`/messages/${conversationId}/${count}`);
       dispatch({ type: SET_MESSAGES, payload: response.data });
     }
   } catch (error) {

@@ -102,7 +102,7 @@ exports.getAllConversations = function () { return function (dispatch) { return 
         }
     });
 }); }; };
-exports.getMessages = function (conversationId) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getMessages = function (conversationId, count) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
     var response, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -114,7 +114,7 @@ exports.getMessages = function (conversationId) { return function (dispatch) { r
                 if (!(conversationId === null)) return [3 /*break*/, 2];
                 dispatch({ type: types_1.SET_MESSAGES, payload: [] });
                 return [3 /*break*/, 4];
-            case 2: return [4 /*yield*/, axios_1.default.get("/messages/" + conversationId)];
+            case 2: return [4 /*yield*/, axios_1.default.get("/messages/" + conversationId + "/" + count)];
             case 3:
                 response = _a.sent();
                 dispatch({ type: types_1.SET_MESSAGES, payload: response.data });

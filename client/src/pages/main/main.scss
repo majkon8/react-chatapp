@@ -7,7 +7,7 @@ $theme-light: #eee;
   display: grid;
   grid-template-columns: 2fr 5fr;
   grid-template-rows: 70px calc(100vh - 140px) 70px;
-  color: #eee;
+  color: $theme-light;
   background-color: $dark-color;
   transition: background-color 0.5s, color 0.5s;
   overflow-x: hidden;
@@ -107,6 +107,12 @@ $theme-light: #eee;
 
     @media screen and (max-width: 768px) {
       grid-column: span 2;
+    }
+  }
+
+  .chat-container {
+    .scroll-down-button {
+      background-color: $theme-light;
     }
   }
 }

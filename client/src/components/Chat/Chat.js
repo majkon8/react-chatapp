@@ -65,12 +65,13 @@ var mapStateToProps = function (state) { return ({
     data: state.data,
     user: state.user,
 }); };
-var mapActionsToProps = { setNewMessage: dataActions_1.setNewMessage };
+var mapActionsToProps = { setNewMessage: dataActions_1.setNewMessage, getMessages: dataActions_1.getMessages };
 var connector = react_redux_1.connect(mapStateToProps, mapActionsToProps);
 function Chat(_a) {
     var _b;
-    var socket = _a.socket, UI = _a.UI, data = _a.data, user = _a.user, setNewMessage = _a.setNewMessage;
+    var socket = _a.socket, UI = _a.UI, data = _a.data, user = _a.user, setNewMessage = _a.setNewMessage, getMessages = _a.getMessages;
     var _c = __read(react_1.useState(false), 2), isScrolling = _c[0], setIsScrolling = _c[1];
+    var _d = __read(react_1.useState(2), 2), page = _d[0], setPage = _d[1];
     var scrollRef = react_1.useRef();
     react_1.useEffect(function () {
         var _a, _b, _c;
@@ -84,11 +85,15 @@ function Chat(_a) {
             socket === null || socket === void 0 ? void 0 : socket.emit("displayMessage", conversation === null || conversation === void 0 ? void 0 : conversation._id);
         }
     }, [data.selectedConversation, data.messages]);
+    // scroll chat to bottom when getting new message or selecting new conversation
     react_1.useEffect(function () {
-        if (isScrolling)
-            return;
-        var height = scrollRef.current.el.getElementsByClassName("simplebar-content-wrapper")[0].scrollHeight;
-        scrollRef.current.getScrollElement().scrollTop = height;
+        if (isScrolling) {
+            // if getting more messages then scroll a little bit down
+            if (scrollRef.current.getScrollElement().scrollTop === 0)
+                scrollRef.current.getScrollElement().scrollTop = 100;
+        }
+        else
+            scrollToBottom();
     }, [data.messages, UI.pending.messages]);
     react_1.useEffect(function () {
         socket === null || socket === void 0 ? void 0 : socket.on("receiveMessage", function (message) {
@@ -117,15 +122,37 @@ function Chat(_a) {
             socket === null || socket === void 0 ? void 0 : socket.off("receiveMessage");
         };
     }, [socket, user.authenticatedUser]);
+    react_1.useEffect(function () {
+        var _a, _b;
+        if ((_a = data.selectedConversation) === null || _a === void 0 ? void 0 : _a.id) {
+            var messagesCount = ((_b = data.messages) === null || _b === void 0 ? void 0 : _b.length) || 0;
+            var newMessagesSinceLastMessagesFetch = (page - 1) * 10;
+            var count = page * 10 + messagesCount - newMessagesSinceLastMessagesFetch;
+            getMessages(data.selectedConversation.id, count);
+        }
+    }, [page]);
+    react_1.useEffect(function () {
+        setPage(1);
+    }, [data.selectedConversation]);
     var handleScroll = function () {
+        var _a;
         var scrollTop = scrollRef.current.getScrollElement().scrollTop;
         var height = scrollRef.current.el.getElementsByClassName("simplebar-content-wrapper")[0].scrollHeight;
         var scrollHeight = scrollRef.current.getScrollElement().clientHeight;
         var scrollBottom = height - (scrollTop + scrollHeight);
-        if (scrollBottom > 300)
+        if (scrollBottom > 50)
             setIsScrolling(true);
         else
             setIsScrolling(false);
+        if ((_a = data.selectedConversation) === null || _a === void 0 ? void 0 : _a.new)
+            return;
+        if (scrollTop === 0 && scrollBottom > 0) {
+            setPage(page + 1);
+        }
+    };
+    var scrollToBottom = function () {
+        var height = scrollRef.current.el.getElementsByClassName("simplebar-content-wrapper")[0].scrollHeight;
+        scrollRef.current.getScrollElement().scrollTop = height;
     };
     return (react_1.default.createElement("div", { className: "chat-container" },
         react_1.default.createElement(simplebar_react_1.default
@@ -135,6 +162,12 @@ function Chat(_a) {
             ref: scrollRef, onScroll: handleScroll, style: { maxHeight: "calc(100vh - 140px)" } }, UI.pending.messages ? (react_1.default.createElement(core_1.CircularProgress, { color: "inherit" })) : ((_b = data.messages) === null || _b === void 0 ? void 0 : _b.map(function (message, index) {
             var _a;
             return (react_1.default.createElement(Message_1.default, { key: message._id, isOwnMessage: message.authorId === ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a._id), body: message.body, createdAt: message.createdAt, isLast: index === data.messages.length - 1 }));
-        })))));
+        }))),
+        react_1.default.createElement("button", { onClick: scrollToBottom, style: {
+                color: UI.color,
+                opacity: isScrolling ? 1 : 0,
+                cursor: isScrolling ? "pointer" : "auto",
+            }, className: "button is-rounded scroll-down-button" },
+            react_1.default.createElement("i", { className: "fas fa-arrow-down" }))));
 }
 exports.default = connector(Chat);
