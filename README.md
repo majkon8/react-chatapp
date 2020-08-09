@@ -4,4 +4,3 @@ Responsive design, animations made with GSAP and Framer Motion.
 # Live app
 https://safe-falls-82651.herokuapp.com/
 # WORK IN PROGRESS
-Only landing and login/signup page available for now  
