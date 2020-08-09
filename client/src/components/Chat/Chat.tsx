@@ -126,12 +126,13 @@ function Chat({ socket, UI, data, user, setNewMessage }: Props) {
         {UI.pending.messages ? (
           <CircularProgress color="inherit" />
         ) : (
-          data.messages?.map((message) => (
+          data.messages?.map((message, index) => (
             <Message
               key={message._id}
               isOwnMessage={message.authorId === user.authenticatedUser?._id}
               body={message.body}
               createdAt={message.createdAt}
+              isLast={index === data.messages!.length - 1}
             />
           ))
         )}

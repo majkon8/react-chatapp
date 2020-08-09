@@ -51,12 +51,28 @@ var socket_io_client_1 = __importDefault(require("socket.io-client"));
 // redux
 var react_redux_1 = require("react-redux");
 var userActions_1 = require("../../redux/actions/userActions");
-var mapStateToProps = function (state) { return ({ UI: state.UI, user: state.user }); };
+var mapStateToProps = function (state) { return ({
+    UI: state.UI,
+    user: state.user,
+    data: state.data,
+}); };
 var mapActionsToProps = { getAuthenticatedUser: userActions_1.getAuthenticatedUser };
 var connector = react_redux_1.connect(mapStateToProps, mapActionsToProps);
 function Main(_a) {
-    var UI = _a.UI, user = _a.user, getAuthenticatedUser = _a.getAuthenticatedUser;
+    var UI = _a.UI, user = _a.user, data = _a.data, getAuthenticatedUser = _a.getAuthenticatedUser;
     var _b = __read(react_1.useState(null), 2), socket = _b[0], setSocket = _b[1];
+    react_1.useEffect(function () {
+        var _a;
+        var undisplayedConversations = (_a = data.conversations) === null || _a === void 0 ? void 0 : _a.filter(function (conversation) {
+            var _a;
+            return !conversation.isDisplayed &&
+                conversation.lastMessage.authorId !== ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a._id);
+        });
+        if (undisplayedConversations && undisplayedConversations.length > 0)
+            document.title = "(!) Chat App";
+        else
+            document.title = "Chat App";
+    }, [data.conversations]);
     react_1.useEffect(function () {
         getAuthenticatedUser();
     }, []);

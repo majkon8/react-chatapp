@@ -5,7 +5,11 @@ import moment from "moment";
 import { connect, ConnectedProps } from "react-redux";
 import { IState } from "../../redux/store";
 
-const mapStateToProps = (state: IState) => ({ UI: state.UI });
+const mapStateToProps = (state: IState) => ({
+  UI: state.UI,
+  data: state.data,
+  user: state.user,
+});
 const connector = connect(mapStateToProps, {});
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -14,6 +18,7 @@ interface IProps {
   isOwnMessage: boolean;
   body: string;
   createdAt: string;
+  isLast: boolean;
 }
 
 type Props = PropsFromRedux & IProps;
@@ -28,7 +33,15 @@ export function formatDate(date: string) {
   }
 }
 
-function Message({ isOwnMessage, UI, body, createdAt }: Props) {
+function Message({
+  isOwnMessage,
+  UI,
+  data,
+  user,
+  body,
+  createdAt,
+  isLast,
+}: Props) {
   const textColor = [
     "rgb(127, 219, 255)",
     "rgb(1, 255, 112)",
@@ -40,6 +53,19 @@ function Message({ isOwnMessage, UI, body, createdAt }: Props) {
 
   const formattedCreatedAt = formatDate(createdAt);
 
+  const shouldShowIsDisplayed = () => {
+    const conversation = data.conversations?.filter(
+      (conversation) => conversation._id === data.selectedConversation?.id
+    )[0];
+    return (
+      isOwnMessage &&
+      // check if conversation which is currently selected is displayed
+      conversation?.isDisplayed &&
+      conversation?.lastMessage.authorId === user.authenticatedUser?._id &&
+      isLast
+    );
+  };
+
   return (
     <div
       className={`chat-message-container ${
@@ -50,6 +76,13 @@ function Message({ isOwnMessage, UI, body, createdAt }: Props) {
         {!isOwnMessage && (
           <img
             className="chat-message-user-image"
+            src="https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
+            alt="user"
+          ></img>
+        )}
+        {shouldShowIsDisplayed() && (
+          <img
+            className="is-displayed-indicator"
             src="https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
             alt="user"
           ></img>

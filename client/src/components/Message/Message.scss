@@ -36,21 +36,7 @@
     grid-template-columns: 25px 1fr;
     gap: 10px;
   }
-}
 
-.own-chat-message {
-  justify-content: end;
-  justify-items: end;
-}
-
-.own-chat-message {
-  .chat-message-text {
-    border: 1px solid;
-    border-radius: 20px 20px 0 20px;
-  }
-}
-
-.other-chat-message {
   .chat-message-text {
     background-color: rgb(40, 40, 40);
     border: 1px solid rgb(40, 40, 40);
@@ -60,5 +46,25 @@
   .chat-message-time {
     // margin of image width + gap between image and text
     margin-left: 35px;
+  }
+}
+
+.own-chat-message {
+  justify-content: end;
+  justify-items: end;
+  margin-right: 25px;
+  position: relative;
+
+  .chat-message-text {
+    border: 1px solid;
+    border-radius: 20px 20px 0 20px;
+  }
+
+  .is-displayed-indicator {
+    border-radius: 100%;
+    width: 15px;
+    position: absolute;
+    right: -20px;
+    bottom: 25px;
   }
 }

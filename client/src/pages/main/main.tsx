@@ -13,7 +13,11 @@ import { connect, ConnectedProps } from "react-redux";
 import { getAuthenticatedUser } from "../../redux/actions/userActions";
 import { IState } from "../../redux/store";
 
-const mapStateToProps = (state: IState) => ({ UI: state.UI, user: state.user });
+const mapStateToProps = (state: IState) => ({
+  UI: state.UI,
+  user: state.user,
+  data: state.data,
+});
 const mapActionsToProps = { getAuthenticatedUser };
 const connector = connect(mapStateToProps, mapActionsToProps);
 
@@ -21,8 +25,19 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux;
 
-function Main({ UI, user, getAuthenticatedUser }: Props) {
+function Main({ UI, user, data, getAuthenticatedUser }: Props) {
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
+
+  useEffect(() => {
+    const undisplayedConversations = data.conversations?.filter(
+      (conversation) =>
+        !conversation.isDisplayed &&
+        conversation.lastMessage.authorId !== user.authenticatedUser?._id
+    );
+    if (undisplayedConversations && undisplayedConversations.length > 0)
+      document.title = "(!) Chat App";
+    else document.title = "Chat App";
+  }, [data.conversations]);
 
   useEffect(() => {
     getAuthenticatedUser();
