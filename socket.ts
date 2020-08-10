@@ -13,10 +13,15 @@ interface IConversation {
   username: string;
 }
 
+interface IFile {
+  name: string;
+  url: string;
+}
+
 interface IMessage {
   body: string;
   type: string;
-  file: string;
+  file: IFile;
   conversation: IConversation;
 }
 

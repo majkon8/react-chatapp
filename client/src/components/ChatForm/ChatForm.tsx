@@ -40,7 +40,7 @@ function ChatForm({ data, socket }: Props) {
     const message = {
       body: messageBody,
       type: messageType,
-      file: fileUrl,
+      file: { name: fileName, url: fileUrl },
       conversation: data.selectedConversation,
     };
     socket?.emit("sendMessage", message);

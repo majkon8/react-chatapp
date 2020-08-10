@@ -1,11 +1,16 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
+interface IFile {
+  name: string;
+  url: string;
+}
+
 export interface IMessageDocument extends Document {
   conversationId: mongoose.Types.ObjectId;
   authorId: mongoose.Types.ObjectId;
   body: string;
   type: "text" | "image" | "other";
-  file: string;
+  file: IFile;
   createdAt: Date;
 }
 
@@ -17,7 +22,7 @@ const messageSchema: Schema = new Schema(
     authorId: { type: Schema.Types.ObjectId, required: true },
     body: String,
     type: { type: String, required: true },
-    file: String,
+    file: { name: String, url: String },
   },
   { timestamps: { createdAt: true, updatedAt: false } }
 );

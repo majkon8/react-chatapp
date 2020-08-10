@@ -10,11 +10,16 @@ import {
 } from "../types";
 import { IUser } from "./userReducer";
 
+interface IFile {
+  name: string;
+  url: string;
+}
+
 export interface IMessage {
   _id: string;
   body: string;
   type: string;
-  file: string;
+  file: IFile;
   authorId: string;
   conversationId: string;
   createdAt: string;
