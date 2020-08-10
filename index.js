@@ -16,9 +16,11 @@ app.use(cors_1.default({ credentials: true, origin: "http://localhost:3001" }));
 var userRoutes = require("./routes/user.routes");
 var conversationRoutes = require("./routes/conversation.routes");
 var messagesRoutes = require("./routes/message.routes");
+var fileRoutes = require("./routes/file.routes");
 app.use("/users", userRoutes);
 app.use("/conversations", conversationRoutes);
 app.use("/messages", messagesRoutes);
+app.use("/files", fileRoutes);
 if (process.env.NODE_ENV === "production") {
     app.use(express_1.default.static(path_1.default.join(__dirname, "client", "build")));
     app.get("*", function (req, res) {

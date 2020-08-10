@@ -105,6 +105,19 @@ $theme-light: #eee;
       }
     }
 
+    .file-container {
+      .file-input {
+        & + label {
+          background-color: $theme-light;
+        }
+      }
+
+      .remove-file-button {
+        background-color: $theme-light;
+        border-color: $theme-light;
+      }
+    }
+
     @media screen and (max-width: 768px) {
       grid-column: span 2;
     }

@@ -19,13 +19,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Message = void 0;
-var mongoose_1 = __importStar(require("mongoose"));
-var messageSchema = new mongoose_1.Schema({
-    conversationId: { type: mongoose_1.Schema.Types.ObjectId, required: true },
-    authorId: { type: mongoose_1.Schema.Types.ObjectId, required: true },
-    body: String,
-    type: { type: String, required: true },
-    file: String,
-}, { timestamps: { createdAt: true, updatedAt: false } });
-exports.Message = mongoose_1.default.model("Message", messageSchema);
+var express = __importStar(require("express"));
+var files = __importStar(require("../controlers/file.controller"));
+var auth_1 = require("../middlewares/auth");
+var router = express.Router();
+/* POST /files */
+router.post("/", auth_1.tokenAuth, files.uploadFile);
+/* DELETE /files */
+router.delete("/", auth_1.tokenAuth, files.removeFile);
+module.exports = router;

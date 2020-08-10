@@ -159,7 +159,7 @@ function Chat(_a) {
         // @ts-ignore
         , { 
             // @ts-ignore
-            ref: scrollRef, onScroll: handleScroll, style: { maxHeight: "calc(100vh - 140px)" } }, UI.pending.messages ? (react_1.default.createElement(core_1.CircularProgress, { color: "inherit" })) : ((_b = data.messages) === null || _b === void 0 ? void 0 : _b.map(function (message, index) {
+            ref: scrollRef, onScroll: handleScroll, style: { maxHeight: "calc(100vh - 170px)" } }, UI.pending.messages ? (react_1.default.createElement(core_1.CircularProgress, { color: "inherit" })) : ((_b = data.messages) === null || _b === void 0 ? void 0 : _b.map(function (message, index) {
             var _a;
             return (react_1.default.createElement(Message_1.default, { key: message._id, isOwnMessage: message.authorId === ((_a = user.authenticatedUser) === null || _a === void 0 ? void 0 : _a._id), body: message.body, createdAt: message.createdAt, isLast: index === data.messages.length - 1 }));
         }))),

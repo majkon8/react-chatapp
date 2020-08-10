@@ -94,6 +94,8 @@ index_1.io.on("connection", function (socket) {
                         conversationId: mongoose_1.mongoose.Types.ObjectId(conversationId),
                         authorId: mongoose_1.mongoose.Types.ObjectId(socket.user._id),
                         body: message.body,
+                        type: message.type,
+                        file: message.file,
                     };
                     return [4 /*yield*/, messages.create(newMessage)];
                 case 4:

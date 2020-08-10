@@ -15,6 +15,8 @@ interface IConversation {
 
 interface IMessage {
   body: string;
+  type: string;
+  file: string;
   conversation: IConversation;
 }
 
@@ -45,6 +47,8 @@ io.on("connection", (socket: Socket) => {
         conversationId: mongoose.Types.ObjectId(conversationId),
         authorId: mongoose.Types.ObjectId(socket.user._id),
         body: message.body,
+        type: message.type,
+        file: message.file,
       };
       const createdMessage = await messages.create(newMessage);
       if (createdMessage) {

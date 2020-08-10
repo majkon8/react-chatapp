@@ -20,6 +20,6 @@ function ChatSearch(_a) {
         setSearchConversations(usernameToSearch);
     };
     return (react_1.default.createElement("div", { className: "chat-search-container " + (UI.isChatOpen && "is-closed") },
-        react_1.default.createElement(ChatInput_1.default, { handleChange: function (e) { return handleChange(e); }, isSearchInput: true })));
+        react_1.default.createElement(ChatInput_1.default, { handleChange: function (e) { return handleChange(e); }, type: "search" })));
 }
 exports.default = connector(ChatSearch);

@@ -11,10 +11,12 @@ import {
 import { IUser } from "./userReducer";
 
 export interface IMessage {
-  _id?: string;
+  _id: string;
   body: string;
+  type: string;
+  file: string;
   authorId: string;
-  conversationId?: string;
+  conversationId: string;
   createdAt: string;
   newConversation: boolean;
 }

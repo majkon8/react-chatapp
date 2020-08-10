@@ -9,6 +9,7 @@ import { connect, ConnectedProps } from "react-redux";
 import { setNewMessage, getMessages } from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
 import { IUser } from "../../redux/reducers/userReducer";
+import { IMessage } from "../../redux/reducers/dataReducer";
 // Assets
 const notificationSound = require("../../assets/notification_sound.mp3");
 
@@ -23,14 +24,6 @@ const connector = connect(mapStateToProps, mapActionsToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux & { socket: SocketIOClient.Socket | null };
-
-interface IMessage {
-  conversationId: string;
-  authorId: string;
-  body: string;
-  createdAt: string;
-  newConversation: boolean;
-}
 
 export interface INewConversation {
   members: { ids: string[]; usernames: string[] };
@@ -148,7 +141,7 @@ function Chat({ socket, UI, data, user, setNewMessage, getMessages }: Props) {
         // @ts-ignore
         ref={scrollRef}
         onScroll={handleScroll}
-        style={{ maxHeight: "calc(100vh - 140px)" }}
+        style={{ maxHeight: "calc(100vh - 170px)" }}
       >
         {UI.pending.messages ? (
           <CircularProgress color="inherit" />
