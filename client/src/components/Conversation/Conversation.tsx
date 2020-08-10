@@ -9,6 +9,7 @@ import {
   getMessages,
 } from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
+import { IFile } from "../../redux/reducers/dataReducer";
 
 const mapStateToProps = (state: IState) => ({ UI: state.UI, data: state.data });
 const mapActionsToProps = {
@@ -26,7 +27,8 @@ interface IProps {
   username: string;
   userId: string;
   id: string;
-  message?: string;
+  messageBody?: string;
+  file?: IFile;
   createdAt?: string;
   isDisplayed?: boolean;
   handleActive(id: string): void;
@@ -40,7 +42,8 @@ function Conversation({
   username,
   userId,
   id,
-  message,
+  messageBody,
+  file,
   createdAt,
   isDisplayed,
   handleActive,
@@ -93,7 +96,8 @@ function Conversation({
                 : "conversation-message-not-displayed"
             }
           >
-            {message}
+            {/* if there is no message body, then there is only a file in the message */}
+            {messageBody ? messageBody : file?.name}
             <span> &middot; {formatDate(createdAt)}</span>
           </span>
         )}

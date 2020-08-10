@@ -151,6 +151,8 @@ function Chat({ socket, UI, data, user, setNewMessage, getMessages }: Props) {
               key={message._id}
               isOwnMessage={message.authorId === user.authenticatedUser?._id}
               body={message.body}
+              file={message.file}
+              type={message.type}
               createdAt={message.createdAt}
               isLast={index === data.messages!.length - 1}
             />

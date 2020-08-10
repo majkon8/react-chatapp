@@ -1,0 +1,16 @@
+.file-name {
+  border: none !important;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  cursor: pointer;
+  color: inherit;
+
+  &:hover {
+    text-decoration: underline;
+    color: inherit;
+  }
+
+  svg {
+    margin-right: 5px;
+  }
+}

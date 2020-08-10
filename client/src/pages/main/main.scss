@@ -9,7 +9,7 @@ $theme-light: #eee;
   grid-template-rows: 70px calc(100vh - 140px) 70px;
   color: $theme-light;
   background-color: $dark-color;
-  transition: background-color 0.5s, color 0.5s;
+  transition: background-color 0.5s;
   overflow-x: hidden;
 }
 

@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
-interface IFile {
+export interface IFile {
   name: string;
   url: string;
 }

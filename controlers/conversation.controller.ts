@@ -25,6 +25,8 @@ export const updateLastMessage = async (message: IMessageDocument) => {
   try {
     const lastMessage = {
       body: message.body,
+      type: message.type,
+      file: message.file,
       authorId: message.authorId,
       createdAt: message.createdAt,
     };

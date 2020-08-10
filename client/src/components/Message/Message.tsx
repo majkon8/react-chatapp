@@ -1,9 +1,11 @@
 import React from "react";
 import "./Message.scss";
 import moment from "moment";
+import File from "../../common/File/File";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { IState } from "../../redux/store";
+import { IFile } from "../../redux/reducers/dataReducer";
 
 const mapStateToProps = (state: IState) => ({
   UI: state.UI,
@@ -17,6 +19,8 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 interface IProps {
   isOwnMessage: boolean;
   body: string;
+  type: "text" | "image" | "other";
+  file: IFile;
   createdAt: string;
   isLast: boolean;
 }
@@ -39,6 +43,8 @@ function Message({
   data,
   user,
   body,
+  type,
+  file,
   createdAt,
   isLast,
 }: Props) {
@@ -96,6 +102,7 @@ function Message({
           className="chat-message-text"
         >
           {body}
+          {type === "other" && <File name={file.name} url={file.url} />}
         </span>
       </div>
       <span className="chat-message-time">{formattedCreatedAt}</span>

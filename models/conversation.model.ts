@@ -1,9 +1,12 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
+import { IFile } from "./message.model";
 
 interface ILastMessage {
   body: string;
   createdAt: Date;
   authorId: mongoose.Types.ObjectId;
+  type: "text" | "image" | "other";
+  file: IFile;
 }
 
 export interface IMembers {
@@ -29,6 +32,8 @@ const conversationSchema: Schema = new Schema(
       body: String,
       createdAt: Date,
       authorId: Schema.Types.ObjectId,
+      type: { type: String, required: true },
+      file: { name: String, url: String },
     },
     isDisplayed: { type: Boolean, required: true, default: false },
   },

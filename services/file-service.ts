@@ -16,12 +16,14 @@ export const upload = multer({
     s3,
     bucket: "majkon-chat",
     acl: "public-read",
-    contentType: multerS3.AUTO_CONTENT_TYPE,
-    metadata: function (req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
+    contentType: (request, file, callback) => {
+      callback(null, file.mimetype);
     },
-    key: function (req, file, cb) {
-      cb(null, Date.now().toString());
+    metadata: (request, file, callback) => {
+      callback(null, { fieldName: file.fieldname });
+    },
+    key: (request, file, callback) => {
+      callback(null, Date.now().toString());
     },
   }),
 });

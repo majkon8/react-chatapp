@@ -5,6 +5,7 @@ import { tokenAuthSocket, IDecodedUser } from "./middlewares/auth";
 import { mongoose } from "./mongoose";
 import { User, IUserDocument } from "./models/user.model";
 import { IConversationDocument } from "./models/conversation.model";
+import { IFile } from "./models/message.model";
 
 interface IConversation {
   new: boolean;
@@ -13,14 +14,9 @@ interface IConversation {
   username: string;
 }
 
-interface IFile {
-  name: string;
-  url: string;
-}
-
 interface IMessage {
   body: string;
-  type: string;
+  type: "text" | "image" | "other";
   file: IFile;
   conversation: IConversation;
 }

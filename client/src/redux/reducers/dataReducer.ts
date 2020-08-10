@@ -10,7 +10,7 @@ import {
 } from "../types";
 import { IUser } from "./userReducer";
 
-interface IFile {
+export interface IFile {
   name: string;
   url: string;
 }
@@ -18,7 +18,7 @@ interface IFile {
 export interface IMessage {
   _id: string;
   body: string;
-  type: string;
+  type: "text" | "image" | "other";
   file: IFile;
   authorId: string;
   conversationId: string;

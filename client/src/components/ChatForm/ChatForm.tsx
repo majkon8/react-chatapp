@@ -10,6 +10,7 @@ import "./ChatForm.scss";
 import ChatInput from "../../common/ChatInput/ChatInput";
 import axios from "axios";
 import { CircularProgress } from "@material-ui/core";
+import File from "../../common/File/File";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { IState } from "../../redux/store";
@@ -108,12 +109,7 @@ function ChatForm({ data, socket }: Props) {
             <i className="fas fa-paperclip"></i>
           </label>
         )}
-        {fileName && (
-          <div className="file-name">
-            <i className="far fa-file-alt"></i>
-            {fileName}
-          </div>
-        )}
+        {fileName && <File name={fileName} url={fileUrl} />}
         {isFileError && (
           <p style={{ color: "hsl(348, 100%, 61%)" }}>Cannot upload file</p>
         )}

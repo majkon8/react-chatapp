@@ -104,7 +104,8 @@ function ConversationsList({
               username={conversation.user.username}
               userId={conversation.user._id}
               id={conversation._id}
-              message={conversation.lastMessage.body}
+              messageBody={conversation.lastMessage.body}
+              file={conversation.lastMessage.file}
               createdAt={conversation.lastMessage.createdAt}
               handleActive={handleActive}
               isDisplayed={
