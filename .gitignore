@@ -1,5 +1,9 @@
 # dependencies
 /node_modules
 
+# AWS keys
 keys.js
 keys.ts
+
+# typescript compiled files
+*.js
