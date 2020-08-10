@@ -18,7 +18,7 @@ export interface IFile {
 export interface IMessage {
   _id: string;
   body: string;
-  type: "text" | "image" | "other";
+  type: "text" | "image" | "video" | "other";
   file: IFile;
   authorId: string;
   conversationId: string;

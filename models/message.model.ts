@@ -9,7 +9,7 @@ export interface IMessageDocument extends Document {
   conversationId: mongoose.Types.ObjectId;
   authorId: mongoose.Types.ObjectId;
   body: string;
-  type: "text" | "image" | "other";
+  type: "text" | "image" | "video" | "other";
   file: IFile;
   createdAt: Date;
 }

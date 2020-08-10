@@ -4,6 +4,7 @@ import path from "path";
 import http from "http";
 import "./mongoose";
 import cors from "cors";
+require("dotenv").config();
 
 const app = express();
 app.use(bodyParser.json());

@@ -19,7 +19,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 interface IProps {
   isOwnMessage: boolean;
   body: string;
-  type: "text" | "image" | "other";
+  type: "text" | "image" | "video" | "other";
   file: IFile;
   createdAt: string;
   isLast: boolean;
@@ -104,7 +104,12 @@ function Message({
           {body}
           {type === "other" && <File name={file.name} url={file.url} />}
           {type === "image" && (
-            <img className="image-small" src={file.url}></img>
+            <img className="media-small" src={file.url}></img>
+          )}
+          {type === "video" && (
+            <video preload="metadata" className="video" controls>
+              <source src={`${file.url}#t=0`} type="video/mp4"></source>
+            </video>
           )}
         </span>
       </div>

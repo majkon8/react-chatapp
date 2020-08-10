@@ -1,11 +1,10 @@
 import aws from "aws-sdk";
 import multer from "multer";
 import multerS3 from "multer-s3";
-import { accessKeyID, secretAccessKey } from "../keys";
 
 aws.config.update({
-  secretAccessKey: secretAccessKey,
-  accessKeyId: accessKeyID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
   region: "eu-central-1",
 });
 

@@ -16,7 +16,7 @@ interface IConversation {
 
 interface IMessage {
   body: string;
-  type: "text" | "image" | "other";
+  type: "text" | "image" | "video" | "other";
   file: IFile;
   conversation: IConversation;
 }
@@ -29,6 +29,7 @@ io.on("connection", (socket: Socket) => {
   socket.join(socket.user._id);
   socket.on("sendMessage", async (message: IMessage) => {
     try {
+      console.log(message.body);
       let conversationId: string;
       let newConversation: IConversationDocument | undefined;
       // first if message starts a new conversation

@@ -5,7 +5,7 @@ interface ILastMessage {
   body: string;
   createdAt: Date;
   authorId: mongoose.Types.ObjectId;
-  type: "text" | "image" | "other";
+  type: "text" | "image" | "video" | "other";
   file: IFile;
 }
 

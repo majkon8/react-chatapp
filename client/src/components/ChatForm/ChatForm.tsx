@@ -62,7 +62,11 @@ function ChatForm({ data, socket }: Props) {
       setFileName(file.name);
       setFileKey(response.data.key);
       setMessageType(
-        response.data.contentType.includes("image") ? "image" : "other"
+        response.data.contentType.includes("image")
+          ? "image"
+          : response.data.contentType.includes("video")
+          ? "video"
+          : "other"
       );
     } catch (error) {
       fileInputRef.current.value = "";
