@@ -103,6 +103,9 @@ function Message({
         >
           {body}
           {type === "other" && <File name={file.name} url={file.url} />}
+          {type === "image" && (
+            <img className="image-small" src={file.url}></img>
+          )}
         </span>
       </div>
       <span className="chat-message-time">{formattedCreatedAt}</span>

@@ -27,6 +27,11 @@
     align-self: end;
     margin-bottom: 5px;
   }
+
+  .image-small {
+    border-radius: 20px 20px 0 20px;
+    cursor: pointer;
+  }
 }
 
 .other-chat-message {

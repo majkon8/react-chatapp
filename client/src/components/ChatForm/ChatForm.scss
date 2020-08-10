@@ -8,9 +8,11 @@ $dark-color: rgb(40, 40, 40);
   .file-container {
     position: absolute;
     bottom: 60px;
-    width: 100%;
+    width: calc(100% * 5/7);
     height: 40px;
     border-top: 0.5px solid rgba(193, 193, 193, 0.25);
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
     display: flex;
     align-items: center;
     padding-top: 12px;
@@ -67,5 +69,9 @@ $dark-color: rgb(40, 40, 40);
 
   @media screen and (max-width: 768px) {
     grid-column: span 2;
+
+    .file-container {
+      width: 100%;
+    }
   }
 }
