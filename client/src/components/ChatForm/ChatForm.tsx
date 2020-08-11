@@ -124,7 +124,9 @@ function ChatForm({ data, socket }: Props) {
         className="button is-rounded submit-button"
         type="submit"
         disabled={
-          (messageBody.length === 0 && fileUrl.length === 0) || isUploadingFile
+          (messageBody.length === 0 && fileUrl.length === 0) ||
+          isUploadingFile ||
+          !data.selectedConversation
         }
       >
         Send

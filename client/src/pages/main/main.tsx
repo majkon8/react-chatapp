@@ -7,6 +7,7 @@ import ConversationsList from "../../components/ConversationsList/ConversationsL
 import ChatForm from "../../components/ChatForm/ChatForm";
 import ChatSearch from "../../components/ChatSearch/ChatSearch";
 import ChatBar from "../../components/ChatBar/ChatBar";
+import ImageFull from "../../components/ImageFull/ImageFull";
 import io from "socket.io-client";
 // redux
 import { connect, ConnectedProps } from "react-redux";
@@ -83,6 +84,7 @@ function Main({ UI, user, data, getAuthenticatedUser }: Props) {
       <ChatBar />
       <Chat socket={socket} />
       <ChatForm socket={socket} />
+      {UI.imageUrlToOpen && <ImageFull url={UI.imageUrlToOpen} />}
     </motion.div>
   );
 }

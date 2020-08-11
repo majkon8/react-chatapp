@@ -32,7 +32,7 @@ const conversationSchema: Schema = new Schema(
       body: String,
       createdAt: Date,
       authorId: Schema.Types.ObjectId,
-      type: { type: String, required: true },
+      type: { type: String },
       file: { name: String, url: String },
     },
     isDisplayed: { type: Boolean, required: true, default: false },

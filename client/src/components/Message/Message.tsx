@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Message.scss";
 import moment from "moment";
 import File from "../../common/File/File";
 import { BrowserView, MobileView } from "react-device-detect";
 // redux
 import { connect, ConnectedProps } from "react-redux";
+import { setImageUrlToOpen } from "../../redux/actions/uiActions";
 import { IState } from "../../redux/store";
 import { IFile } from "../../redux/reducers/dataReducer";
 
@@ -13,7 +14,8 @@ const mapStateToProps = (state: IState) => ({
   data: state.data,
   user: state.user,
 });
-const connector = connect(mapStateToProps, {});
+const mapActionsToProps = { setImageUrlToOpen };
+const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
@@ -48,6 +50,7 @@ function Message({
   file,
   createdAt,
   isLast,
+  setImageUrlToOpen,
 }: Props) {
   const textColor = [
     "rgb(127, 219, 255)",
@@ -72,6 +75,8 @@ function Message({
       isLast
     );
   };
+
+  const openFullImage = () => setImageUrlToOpen(file.url);
 
   return (
     <div
@@ -105,7 +110,11 @@ function Message({
           {body}
           {type === "other" && <File name={file.name} url={file.url} />}
           {type === "image" && (
-            <img className="image-small" src={file.url}></img>
+            <img
+              onClick={openFullImage}
+              className="image-small"
+              src={file.url}
+            ></img>
           )}
           {type === "video" && (
             <>

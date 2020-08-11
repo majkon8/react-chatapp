@@ -29,7 +29,6 @@ io.on("connection", (socket: Socket) => {
   socket.join(socket.user._id);
   socket.on("sendMessage", async (message: IMessage) => {
     try {
-      console.log(message.body);
       let conversationId: string;
       let newConversation: IConversationDocument | undefined;
       // first if message starts a new conversation
