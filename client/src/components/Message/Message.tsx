@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Message.scss";
 import moment from "moment";
 import File from "../../common/File/File";
+import { BrowserView, MobileView } from "react-device-detect";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { IState } from "../../redux/store";
@@ -104,12 +105,22 @@ function Message({
           {body}
           {type === "other" && <File name={file.name} url={file.url} />}
           {type === "image" && (
-            <img className="media-small" src={file.url}></img>
+            <img className="image-small" src={file.url}></img>
           )}
           {type === "video" && (
-            <video preload="metadata" className="video" controls>
-              <source src={`${file.url}#t=0`} type="video/mp4"></source>
-            </video>
+            <>
+              <BrowserView>
+                <video className="video" controls>
+                  <source src={file.url}></source>
+                </video>
+              </BrowserView>
+              {/* displays thumbnail on mobile browsers */}
+              <MobileView>
+                <video preload="metadata" className="video" controls>
+                  <source src={`${file.url}#t=0.01`}></source>
+                </video>
+              </MobileView>
+            </>
           )}
         </span>
       </div>
