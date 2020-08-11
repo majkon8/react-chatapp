@@ -21,11 +21,13 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 interface IProps {
   isOwnMessage: boolean;
+  messageId: string;
   body: string;
   type: "text" | "image" | "video" | "other";
   file: IFile;
   createdAt: string;
   isLast: boolean;
+  socket: SocketIOClient.Socket | null;
 }
 
 type Props = PropsFromRedux & IProps;
@@ -45,13 +47,17 @@ function Message({
   UI,
   data,
   user,
+  messageId,
   body,
   type,
   file,
   createdAt,
   isLast,
+  socket,
   setImageUrlToOpen,
 }: Props) {
+  const isMessageDeleted = type === "text" && body === "";
+
   const textColor = [
     "rgb(127, 219, 255)",
     "rgb(1, 255, 112)",
@@ -63,7 +69,7 @@ function Message({
 
   const formattedCreatedAt = formatDate(createdAt);
 
-  const shouldShowIsDisplayed = () => {
+  const shouldShowThatIsDisplayed = () => {
     const conversation = data.conversations?.filter(
       (conversation) => conversation._id === data.selectedConversation?.id
     )[0];
@@ -78,6 +84,12 @@ function Message({
 
   const openFullImage = () => setImageUrlToOpen(file.url);
 
+  const handleMessageDelete = () =>
+    socket?.emit("deleteMessage", {
+      messageId,
+      otherUserId: data.selectedConversation?.userId,
+    });
+
   return (
     <div
       className={`chat-message-container ${
@@ -85,6 +97,11 @@ function Message({
       }`}
     >
       <div className="chat-message-content">
+        {isOwnMessage && !isMessageDeleted && (
+          <div onClick={handleMessageDelete} className="chat-message-delete">
+            <i className="far fa-trash-alt"></i>
+          </div>
+        )}
         {!isOwnMessage && (
           <img
             className="chat-message-user-image"
@@ -92,7 +109,7 @@ function Message({
             alt="user"
           ></img>
         )}
-        {shouldShowIsDisplayed() && (
+        {shouldShowThatIsDisplayed() && (
           <img
             className="is-displayed-indicator"
             src="https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
@@ -107,7 +124,10 @@ function Message({
           }}
           className="chat-message-text"
         >
-          {body}
+          {isMessageDeleted && (
+            <span className="chat-message-deleted">Message deleted</span>
+          )}
+          {!isMessageDeleted && body}
           {type === "other" && <File name={file.name} url={file.url} />}
           {type === "image" && (
             <img

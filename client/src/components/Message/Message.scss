@@ -8,6 +8,24 @@
 
   .chat-message-content {
     display: grid;
+    position: relative;
+
+    &:hover {
+      .chat-message-delete {
+        display: block;
+      }
+    }
+
+    .chat-message-delete {
+      color: hsl(348, 100%, 61%);
+      position: absolute;
+      left: -25px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      padding: 5px;
+      display: none;
+    }
   }
 
   .chat-message-text {
@@ -15,6 +33,13 @@
     margin-bottom: 5px;
     text-align: left;
     transition: background-color 0.5s, border 0.5s, color 0.5s;
+
+    .chat-message-deleted {
+      font-style: italic;
+      text-decoration: line-through;
+      opacity: 0.7;
+      font-size: 0.9em;
+    }
   }
 
   .chat-message-time {
@@ -29,13 +54,8 @@
   }
 
   .image-small {
-    border-radius: 20px 20px 0 20px;
     cursor: pointer;
     max-height: 500px;
-  }
-
-  .video {
-    border-radius: 20px 20px 0 20px;
   }
 }
 
@@ -50,6 +70,11 @@
   .chat-message-text {
     background-color: rgb(40, 40, 40);
     border: 1px solid rgb(40, 40, 40);
+    border-radius: 20px 20px 20px 0;
+  }
+
+  .video,
+  .image-small {
     border-radius: 20px 20px 20px 0;
   }
 
@@ -70,11 +95,16 @@
     border-radius: 20px 20px 0 20px;
   }
 
+  .video,
+  .image-small {
+    border-radius: 20px 20px 0 20px;
+  }
+
   .is-displayed-indicator {
     border-radius: 100%;
     width: 15px;
     position: absolute;
     right: -20px;
-    bottom: 25px;
+    bottom: 5px;
   }
 }

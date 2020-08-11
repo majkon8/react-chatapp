@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 import { IFile } from "./message.model";
 
 interface ILastMessage {
+  _id: mongoose.Types.ObjectId;
   body: string;
   createdAt: Date;
   authorId: mongoose.Types.ObjectId;
@@ -29,6 +30,7 @@ const conversationSchema: Schema = new Schema(
       usernames: { type: [String], required: true },
     },
     lastMessage: {
+      _id: Schema.Types.ObjectId,
       body: String,
       createdAt: Date,
       authorId: Schema.Types.ObjectId,

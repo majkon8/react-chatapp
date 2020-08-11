@@ -30,6 +30,11 @@
       font-size: 0.8em;
       font-weight: bold;
     }
+
+    .conversation-message-deleted {
+      font-style: italic;
+      text-decoration: line-through;
+    }
   }
 }
 

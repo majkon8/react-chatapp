@@ -106,6 +106,7 @@ function ConversationsList({
               id={conversation._id}
               messageBody={conversation.lastMessage.body}
               file={conversation.lastMessage.file}
+              type={conversation.lastMessage.type}
               createdAt={conversation.lastMessage.createdAt}
               handleActive={handleActive}
               isDisplayed={

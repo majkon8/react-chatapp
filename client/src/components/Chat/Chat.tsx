@@ -6,7 +6,11 @@ import Message from "../Message/Message";
 import { CircularProgress } from "@material-ui/core";
 // redux
 import { connect, ConnectedProps } from "react-redux";
-import { setNewMessage, getMessages } from "../../redux/actions/dataActions";
+import {
+  setNewMessage,
+  getMessages,
+  setMessageDeleted,
+} from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
 import { IUser } from "../../redux/reducers/userReducer";
 import { IMessage } from "../../redux/reducers/dataReducer";
@@ -18,7 +22,7 @@ const mapStateToProps = (state: IState) => ({
   data: state.data,
   user: state.user,
 });
-const mapActionsToProps = { setNewMessage, getMessages };
+const mapActionsToProps = { setNewMessage, getMessages, setMessageDeleted };
 const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -36,7 +40,15 @@ interface IScrollElement extends HTMLDivElement {
   el: any;
 }
 
-function Chat({ socket, UI, data, user, setNewMessage, getMessages }: Props) {
+function Chat({
+  socket,
+  UI,
+  data,
+  user,
+  setNewMessage,
+  getMessages,
+  setMessageDeleted,
+}: Props) {
   const [isScrolling, setIsScrolling] = useState(false);
   const [page, setPage] = useState(2);
   const scrollRef = useRef() as MutableRefObject<IScrollElement>;
@@ -94,8 +106,12 @@ function Chat({ socket, UI, data, user, setNewMessage, getMessages }: Props) {
         } else setNewMessage(message);
       }
     );
+    socket?.on("messageDeleted", (messageId: string) =>
+      setMessageDeleted(messageId)
+    );
     return () => {
       socket?.off("receiveMessage");
+      socket?.off("messageDeleted");
     };
   }, [socket, user.authenticatedUser]);
 
@@ -150,11 +166,13 @@ function Chat({ socket, UI, data, user, setNewMessage, getMessages }: Props) {
             <Message
               key={message._id}
               isOwnMessage={message.authorId === user.authenticatedUser?._id}
+              messageId={message._id}
               body={message.body}
               file={message.file}
               type={message.type}
               createdAt={message.createdAt}
               isLast={index === data.messages!.length - 1}
+              socket={socket}
             />
           ))
         )}

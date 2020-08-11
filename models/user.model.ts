@@ -25,6 +25,7 @@ export interface IUserDocument extends Document {
   createdExternally: boolean;
   generateToken(temporary?: boolean): Promise<string>;
   createEmail(isConfirmationEmail: boolean): IMailOptions;
+  createTokens(): Promise<void>;
 }
 
 interface IUserModel extends Model<IUserDocument> {
@@ -129,6 +130,16 @@ ${baseUrl}/reset/${user.temporaryToken}`;
     text,
   };
   return mailOptions;
+};
+
+UserSchema.methods.createTokens = async function () {
+  try {
+    const user = this;
+    const refreshToken = await user.generateToken();
+    const temporaryToken = await user.generateToken();
+    user.refreshToken = refreshToken;
+    user.temporaryToken = temporaryToken;
+  } catch (error) {}
 };
 
 /*** Model methods (static methods) ***/

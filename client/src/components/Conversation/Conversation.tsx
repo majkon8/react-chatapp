@@ -28,6 +28,7 @@ interface IProps {
   userId: string;
   id: string;
   messageBody?: string;
+  type?: string;
   file?: IFile;
   createdAt?: string;
   isDisplayed?: boolean;
@@ -43,6 +44,7 @@ function Conversation({
   userId,
   id,
   messageBody,
+  type,
   file,
   createdAt,
   isDisplayed,
@@ -58,6 +60,8 @@ function Conversation({
       else getMessages(null);
     }
   }, [isActive]);
+
+  const isMessageDeleted = type === "text" && messageBody === "";
 
   const handleChatOpen = () => setIsChatOpen(true);
 
@@ -96,8 +100,13 @@ function Conversation({
                 : "conversation-message-not-displayed"
             }
           >
-            {/* if there is no message body, then there is only a file in the message */}
-            {messageBody ? messageBody : file?.name}
+            {/* if there is no message body and message is not deleted, then there is only a file in the message */}
+            {!isMessageDeleted && (messageBody ? messageBody : file?.name)}
+            {isMessageDeleted && (
+              <span className="conversation-message-deleted">
+                Message deleted
+              </span>
+            )}
             <span> &middot; {formatDate(createdAt)}</span>
           </span>
         )}

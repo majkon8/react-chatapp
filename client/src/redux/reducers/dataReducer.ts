@@ -7,6 +7,7 @@ import {
   SET_NEW_MESSAGE,
   DISPLAY_MESSAGE,
   DataActionTypes,
+  SET_MESSAGE_DELETED,
 } from "../types";
 import { IUser } from "./userReducer";
 
@@ -43,6 +44,7 @@ export interface ISelectedConversation {
   new: boolean;
   id: string;
   username: string;
+  userId: string;
 }
 
 export interface IDataState {
@@ -166,6 +168,28 @@ export default function (state = initialState, action: DataActionTypes) {
           ...state.conversations?.map((conversation) => {
             if (conversation._id === action.payload._id)
               conversation.isDisplayed = true;
+            return conversation;
+          }),
+        ],
+      };
+    case SET_MESSAGE_DELETED:
+      return {
+        ...state,
+        messages: [
+          ...state.messages?.map((message) => {
+            if (message._id === action.payload) {
+              message.type = "text";
+              message.body = "";
+            }
+            return message;
+          }),
+        ],
+        conversations: [
+          ...state.conversations?.map((conversation) => {
+            if (conversation.lastMessage._id === action.payload) {
+              conversation.lastMessage.type = "text";
+              conversation.lastMessage.body = "";
+            }
             return conversation;
           }),
         ],

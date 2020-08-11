@@ -24,6 +24,7 @@ export const create = async (members: IMembers) => {
 export const updateLastMessage = async (message: IMessageDocument) => {
   try {
     const lastMessage = {
+      _id: message.id,
       body: message.body,
       type: message.type,
       file: message.file,

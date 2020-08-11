@@ -7,6 +7,7 @@ import {
   SET_MESSAGES,
   SET_NEW_MESSAGE,
   DISPLAY_MESSAGE,
+  SET_MESSAGE_DELETED,
 } from "../types";
 import { Dispatch } from "redux";
 import axios from "axios";
@@ -85,3 +86,6 @@ export const setNewMessage = (messageData: {
 export const displayMessage = (conversation: IConversation) => (
   dispatch: Dispatch
 ) => dispatch({ type: DISPLAY_MESSAGE, payload: conversation });
+
+export const setMessageDeleted = (messageId: string) => (dispatch: Dispatch) =>
+  dispatch({ type: SET_MESSAGE_DELETED, payload: messageId });

@@ -93,4 +93,24 @@ io.on("connection", (socket: Socket) => {
       console.error(error);
     }
   });
+
+  interface IMessageToDeleteData {
+    messageId: string;
+    otherUserId: string;
+  }
+
+  socket.on(
+    "deleteMessage",
+    async (messageToDeleteData: IMessageToDeleteData) => {
+      try {
+        await messages.deleteMessage(messageToDeleteData.messageId);
+        return io
+          .in(socket.user._id)
+          .in(messageToDeleteData.otherUserId)
+          .emit("messageDeleted", messageToDeleteData.messageId);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  );
 });

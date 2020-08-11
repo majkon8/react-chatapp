@@ -27,6 +27,7 @@ export const SET_MESSAGES = "SET_MESSAGES";
 export const SET_NEW_MESSAGE = "SET_NEW_MESSAGE";
 export const SEARCH_CONVERSATIONS = "SEARCH_CONVERSATIONS";
 export const DISPLAY_MESSAGE = "DISPLAY_MESSAGE";
+export const SET_MESSAGE_DELETED = "SET_MESSAGE_DELETED";
 
 // user interfaces
 interface ISetAuthenticatedAction {
@@ -118,6 +119,10 @@ interface IDisplayMessageAction {
   type: typeof DISPLAY_MESSAGE;
   payload: IConversation;
 }
+interface ISetMessageDeletedAction {
+  type: typeof SET_MESSAGE_DELETED;
+  payload: string;
+}
 
 export type DataActionTypes =
   | ISetSearchedUsersAction
@@ -126,4 +131,5 @@ export type DataActionTypes =
   | ISetMessagesAction
   | ISetNewMessageAction
   | ISearchConversationsAction
-  | IDisplayMessageAction;
+  | IDisplayMessageAction
+  | ISetMessageDeletedAction;

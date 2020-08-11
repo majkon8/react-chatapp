@@ -61,10 +61,7 @@ export const signup = async (req: Request, res: Response) => {
   try {
     const body: ISignupBody = req.body;
     const newUser = new User(body);
-    const refreshToken = await newUser.generateToken();
-    const temporaryToken = await newUser.generateToken();
-    newUser.refreshToken = refreshToken;
-    newUser.temporaryToken = temporaryToken;
+    await newUser.createTokens();
     await newUser.save();
     const mailOptions = newUser.createEmail(true);
     transporter.sendMail(mailOptions, (error) => {
@@ -176,15 +173,12 @@ export const externalLogin = async (req: Request, res: Response) => {
     // create new account with user's facebook/google data and log him in
     if (!user) {
       const newUser = new User(body);
-      const refreshToken = await newUser.generateToken();
-      const temporaryToken = await newUser.generateToken();
-      newUser.refreshToken = refreshToken;
-      newUser.temporaryToken = temporaryToken;
+      await newUser.createTokens();
       newUser.createdExternally = true;
       newUser.confirmed = true;
-      await newUser.save();
+      const createdUser = await newUser.save();
       const accessToken = await newUser.generateToken(true);
-      res.header("x-refresh-token", refreshToken);
+      res.header("x-refresh-token", createdUser.refreshToken);
       res.header("x-access-token", accessToken);
       return res.json("success");
     }

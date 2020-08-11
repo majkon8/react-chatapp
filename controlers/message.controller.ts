@@ -25,6 +25,30 @@ export const create = async (message: IMessage) => {
   }
 };
 
+// DELETE MESSAGE
+export const deleteMessage = async (messageId: string) => {
+  try {
+    const updatedMessage = await Message.findByIdAndUpdate(messageId, {
+      body: "",
+      type: "text",
+      file: undefined,
+    });
+    const conversationOfUpdatedMessage = await Conversation.findById(
+      updatedMessage?.conversationId
+    );
+    // if the last message was the deleted one then we need to change some data of it
+    if (
+      conversationOfUpdatedMessage?.lastMessage._id.toHexString() === messageId
+    ) {
+      conversationOfUpdatedMessage.lastMessage.type = "text";
+      conversationOfUpdatedMessage.lastMessage.body = "";
+      conversationOfUpdatedMessage.save();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 // GET MESSAGES OF CONVERSATION
 export const getConversationMessages = async (req: Request, res: Response) => {
   try {
