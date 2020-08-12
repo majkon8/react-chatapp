@@ -19,11 +19,29 @@ export interface IConversationDocument extends Document {
   members: IMembers;
   lastMessage: ILastMessage;
   isDisplayed: boolean;
+  setLastMessageToDeleted(): Promise<void>;
 }
 
-export interface IConversationModel extends Model<IConversationDocument> {}
+export interface IConversationModel extends Model<IConversationDocument> {
+  setConversationToNotDisplayed(
+    conversationId: mongoose.Types.ObjectId
+  ): Promise<void>;
 
-const conversationSchema: Schema = new Schema(
+  updateLastMessage(
+    conversationId: mongoose.Types.ObjectId,
+    lastMessage: ILastMessage
+  ): Promise<void>;
+
+  displayLastMessage(
+    conversationId: string
+  ): Promise<IConversationDocument | null>;
+  
+  getUserConversations(
+    userId: string | undefined
+  ): Promise<IConversationDocument[]>;
+}
+
+const ConversationSchema: Schema = new Schema(
   {
     members: {
       ids: { type: [Schema.Types.ObjectId], required: true },
@@ -42,7 +60,55 @@ const conversationSchema: Schema = new Schema(
   { timestamps: { createdAt: false, updatedAt: true } }
 );
 
+/*** Instance methods ***/
+
+ConversationSchema.methods.setLastMessageToDeleted = async function () {
+  const conversation = this;
+  conversation.lastMessage.type = "text";
+  conversation.lastMessage.body = "";
+  conversation.save();
+};
+
+/*** Model methods (static methods) ***/
+
+ConversationSchema.statics.setConversationToNotDisplayed = async function (
+  conversationId: mongoose.Types.ObjectId
+) {
+  const Conversation = this;
+  await Conversation.findByIdAndUpdate(conversationId, {
+    isDisplayed: false,
+  });
+};
+
+ConversationSchema.statics.updateLastMessage = async function (
+  conversationId: mongoose.Types.ObjectId,
+  lastMessage: ILastMessage
+) {
+  const Conversation = this;
+  await Conversation.findByIdAndUpdate(conversationId, {
+    lastMessage,
+  });
+};
+
+ConversationSchema.statics.displayLastMessage = async function (
+  conversationId: string
+) {
+  const Conversation = this;
+  return await Conversation.findByIdAndUpdate(conversationId, {
+    isDisplayed: true,
+  });
+};
+
+ConversationSchema.statics.getUserConversations = async function (
+  userId: string | undefined
+) {
+  const Conversation = this;
+  return await Conversation.find({
+    "members.ids": mongoose.Types.ObjectId(userId),
+  }).sort({ updatedAt: "descending" });
+};
+
 export const Conversation: IConversationModel = mongoose.model<
   IConversationDocument,
   IConversationModel
->("Conversation", conversationSchema);
+>("Conversation", ConversationSchema);

@@ -10,13 +10,13 @@ import {
   SET_MESSAGE_DELETED,
 } from "../types";
 import { Dispatch } from "redux";
-import axios from "axios";
 import {
   ISelectedConversation,
   IMessage,
   IConversation,
 } from "../reducers/dataReducer";
 import { INewConversation } from "../../components/Chat/Chat";
+import api from "../../api/api";
 
 export const searchForUsers = (username: string) => async (
   dispatch: Dispatch
@@ -27,7 +27,7 @@ export const searchForUsers = (username: string) => async (
     if (username.length === 0) {
       dispatch({ type: SET_SEARCHED_USERS, payload: [] });
     } else {
-      const response = await axios.get(`/users/search/${username}`);
+      const response = await api.searchForUsersByUsername(username);
       dispatch({ type: SET_SEARCHED_USERS, payload: response.data });
     }
   } catch (error) {
@@ -50,7 +50,7 @@ export const setSelectedConversation = (
 export const getAllConversations = () => async (dispatch: Dispatch) => {
   dispatch({ type: SET_PENDING, payload: { conversations: true } });
   try {
-    const response = await axios.get("/conversations");
+    const response = await api.getAllConversations();
     dispatch({ type: SET_CONVERSATIONS, payload: response.data });
   } catch (error) {
     console.error(error);
@@ -67,7 +67,7 @@ export const getMessages = (
   try {
     if (conversationId === null) dispatch({ type: SET_MESSAGES, payload: [] });
     else {
-      const response = await axios.get(`/messages/${conversationId}/${count}`);
+      const response = await api.getMessages(conversationId, count);
       dispatch({ type: SET_MESSAGES, payload: response.data });
     }
   } catch (error) {

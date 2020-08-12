@@ -8,15 +8,16 @@ import {
 } from "../types";
 import { Dispatch } from "redux";
 import axios from "axios";
+import api from "../../api/api";
 
-interface IUserData {
+export interface IUserData {
   username?: string;
   email: string;
   birthDate?: Date;
   password?: string;
 }
 
-interface IResetPasswordData {
+export interface IResetPasswordData {
   newPassword: string;
   token: string;
 }
@@ -29,9 +30,7 @@ interface ITokens {
 export const getAuthenticatedUser = () => async (dispatch: Dispatch) => {
   dispatch({ type: SET_PENDING, payload: { auth: true } });
   try {
-    const response = await axios.get("/users", {
-      headers: { "x-refresh-token": localStorage.getItem("refreshToken") },
-    });
+    const response = await api.getAuthenticatedUser();
     dispatch({ type: SET_AUTHENTICATED_USER, payload: response.data });
   } catch (error) {
     console.error(error);
@@ -43,7 +42,7 @@ export const getAuthenticatedUser = () => async (dispatch: Dispatch) => {
 export const signup = (userData: IUserData) => async (dispatch: Dispatch) => {
   dispatch({ type: SET_PENDING, payload: { auth: true } });
   try {
-    await axios.post("/users", userData);
+    await api.signup(userData);
     dispatch({
       type: SET_SUCCESS,
       payload: "Check you email to confirm an account",
@@ -64,7 +63,7 @@ export const signup = (userData: IUserData) => async (dispatch: Dispatch) => {
 
 export const confirmAccount = (token: string) => async (dispatch: Dispatch) => {
   try {
-    await axios.get(`/users/confirm/${token}`);
+    await api.confirmAccount(token);
     dispatch({
       type: SET_SUCCESS,
       payload: "You can now log in",
@@ -81,7 +80,7 @@ export const confirmAccount = (token: string) => async (dispatch: Dispatch) => {
 export const login = (userData: IUserData) => async (dispatch: Dispatch) => {
   dispatch({ type: SET_PENDING, payload: { auth: true } });
   try {
-    const response = await axios.post("/users/login", userData);
+    const response = await api.login(userData);
     const accessToken: string = response.headers["x-access-token"];
     const refreshToken: string = response.headers["x-refresh-token"];
     setAuthorization({ accessToken, refreshToken });
@@ -107,7 +106,7 @@ export const login = (userData: IUserData) => async (dispatch: Dispatch) => {
 export const forgotPassword = (email: string) => async (dispatch: Dispatch) => {
   dispatch({ type: SET_PENDING, payload: { auth: true } });
   try {
-    await axios.post("/users/forgot", { email });
+    await api.forgotPassword(email);
     dispatch({
       type: SET_SUCCESS,
       payload: "Reset password email sent",
@@ -131,7 +130,7 @@ export const resetPassword = (data: IResetPasswordData) => async (
 ) => {
   dispatch({ type: SET_PENDING, payload: { auth: true } });
   try {
-    await axios.post("/users/reset", data);
+    await api.resetPassword(data);
     dispatch({
       type: SET_SUCCESS,
       payload: "Password changed",
@@ -148,12 +147,12 @@ export const resetPassword = (data: IResetPasswordData) => async (
 };
 
 // source is 'facebook' or 'google'
-export const externalLogin = (data: IUserData) => async (
+export const externalLogin = (userData: IUserData) => async (
   dispatch: Dispatch
 ) => {
   dispatch({ type: SET_PENDING, payload: { auth: true } });
   try {
-    const response = await axios.post("/users/login/external", data);
+    const response = await api.externalLogin(userData);
     const accessToken: string = response.headers["x-access-token"];
     const refreshToken: string = response.headers["x-refresh-token"];
     setAuthorization({ accessToken, refreshToken });

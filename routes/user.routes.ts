@@ -10,9 +10,6 @@ router.get("/search/:username", tokenAuth, users.searchForUsers);
 /* GET /users */
 router.get("/", tokenAuth, users.getAuthenticatedUser);
 
-/* PATCH /users/:id */
-router.patch("/:id", users.update);
-
 /* POST /users */
 router.post("/", users.signup);
 

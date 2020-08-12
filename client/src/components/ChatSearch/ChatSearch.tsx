@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from "react";
 import "./ChatSearch.scss";
 import ChatInput from "../../common/ChatInput/ChatInput";
-import Settings from "../Settings/Settings";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import {

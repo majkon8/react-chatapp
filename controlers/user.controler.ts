@@ -16,7 +16,7 @@ export const getAuthenticatedUser = async (req: Req, res: Response) => {
   try {
     const refreshToken = req.get("x-refresh-token");
     const userId = req.user?._id;
-    const user = await User.findByIdAndToken(userId, refreshToken);
+    const user = await User.findByIdAndRefreshToken(userId, refreshToken);
     if (!user) return res.status(404).json({ error: "User not found" });
     return res.json(user);
   } catch (error) {
@@ -30,26 +30,9 @@ export const searchForUsers = async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
     const usernameRegex = new RegExp(username);
-    const users = await User.find({
-      username: { $regex: usernameRegex, $options: "i" },
-    });
+    const users = await User.findByUsername(usernameRegex);
     const confirmedUsers = users.filter((user) => user.confirmed);
     return res.json(confirmedUsers);
-  } catch (error) {
-    console.error(error);
-    return res.status(400).json(error);
-  }
-};
-
-// UPDATE USER
-export const update = async (req: Request, res: Response) => {
-  try {
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      { $set: req.body.result },
-      { new: true }
-    );
-    return res.json(user);
   } catch (error) {
     console.error(error);
     return res.status(400).json(error);
@@ -104,10 +87,10 @@ export const confirmAccount = async (req: Request, res: Response) => {
       if (error) return res.status(400).json(error);
       decodedToken = decoded;
     });
-    const user = await User.findOne({
-      _id: decodedToken!._id,
-      temporaryToken,
-    });
+    const user = await User.findByIdAndTemporaryToken(
+      decodedToken._id,
+      temporaryToken
+    );
     if (!user) res.status(404).json({ error: "User not found" });
     user!.confirmed = true;
     await user?.save();
@@ -148,10 +131,10 @@ export const resetPassword = async (req: Request, res: Response) => {
       if (error) return res.status(400).json(error);
       decodedToken = decoded;
     });
-    const user = await User.findOne({
-      _id: decodedToken!._id,
-      temporaryToken,
-    });
+    const user = await User.findByIdAndTemporaryToken(
+      decodedToken._id,
+      temporaryToken
+    );
     if (!user) return res.status(404).json({ error: "User not found" });
     user.password = newPassword;
     await user.save();

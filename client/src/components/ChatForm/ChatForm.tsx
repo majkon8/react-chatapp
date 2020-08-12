@@ -9,9 +9,9 @@ import React, {
 } from "react";
 import "./ChatForm.scss";
 import ChatInput from "../../common/ChatInput/ChatInput";
-import axios from "axios";
 import { CircularProgress } from "@material-ui/core";
 import File from "../../common/File/File";
+import api from "../../api/api";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { IState } from "../../redux/store";
@@ -69,7 +69,7 @@ function ChatForm({ data, socket }: Props) {
     formData.append("file", file);
     try {
       setIsUploadingFile(true);
-      const response = await axios.post("/files", formData);
+      const response = await api.uploadFile(formData);
       setFileUrl(response.data.fileUrl);
       setFileName(file.name);
       setFileKey(response.data.key);
@@ -90,7 +90,7 @@ function ChatForm({ data, socket }: Props) {
 
   const handleFileRemove = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    await axios.delete("/files", { data: { key: fileKey } });
+    await api.deleteFile(fileKey);
     resetFileData();
   };
 

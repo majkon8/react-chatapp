@@ -16,9 +16,7 @@ export const create = async (message: IMessage) => {
     const newMessage = new Message(message);
     await newMessage.save();
     await updateLastMessage(newMessage);
-    await Conversation.findByIdAndUpdate(newMessage.conversationId, {
-      isDisplayed: false,
-    });
+    await Conversation.setConversationToNotDisplayed(newMessage.conversationId);
     return newMessage;
   } catch (error) {
     console.error(error);
@@ -28,22 +26,15 @@ export const create = async (message: IMessage) => {
 // DELETE MESSAGE
 export const deleteMessage = async (messageId: string) => {
   try {
-    const updatedMessage = await Message.findByIdAndUpdate(messageId, {
-      body: "",
-      type: "text",
-      file: undefined,
-    });
+    const updatedMessage = await Message.setMessageToDeleted(messageId);
     const conversationOfUpdatedMessage = await Conversation.findById(
       updatedMessage?.conversationId
     );
     // if the last message was the deleted one then we need to change some data of it
     if (
       conversationOfUpdatedMessage?.lastMessage._id.toHexString() === messageId
-    ) {
-      conversationOfUpdatedMessage.lastMessage.type = "text";
-      conversationOfUpdatedMessage.lastMessage.body = "";
-      conversationOfUpdatedMessage.save();
-    }
+    )
+      conversationOfUpdatedMessage.setLastMessageToDeleted();
   } catch (error) {
     console.error(error);
   }
@@ -54,10 +45,11 @@ export const getConversationMessages = async (req: Request, res: Response) => {
   try {
     const conversationId = req.params.conversationId;
     const count = +req.params.count;
-    const messages = await Message.find({ conversationId }).limit(count).sort({
-      createdAt: "descending",
-    });
-    res.json(messages.reverse());
+    const messages = await Message.getMessagesOfConversation(
+      conversationId,
+      count
+    );
+    res.json(messages);
   } catch (error) {
     console.error(error);
     res.status(400).json(error);

@@ -30,11 +30,19 @@ export interface IUserDocument extends Document {
 
 interface IUserModel extends Model<IUserDocument> {
   findByCredentials(email: string, password: string): Promise<IUserDocument>;
-  findByIdAndToken(
+
+  findByIdAndRefreshToken(
     _id: string | undefined,
     token: string | undefined
   ): IUserDocument;
+
   getJWTSecret(): string;
+  findByUsername(usernameRegex: RegExp): Promise<IUserDocument[]>;
+
+  findByIdAndTemporaryToken(
+    _id: string | undefined,
+    token: string | undefined
+  ): IUserDocument;
 }
 
 const UserSchema: Schema = new Schema({
@@ -133,13 +141,11 @@ ${baseUrl}/reset/${user.temporaryToken}`;
 };
 
 UserSchema.methods.createTokens = async function () {
-  try {
-    const user = this;
-    const refreshToken = await user.generateToken();
-    const temporaryToken = await user.generateToken();
-    user.refreshToken = refreshToken;
-    user.temporaryToken = temporaryToken;
-  } catch (error) {}
+  const user = this;
+  const refreshToken = await user.generateToken();
+  const temporaryToken = await user.generateToken();
+  user.refreshToken = refreshToken;
+  user.temporaryToken = temporaryToken;
 };
 
 /*** Model methods (static methods) ***/
@@ -164,25 +170,39 @@ UserSchema.statics.findByCredentials = async function (
   });
 };
 
-UserSchema.statics.findByIdAndToken = async function (
+UserSchema.statics.findByIdAndRefreshToken = async function (
   _id: string | undefined,
-  token: string | undefined
+  refreshToken: string | undefined
 ) {
   const User = this;
-  const user: IUserDocument = await User.findOne({ _id, refreshToken: token });
-  return user;
+  return await User.findOne({ _id, refreshToken });
+};
+
+UserSchema.statics.findByIdAndTemporaryToken = async function (
+  _id: string | undefined,
+  temporaryToken: string | undefined
+) {
+  const User = this;
+  return await User.findOne({ _id, temporaryToken });
+};
+
+UserSchema.statics.findByUsername = async function (usernameRegex: RegExp) {
+  const User = this;
+  return await User.find({
+    username: { $regex: usernameRegex, $options: "i" },
+  });
 };
 
 /*** Middleware ***/
 
 // hash password
 UserSchema.pre<IUserDocument>("save", function (next) {
-  const user = this;
+  const User = this;
   const costFactor = 10;
-  if (user.isModified("password")) {
+  if (User.isModified("password")) {
     bcrypt.genSalt(costFactor, (error, salt) => {
-      bcrypt.hash(user.password, salt, (error, hash) => {
-        user.password = hash;
+      bcrypt.hash(User.password, salt, (error, hash) => {
+        User.password = hash;
         next();
       });
     });

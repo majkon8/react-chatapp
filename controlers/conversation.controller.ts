@@ -1,4 +1,3 @@
-import { mongoose } from "../mongoose";
 import {
   Conversation,
   IMembers,
@@ -31,9 +30,7 @@ export const updateLastMessage = async (message: IMessageDocument) => {
       authorId: message.authorId,
       createdAt: message.createdAt,
     };
-    await Conversation.findByIdAndUpdate(message.conversationId, {
-      lastMessage,
-    });
+    await Conversation.updateLastMessage(message.conversationId, lastMessage);
   } catch (error) {
     console.error(error);
   }
@@ -42,9 +39,8 @@ export const updateLastMessage = async (message: IMessageDocument) => {
 // SET CONVERSATION TO DISPLAYED
 export const displayLastMessage = async (conversationId: string) => {
   try {
-    const updatedConversation = await Conversation.findByIdAndUpdate(
-      conversationId,
-      { isDisplayed: true }
+    const updatedConversation = await Conversation.displayLastMessage(
+      conversationId
     );
     return updatedConversation;
   } catch (error) {
@@ -60,9 +56,7 @@ export interface IConversationWithUsers extends IConversationDocument {
 export const getAll = async (req: Req, res: Response) => {
   try {
     const user = req.user;
-    const conversations = await Conversation.find({
-      "members.ids": mongoose.Types.ObjectId(user?._id),
-    }).sort({ updatedAt: "descending" });
+    const conversations = await Conversation.getUserConversations(user?._id);
     const conversationsAndUsers = <IConversationWithUsers[]>[
       ...conversations.map((conversation) => conversation.toObject()),
     ];
