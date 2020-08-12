@@ -4,6 +4,7 @@ import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import Message from "../Message/Message";
 import { CircularProgress } from "@material-ui/core";
+import TypingIndicator from "../../common/TypingIndicator/TypingIndicator";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import {
@@ -27,7 +28,12 @@ const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = PropsFromRedux & { socket: SocketIOClient.Socket | null };
+interface IProps {
+  isTyping: boolean;
+  socket: SocketIOClient.Socket | null;
+}
+
+type Props = PropsFromRedux & IProps;
 
 export interface INewConversation {
   members: { ids: string[]; usernames: string[] };
@@ -45,6 +51,7 @@ function Chat({
   UI,
   data,
   user,
+  isTyping,
   setNewMessage,
   getMessages,
   setMessageDeleted,
@@ -66,13 +73,14 @@ function Chat({
   }, [data.selectedConversation, data.messages]);
 
   // scroll chat to bottom when getting new message or selecting new conversation
+  // also handle scrolling a bit down when fetching more messages
   useEffect(() => {
     if (isScrolling) {
       // if getting more messages then scroll a little bit down
       if (scrollRef.current.getScrollElement().scrollTop === 0)
         scrollRef.current.getScrollElement().scrollTop = 100;
     } else scrollToBottom();
-  }, [data.messages, UI.pending.messages]);
+  }, [data.messages, UI.pending.messages, isTyping]);
 
   useEffect(() => {
     socket?.on(
@@ -136,7 +144,7 @@ function Chat({
     )[0].scrollHeight;
     const scrollHeight = scrollRef.current.getScrollElement().clientHeight;
     const scrollBottom = height - (scrollTop + scrollHeight);
-    if (scrollBottom > 50) setIsScrolling(true);
+    if (scrollBottom > 200) setIsScrolling(true);
     else setIsScrolling(false);
     if (data.selectedConversation?.new) return;
     if (scrollTop === 0 && scrollBottom > 0) {
@@ -175,6 +183,11 @@ function Chat({
               socket={socket}
             />
           ))
+        )}
+        {isTyping && (
+          <div style={{ marginBottom: 5 }}>
+            <TypingIndicator />
+          </div>
         )}
       </SimpleBar>
       <button

@@ -26,8 +26,14 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux;
 
+interface ITypingData {
+  isTyping: boolean;
+  userId: string;
+}
+
 function Main({ UI, user, data, getAuthenticatedUser }: Props) {
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
+  const [typingUsersIds, setTypingUsersIds] = useState<string[]>([]);
 
   useEffect(() => {
     const undisplayedConversations = data.conversations?.filter(
@@ -66,6 +72,20 @@ function Main({ UI, user, data, getAuthenticatedUser }: Props) {
   };
 
   useEffect(() => {
+    socket?.on("receiveIsTyping", (typingData: ITypingData) => {
+      if (typingData.isTyping)
+        setTypingUsersIds([...typingUsersIds, typingData.userId]);
+      else
+        setTypingUsersIds([
+          ...typingUsersIds.filter((userId) => userId !== typingData.userId),
+        ]);
+    });
+    return () => {
+      socket?.off("receiveIsTyping");
+    };
+  }, [socket, user.authenticatedUser]);
+
+  useEffect(() => {
     if (!user.accessToken) return;
     setupSocket();
   }, [user.accessToken]);
@@ -80,9 +100,14 @@ function Main({ UI, user, data, getAuthenticatedUser }: Props) {
       transition={pageTransition}
     >
       <ChatSearch />
-      <ConversationsList socket={socket} />
+      <ConversationsList socket={socket} typingUsersIds={typingUsersIds} />
       <ChatBar />
-      <Chat socket={socket} />
+      <Chat
+        socket={socket}
+        isTyping={typingUsersIds.includes(
+          data.selectedConversation?.userId || ""
+        )}
+      />
       <ChatForm socket={socket} />
       {UI.imageUrlToOpen && <ImageFull url={UI.imageUrlToOpen} />}
     </motion.div>

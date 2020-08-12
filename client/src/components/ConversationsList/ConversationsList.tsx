@@ -23,13 +23,19 @@ const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Props = PropsFromRedux & { socket: SocketIOClient.Socket | null };
+interface IProps {
+  typingUsersIds: string[];
+  socket: SocketIOClient.Socket | null;
+}
+
+type Props = PropsFromRedux & IProps;
 
 function ConversationsList({
   socket,
   UI,
   data,
   user,
+  typingUsersIds,
   getAllConversations,
   displayMessage,
 }: Props) {
@@ -114,6 +120,7 @@ function ConversationsList({
                 conversation.lastMessage.authorId ===
                   user.authenticatedUser?._id
               }
+              isTyping={typingUsersIds.includes(conversation.user._id)}
             />
           ))
         )}

@@ -5,6 +5,7 @@ import React, {
   useRef,
   MutableRefObject,
   MouseEvent,
+  useEffect,
 } from "react";
 import "./ChatForm.scss";
 import ChatInput from "../../common/ChatInput/ChatInput";
@@ -30,7 +31,18 @@ function ChatForm({ data, socket }: Props) {
   const [fileUrl, setFileUrl] = useState("");
   const [isUploadingFile, setIsUploadingFile] = useState(false);
   const [isFileError, setIsFileError] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const fileInputRef = useRef() as MutableRefObject<HTMLInputElement>;
+
+  useEffect(() => {
+    if (messageBody.length > 0) setIsTyping(true);
+    else setIsTyping(false);
+  }, [messageBody]);
+
+  useEffect(() => {
+    const userIdToReemit = data.selectedConversation?.userId;
+    socket?.emit("isTyping", { isTyping, userIdToReemit });
+  }, [isTyping]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
     setMessageBody(event.target.value);

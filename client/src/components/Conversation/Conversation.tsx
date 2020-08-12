@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "./Conversation.scss";
 import { formatDate } from "../Message/Message";
+import TypingIndicator from "../../common/TypingIndicator/TypingIndicator";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { setIsChatOpen } from "../../redux/actions/uiActions";
@@ -28,6 +29,7 @@ interface IProps {
   userId: string;
   id: string;
   messageBody?: string;
+  isTyping?: boolean;
   type?: string;
   file?: IFile;
   createdAt?: string;
@@ -44,6 +46,7 @@ function Conversation({
   userId,
   id,
   messageBody,
+  isTyping,
   type,
   file,
   createdAt,
@@ -92,7 +95,7 @@ function Conversation({
         >
           {username}
         </span>
-        {!isNew && createdAt && (
+        {!isNew && createdAt && !isTyping && (
           <span
             className={
               isDisplayed
@@ -110,6 +113,7 @@ function Conversation({
             <span> &middot; {formatDate(createdAt)}</span>
           </span>
         )}
+        {isTyping && <TypingIndicator />}
       </div>
     </div>
   );

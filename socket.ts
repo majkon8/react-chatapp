@@ -113,4 +113,16 @@ io.on("connection", (socket: Socket) => {
       }
     }
   );
+
+  interface ITypingData {
+    isTyping: boolean;
+    userIdToReemit: string;
+  }
+
+  socket.on("isTyping", (typingData: ITypingData) => {
+    return io.in(typingData.userIdToReemit).emit("receiveIsTyping", {
+      isTyping: typingData.isTyping,
+      userId: socket.user._id,
+    });
+  });
 });
