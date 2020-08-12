@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, MouseEvent } from "react";
 import "./Conversation.scss";
 import { formatDate } from "../Message/Message";
 import TypingIndicator from "../../common/TypingIndicator/TypingIndicator";
@@ -8,6 +8,7 @@ import { setIsChatOpen } from "../../redux/actions/uiActions";
 import {
   setSelectedConversation,
   getMessages,
+  deleteConversation,
 } from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
 import { IFile } from "../../redux/reducers/dataReducer";
@@ -17,6 +18,7 @@ const mapActionsToProps = {
   setIsChatOpen,
   setSelectedConversation,
   getMessages,
+  deleteConversation,
 };
 const connector = connect(mapStateToProps, mapActionsToProps);
 
@@ -55,6 +57,7 @@ function Conversation({
   setIsChatOpen,
   setSelectedConversation,
   getMessages,
+  deleteConversation,
 }: Props) {
   useEffect(() => {
     if (isActive) {
@@ -79,11 +82,25 @@ function Conversation({
     handleActive(id);
   };
 
+  const handleConversationDelete = (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    const confirmed = confirm("Are you sure?");
+    if (confirmed) deleteConversation(id);
+  };
+
   return (
     <div
       onClick={handleClick}
       className={`conversation-container ${isActive && "active-conversation"}`}
     >
+      {!isNew && (
+        <div
+          onClick={(e) => handleConversationDelete(e)}
+          className="conversation-delete"
+        >
+          <i className="far fa-trash-alt"></i>
+        </div>
+      )}
       <img
         src="https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
         alt="user"

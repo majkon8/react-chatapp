@@ -35,7 +35,7 @@ interface IProps {
 
 type Props = PropsFromRedux & IProps;
 
-export interface INewConversation {
+export interface IMessageConversation {
   members: { ids: string[]; usernames: string[] };
   updatedAt: string;
   _id: string;
@@ -87,7 +87,7 @@ function Chat({
       "receiveMessage",
       (message: {
         createdMessage: IMessage;
-        newConversation: INewConversation;
+        messageConversation: IMessageConversation;
         receiver: IUser;
         sender: IUser;
       }) => {
@@ -95,23 +95,20 @@ function Chat({
           const audio = new Audio(notificationSound);
           audio.play();
         }
-        // if the message started new conversation
-        if (message.sender && message.receiver) {
-          // if the user is a sender, then set another user (receiver) to conversation and vice versa
-          const conversationUser =
-            message.sender._id === user.authenticatedUser?._id
-              ? message.receiver
-              : message.sender;
-          const messageData = {
-            createdMessage: message.createdMessage,
-            // set user to newConversation
-            newConversation: {
-              ...message.newConversation,
-              user: conversationUser,
-            },
-          };
-          setNewMessage(messageData);
-        } else setNewMessage(message);
+        // if the user is a sender, then set another user (receiver) to conversation and vice versa
+        const conversationUser =
+          message.sender._id === user.authenticatedUser?._id
+            ? message.receiver
+            : message.sender;
+        const messageData = {
+          createdMessage: message.createdMessage,
+          // set user to newConversation
+          messageConversation: {
+            ...message.messageConversation,
+            user: conversationUser,
+          },
+        };
+        setNewMessage(messageData);
       }
     );
     socket?.on("messageDeleted", (messageId: string) =>

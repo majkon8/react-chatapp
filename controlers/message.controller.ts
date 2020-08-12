@@ -1,8 +1,9 @@
 import { mongoose } from "../mongoose";
 import { Message } from "../models/message.model";
 import { updateLastMessage } from "../controlers/conversation.controller";
-import { Request, Response } from "express";
+import { Response } from "express";
 import { Conversation } from "../models/conversation.model";
+import { Req } from "../middlewares/auth";
 
 export interface IMessage {
   conversationId: mongoose.Types.ObjectId;
@@ -41,13 +42,14 @@ export const deleteMessage = async (messageId: string) => {
 };
 
 // GET MESSAGES OF CONVERSATION
-export const getConversationMessages = async (req: Request, res: Response) => {
+export const getConversationMessages = async (req: Req, res: Response) => {
   try {
     const conversationId = req.params.conversationId;
     const count = +req.params.count;
     const messages = await Message.getMessagesOfConversation(
       conversationId,
-      count
+      count,
+      req.user!._id
     );
     res.json(messages);
   } catch (error) {

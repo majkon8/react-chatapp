@@ -8,6 +8,7 @@ import {
   SET_NEW_MESSAGE,
   DISPLAY_MESSAGE,
   SET_MESSAGE_DELETED,
+  DELETE_CONVERSATION,
 } from "../types";
 import { Dispatch } from "redux";
 import {
@@ -15,7 +16,7 @@ import {
   IMessage,
   IConversation,
 } from "../reducers/dataReducer";
-import { INewConversation } from "../../components/Chat/Chat";
+import { IMessageConversation } from "../../components/Chat/Chat";
 import api from "../../api/api";
 
 export const searchForUsers = (username: string) => async (
@@ -79,7 +80,7 @@ export const getMessages = (
 
 export const setNewMessage = (messageData: {
   createdMessage: IMessage;
-  newConversation: INewConversation;
+  messageConversation: IMessageConversation;
 }) => (dispatch: Dispatch) =>
   dispatch({ type: SET_NEW_MESSAGE, payload: messageData });
 
@@ -89,3 +90,14 @@ export const displayMessage = (conversation: IConversation) => (
 
 export const setMessageDeleted = (messageId: string) => (dispatch: Dispatch) =>
   dispatch({ type: SET_MESSAGE_DELETED, payload: messageId });
+
+export const deleteConversation = (conversationId: string) => async (
+  dispatch: Dispatch
+) => {
+  dispatch({ type: DELETE_CONVERSATION, payload: conversationId });
+  try {
+    await api.deleteConversation(conversationId);
+  } catch (error) {
+    console.error(error);
+  }
+};

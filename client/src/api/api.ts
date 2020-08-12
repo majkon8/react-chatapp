@@ -37,4 +37,7 @@ export default {
 
   deleteFile: async (fileKey: string) =>
     await axios.delete("/files", { data: { key: fileKey } }),
+
+  deleteConversation: async (conversationId: string) =>
+    await axios.post("/conversations/delete", { conversationId }),
 };

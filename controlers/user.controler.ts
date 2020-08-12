@@ -26,13 +26,12 @@ export const getAuthenticatedUser = async (req: Req, res: Response) => {
 };
 
 // SEARCH FOR USERS BY NAME
-export const searchForUsers = async (req: Request, res: Response) => {
+export const searchForUsers = async (req: Req, res: Response) => {
   try {
     const username = req.params.username;
     const usernameRegex = new RegExp(username);
     const users = await User.findByUsername(usernameRegex);
-    const confirmedUsers = users.filter((user) => user.confirmed);
-    return res.json(confirmedUsers);
+    return res.json(users);
   } catch (error) {
     console.error(error);
     return res.status(400).json(error);

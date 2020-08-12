@@ -23,9 +23,12 @@ export interface IUserDocument extends Document {
   temporaryToken: string;
   confirmed: boolean;
   createdExternally: boolean;
+  deletedConversations: string[];
   generateToken(temporary?: boolean): Promise<string>;
   createEmail(isConfirmationEmail: boolean): IMailOptions;
   createTokens(): Promise<void>;
+  addConversationToDeleted(conversationId: string): Promise<void>;
+  removeConversationFromDeleted(conversationId: string): Promise<void>;
 }
 
 interface IUserModel extends Model<IUserDocument> {
@@ -43,6 +46,8 @@ interface IUserModel extends Model<IUserDocument> {
     _id: string | undefined,
     token: string | undefined
   ): IUserDocument;
+
+  getDeletedConversations(userId: string): Promise<string[] | undefined>;
 }
 
 const UserSchema: Schema = new Schema({
@@ -85,6 +90,7 @@ const UserSchema: Schema = new Schema({
   temporaryToken: String, // used for reseting password and confirming user account
   confirmed: { type: Boolean, required: true, default: false },
   createdExternally: { type: Boolean, required: true, default: false },
+  deletedConversations: [String],
 });
 
 /*** Instance methods ***/
@@ -95,9 +101,10 @@ UserSchema.methods.toJSON = function (): Object {
     password,
     refreshToken,
     temporaryToken,
+    deletedConversations,
     ...userObject
   } = user.toObject();
-  // return the document except the password and tokens (these shouldn't be made available)
+  // return the document except fields that shouldn't be made available
   return userObject;
 };
 
@@ -148,6 +155,27 @@ UserSchema.methods.createTokens = async function () {
   user.temporaryToken = temporaryToken;
 };
 
+UserSchema.methods.addConversationToDeleted = async function (
+  conversationId: string
+) {
+  const user = this;
+  user.deletedConversations = [...user.deletedConversations, conversationId];
+  user.save();
+};
+
+UserSchema.methods.removeConversationFromDeleted = async function (
+  conversationId: string
+) {
+  const user = this;
+  user.deletedConversations = [
+    ...user.deletedConversations.filter(
+      (deletedConversationId: string) =>
+        deletedConversationId !== conversationId
+    ),
+  ];
+  user.save();
+};
+
 /*** Model methods (static methods) ***/
 
 UserSchema.statics.getJWTSecret = () => jwtSecret;
@@ -187,10 +215,16 @@ UserSchema.statics.findByIdAndTemporaryToken = async function (
 };
 
 UserSchema.statics.findByUsername = async function (usernameRegex: RegExp) {
-  const User = this;
+  const User: IUserModel = this;
   return await User.find({
     username: { $regex: usernameRegex, $options: "i" },
+    confirmed: true,
   });
+};
+
+UserSchema.statics.getDeletedConversations = async function (userId: string) {
+  const user = await User.findById(userId);
+  return user?.deletedConversations;
 };
 
 /*** Middleware ***/

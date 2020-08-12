@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import { IFile } from "./message.model";
+import { User } from "./user.model";
 
 interface ILastMessage {
   _id: mongoose.Types.ObjectId;
@@ -35,7 +36,7 @@ export interface IConversationModel extends Model<IConversationDocument> {
   displayLastMessage(
     conversationId: string
   ): Promise<IConversationDocument | null>;
-  
+
   getUserConversations(
     userId: string | undefined
   ): Promise<IConversationDocument[]>;
@@ -100,12 +101,22 @@ ConversationSchema.statics.displayLastMessage = async function (
 };
 
 ConversationSchema.statics.getUserConversations = async function (
-  userId: string | undefined
+  userId: string
 ) {
   const Conversation = this;
+  const deletedConversations = await User.getDeletedConversations(userId);
   return await Conversation.find({
     "members.ids": mongoose.Types.ObjectId(userId),
+    _id: { $nin: deletedConversations },
   }).sort({ updatedAt: "descending" });
+};
+
+ConversationSchema.statics.getUserDeletedConversations = async function (
+  userId: string
+) {
+  return await Conversation.find({
+    "members.ids": mongoose.Types.ObjectId(userId),
+  });
 };
 
 export const Conversation: IConversationModel = mongoose.model<

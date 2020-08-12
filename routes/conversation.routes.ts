@@ -7,4 +7,7 @@ let router = express.Router();
 /* GET /conversations/ */
 router.get("/", tokenAuth, conversations.getAll);
 
+/* POST /conversations/delete */
+router.post("/delete", tokenAuth, conversations.deleteConversation);
+
 module.exports = router;

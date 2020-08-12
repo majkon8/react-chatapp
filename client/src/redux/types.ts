@@ -4,7 +4,7 @@ import {
   IConversation,
   IMessage,
 } from "./reducers/dataReducer";
-import { INewConversation } from "../components/Chat/Chat";
+import { IMessageConversation } from "../components/Chat/Chat";
 import { IPending } from "./reducers/uiReducer";
 
 // user reducer types
@@ -28,6 +28,7 @@ export const SET_NEW_MESSAGE = "SET_NEW_MESSAGE";
 export const SEARCH_CONVERSATIONS = "SEARCH_CONVERSATIONS";
 export const DISPLAY_MESSAGE = "DISPLAY_MESSAGE";
 export const SET_MESSAGE_DELETED = "SET_MESSAGE_DELETED";
+export const DELETE_CONVERSATION = "DELETE_CONVERSATION";
 
 // user interfaces
 interface ISetAuthenticatedAction {
@@ -108,7 +109,7 @@ interface ISetNewMessageAction {
   type: typeof SET_NEW_MESSAGE;
   payload: {
     createdMessage: IMessage;
-    newConversation: INewConversation;
+    messageConversation: IMessageConversation;
   };
 }
 interface ISearchConversationsAction {
@@ -123,6 +124,10 @@ interface ISetMessageDeletedAction {
   type: typeof SET_MESSAGE_DELETED;
   payload: string;
 }
+interface IDeleteConversationAction {
+  type: typeof DELETE_CONVERSATION;
+  payload: string;
+}
 
 export type DataActionTypes =
   | ISetSearchedUsersAction
@@ -132,4 +137,5 @@ export type DataActionTypes =
   | ISetNewMessageAction
   | ISearchConversationsAction
   | IDisplayMessageAction
-  | ISetMessageDeletedAction;
+  | ISetMessageDeletedAction
+  | IDeleteConversationAction;

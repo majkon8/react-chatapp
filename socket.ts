@@ -30,20 +30,56 @@ io.on("connection", (socket: Socket) => {
   socket.on("sendMessage", async (message: IMessage) => {
     try {
       let conversationId: string;
-      let newConversation: IConversationDocument | undefined;
+      let messageConversation: IConversationDocument | undefined | null;
       // first if message starts a new conversation
       if (message.conversation.new) {
-        const members = {
-          ids: [
-            mongoose.Types.ObjectId(socket.user._id),
-            mongoose.Types.ObjectId(message.conversation.userId),
-          ],
-          usernames: [socket.user.username, message.conversation.username],
-        };
-        newConversation = await conversations.create(members);
-        // we need the conversationId in order to save message to database
-        conversationId = newConversation?._id;
-      } else conversationId = message.conversation.id;
+        // first check if the sender had conversation with that user but deleted it, if yes then undelete conversation instead of creating new one
+        const deletedConversationsIds =
+          (await conversations.getUserDeletedConversationsIds(
+            socket.user._id
+          )) || [];
+        const deletedConversations: IConversationDocument[] = [];
+        for (const conversationId of deletedConversationsIds) {
+          const conversation = await conversations.get(conversationId);
+          if (conversation) deletedConversations.push(conversation);
+        }
+        const deletedConversation = deletedConversations.filter(
+          (conversation) =>
+            conversation.members.ids.includes(
+              mongoose.Types.ObjectId(message.conversation.userId)
+            )
+        );
+        if (deletedConversation.length === 0) {
+          const members = {
+            ids: [
+              mongoose.Types.ObjectId(socket.user._id),
+              mongoose.Types.ObjectId(message.conversation.userId),
+            ],
+            usernames: [socket.user.username, message.conversation.username],
+          };
+          messageConversation = await conversations.create(members);
+          // we need the conversationId in order to save message to database
+          conversationId = messageConversation?._id;
+        } else {
+          conversationId = deletedConversation[0].id;
+          messageConversation = {
+            ...deletedConversation[0].toObject(),
+            isDisplayed: false,
+          };
+          await conversations.undeleteConversation(
+            conversationId,
+            socket.user._id
+          );
+        }
+      } else {
+        conversationId = message.conversation.id;
+        messageConversation = await conversations.get(conversationId);
+        // undelete conversation for the receiver in case he deleted the conversation
+        await conversations.undeleteConversation(
+          conversationId,
+          message.conversation.userId
+        );
+      }
       const newMessage = {
         conversationId: mongoose.Types.ObjectId(conversationId),
         authorId: mongoose.Types.ObjectId(socket.user._id),
@@ -55,11 +91,9 @@ io.on("connection", (socket: Socket) => {
       if (createdMessage) {
         let sender: IUserDocument | null | undefined;
         let receiver: IUserDocument | null | undefined;
-        if (message.conversation.new) {
-          // now we need to get both users from conversations to send them back and set to conversation
-          sender = await User.findById(socket.user._id);
-          receiver = await User.findById(message.conversation.userId);
-        }
+        // now we need to get both users from conversations to send them back and set to conversation
+        sender = await User.findById(socket.user._id);
+        receiver = await User.findById(message.conversation.userId);
         return (
           io
             //emit created message both to sender and receiver
@@ -67,9 +101,7 @@ io.on("connection", (socket: Socket) => {
             .in(socket.user._id)
             .emit("receiveMessage", {
               createdMessage,
-              newConversation: message.conversation.new
-                ? newConversation
-                : null,
+              messageConversation: messageConversation,
               sender,
               receiver,
             })
