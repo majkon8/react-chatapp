@@ -120,17 +120,21 @@ function Conversation({
                 : "conversation-message-not-displayed"
             }
           >
+            <span>{formatDate(createdAt)} &middot; </span>
             {/* if there is no message body and message is not deleted, then there is only a file in the message */}
-            {!isMessageDeleted && (messageBody ? messageBody : file?.name)}
+            {!isMessageDeleted && (
+              <span className="conversation-message-body">
+                {messageBody ? messageBody : file?.name}
+              </span>
+            )}
             {isMessageDeleted && (
               <span className="conversation-message-deleted">
                 Message deleted
               </span>
             )}
-            <span> &middot; {formatDate(createdAt)}</span>
           </span>
         )}
-        {isTyping && <TypingIndicator />}
+        {isTyping && <TypingIndicator showImage={false} />}
       </div>
     </div>
   );

@@ -183,7 +183,7 @@ function Chat({
         )}
         {isTyping && (
           <div style={{ marginBottom: 5 }}>
-            <TypingIndicator />
+            <TypingIndicator showImage={true} />
           </div>
         )}
       </SimpleBar>

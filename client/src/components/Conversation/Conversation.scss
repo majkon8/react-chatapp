@@ -49,6 +49,12 @@
     .conversation-message {
       font-size: 0.8em;
       opacity: 0.5;
+      display: flex;
+
+      .conversation-message-body,
+      .conversation-message-deleted {
+        margin-left: 5px;
+      }
     }
 
     .conversation-message-not-displayed {
