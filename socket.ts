@@ -73,7 +73,6 @@ io.on("connection", (socket: Socket) => {
         }
       } else {
         conversationId = message.conversation.id;
-        messageConversation = await conversations.get(conversationId);
         // undelete conversation for the receiver in case he deleted the conversation
         await conversations.undeleteConversation(
           conversationId,
@@ -88,6 +87,9 @@ io.on("connection", (socket: Socket) => {
         file: message.file,
       };
       const createdMessage = await messages.create(newMessage);
+      // in this case, we need to get the message conversation after we create new message
+      if (!messageConversation)
+        messageConversation = await conversations.get(conversationId);
       if (createdMessage) {
         let sender: IUserDocument | null | undefined;
         let receiver: IUserDocument | null | undefined;
@@ -157,4 +159,22 @@ io.on("connection", (socket: Socket) => {
       userId: socket.user._id,
     });
   });
+
+  socket.on(
+    "reactToMessage",
+    async (messageId: string, emote: string, otherUserId: string) => {
+      try {
+        const emoteToSend = await messages.toggleMessageReactionEmote(
+          messageId,
+          emote
+        );
+        return io
+          .in(socket.user._id)
+          .in(otherUserId)
+          .emit("reactedToMessage", messageId, emoteToSend);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  );
 });

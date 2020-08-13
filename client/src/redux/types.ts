@@ -29,6 +29,7 @@ export const SEARCH_CONVERSATIONS = "SEARCH_CONVERSATIONS";
 export const DISPLAY_MESSAGE = "DISPLAY_MESSAGE";
 export const SET_MESSAGE_DELETED = "SET_MESSAGE_DELETED";
 export const DELETE_CONVERSATION = "DELETE_CONVERSATION";
+export const ADD_REACTION_EMOTE_TO_MESSAGE = "ADD_REACTION_EMOTE_TO_MESSAGE";
 
 // user interfaces
 interface ISetAuthenticatedAction {
@@ -128,6 +129,10 @@ interface IDeleteConversationAction {
   type: typeof DELETE_CONVERSATION;
   payload: string;
 }
+interface IAddReactionToMessageAction {
+  type: typeof ADD_REACTION_EMOTE_TO_MESSAGE;
+  payload: { messageId: string; emote: string };
+}
 
 export type DataActionTypes =
   | ISetSearchedUsersAction
@@ -138,4 +143,5 @@ export type DataActionTypes =
   | ISearchConversationsAction
   | IDisplayMessageAction
   | ISetMessageDeletedAction
-  | IDeleteConversationAction;
+  | IDeleteConversationAction
+  | IAddReactionToMessageAction;

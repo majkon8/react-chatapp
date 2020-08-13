@@ -9,6 +9,7 @@ import {
   DataActionTypes,
   SET_MESSAGE_DELETED,
   DELETE_CONVERSATION,
+  ADD_REACTION_EMOTE_TO_MESSAGE,
 } from "../types";
 import { IUser } from "./userReducer";
 
@@ -26,6 +27,7 @@ export interface IMessage {
   conversationId: string;
   createdAt: string;
   messageConversation: boolean;
+  reactionEmote: string;
 }
 
 interface IMembers {
@@ -168,7 +170,6 @@ export default function (state = initialState, action: DataActionTypes) {
             : state.messages,
         };
       }
-
     case DISPLAY_MESSAGE:
       return {
         ...state,
@@ -188,6 +189,7 @@ export default function (state = initialState, action: DataActionTypes) {
             if (message._id === action.payload) {
               message.type = "text";
               message.body = "";
+              message.reactionEmote = "";
             }
             return message;
           }),
@@ -216,6 +218,18 @@ export default function (state = initialState, action: DataActionTypes) {
           ? null
           : state.selectedConversation,
         messages: isDeletingSelectedConversation ? null : state.messages,
+      };
+    case ADD_REACTION_EMOTE_TO_MESSAGE:
+      return {
+        ...state,
+        messages: [
+          ...state.messages?.map((message) => {
+            if (message._id === action.payload.messageId) {
+              message.reactionEmote = action.payload.emote;
+            }
+            return message;
+          }),
+        ],
       };
     default:
       return state;

@@ -171,11 +171,7 @@ function Chat({
             <Message
               key={message._id}
               isOwnMessage={message.authorId === user.authenticatedUser?._id}
-              messageId={message._id}
-              body={message.body}
-              file={message.file}
-              type={message.type}
-              createdAt={message.createdAt}
+              message={message}
               isLast={index === data.messages!.length - 1}
               socket={socket}
             />

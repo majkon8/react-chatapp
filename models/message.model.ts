@@ -14,6 +14,7 @@ export interface IMessageDocument extends Document {
   createdAt: Date;
   // contains ids of users that deleted the conversation in which the message is in
   isDeletedConversationBy: string[];
+  reactionEmote: string;
 }
 
 export interface IMessageModel extends Model<IMessageDocument> {
@@ -29,6 +30,8 @@ export interface IMessageModel extends Model<IMessageDocument> {
     conversationId: string,
     userId: string
   ): Promise<void>;
+
+  toggleMessageReactionEmote(messageId: string, emote: string): Promise<string>;
 }
 
 const MessageSchema: Schema = new Schema(
@@ -39,6 +42,7 @@ const MessageSchema: Schema = new Schema(
     type: { type: String, required: true },
     file: { name: String, url: String },
     isDeletedConversationBy: [String],
+    reactionEmote: String,
   },
   { timestamps: { createdAt: true, updatedAt: false } }
 );
@@ -60,6 +64,7 @@ MessageSchema.statics.setMessageToDeleted = async function (messageId: string) {
     body: "",
     type: "text",
     file: undefined,
+    emote: "",
   });
 };
 
@@ -93,6 +98,19 @@ MessageSchema.statics.addToIsDeletedConversationBy = async function (
     ];
     await message.save();
   }
+};
+
+MessageSchema.statics.toggleMessageReactionEmote = async function (
+  messageId: string,
+  emote: string
+) {
+  const Message = this;
+  const message: IMessageDocument = await Message.findById(messageId);
+  if (!message.body && !message.file) return ""; // message is deleted
+  if (message.reactionEmote === emote) message.reactionEmote = "";
+  else message.reactionEmote = emote;
+  message.save();
+  return message.reactionEmote;
 };
 
 export const Message: IMessageModel = mongoose.model<

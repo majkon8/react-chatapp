@@ -9,6 +9,7 @@ import {
   DISPLAY_MESSAGE,
   SET_MESSAGE_DELETED,
   DELETE_CONVERSATION,
+  ADD_REACTION_EMOTE_TO_MESSAGE,
 } from "../types";
 import { Dispatch } from "redux";
 import {
@@ -100,4 +101,13 @@ export const deleteConversation = (conversationId: string) => async (
   } catch (error) {
     console.error(error);
   }
+};
+
+export const addReactionEmoteToMessage = (messageId: string, emote: string) => (
+  dispatch: Dispatch
+) => {
+  dispatch({
+    type: ADD_REACTION_EMOTE_TO_MESSAGE,
+    payload: { messageId, emote },
+  });
 };

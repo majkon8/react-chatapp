@@ -57,3 +57,15 @@ export const getConversationMessages = async (req: Req, res: Response) => {
     res.status(400).json(error);
   }
 };
+
+// TOGGLE REACTON EMOTE
+export const toggleMessageReactionEmote = async (
+  messageId: string,
+  emote: string
+) => {
+  try {
+    return await Message.toggleMessageReactionEmote(messageId, emote);
+  } catch (error) {
+    console.error(error);
+  }
+};

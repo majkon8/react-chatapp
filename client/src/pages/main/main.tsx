@@ -102,12 +102,12 @@ function Main({ UI, user, data, getAuthenticatedUser }: Props) {
       <ChatSearch />
       <ConversationsList socket={socket} typingUsersIds={typingUsersIds} />
       <ChatBar />
-      <Chat
+      {<Chat
         socket={socket}
         isTyping={typingUsersIds.includes(
           data.selectedConversation?.userId || ""
         )}
-      />
+      />}
       <ChatForm socket={socket} />
       {UI.imageUrlToOpen && <ImageFull url={UI.imageUrlToOpen} />}
     </motion.div>

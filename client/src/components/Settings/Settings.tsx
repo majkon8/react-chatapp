@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Settings.scss";
 import ColorPicker from "../../common/ColorPicker/ColorPicker";
+import { useOuterClick } from "../../hooks/hooks";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { setTheme } from "../../redux/actions/uiActions";
@@ -14,6 +15,7 @@ type Props = PropsFromRedux;
 
 function Settings({ setTheme }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const innerRef = useOuterClick(() => setIsOpen(false));
 
   const toggleOpen = () => setIsOpen(!isOpen);
 
@@ -28,6 +30,7 @@ function Settings({ setTheme }: Props) {
 
   return (
     <div
+      ref={innerRef}
       onClick={toggleOpen}
       className={`settings-container dropdown is-right ${
         isOpen && "is-active"

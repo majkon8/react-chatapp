@@ -3,12 +3,13 @@ import "./Message.scss";
 import moment from "moment";
 import File from "../../common/File/File";
 import { BrowserView, MobileView } from "react-device-detect";
+import DeleteMessage from "../DeleteMessage/DeleteMessage";
+import ReactionEmotes from "../ReactionEmotes/ReactionEmotes";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { setImageUrlToOpen } from "../../redux/actions/uiActions";
 import { IState } from "../../redux/store";
-import { IFile } from "../../redux/reducers/dataReducer";
-import DeleteMessage from "../DeleteMessage/DeleteMessage";
+import { IMessage } from "../../redux/reducers/dataReducer";
 
 const mapStateToProps = (state: IState) => ({
   UI: state.UI,
@@ -21,12 +22,8 @@ const connector = connect(mapStateToProps, mapActionsToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 interface IProps {
+  message: IMessage;
   isOwnMessage: boolean;
-  messageId: string;
-  body: string;
-  type: "text" | "image" | "video" | "other";
-  file: IFile;
-  createdAt: string;
   isLast: boolean;
   socket: SocketIOClient.Socket | null;
 }
@@ -48,16 +45,12 @@ function Message({
   UI,
   data,
   user,
-  messageId,
-  body,
-  type,
-  file,
-  createdAt,
+  message,
   isLast,
   socket,
   setImageUrlToOpen,
 }: Props) {
-  const isMessageDeleted = type === "text" && body === "";
+  const isMessageDeleted = message.type === "text" && message.body === "";
 
   const textColor = [
     "rgb(127, 219, 255)",
@@ -68,7 +61,7 @@ function Message({
     ? "#333"
     : "#eee";
 
-  const formattedCreatedAt = formatDate(createdAt);
+  const formattedCreatedAt = formatDate(message.createdAt);
 
   const shouldShowThatIsDisplayed = () => {
     const conversation = data.conversations?.filter(
@@ -83,7 +76,7 @@ function Message({
     );
   };
 
-  const openFullImage = () => setImageUrlToOpen(file.url);
+  const openFullImage = () => setImageUrlToOpen(message.file.url);
 
   return (
     <div
@@ -95,7 +88,14 @@ function Message({
         {isOwnMessage && !isMessageDeleted && (
           <DeleteMessage
             socket={socket}
-            messageId={messageId}
+            messageId={message._id}
+            otherUserId={data.selectedConversation!.userId}
+          />
+        )}
+        {!isOwnMessage && !isMessageDeleted && (
+          <ReactionEmotes
+            socket={socket}
+            messageId={message._id}
             otherUserId={data.selectedConversation!.userId}
           />
         )}
@@ -108,6 +108,10 @@ function Message({
         )}
         {shouldShowThatIsDisplayed() && (
           <img
+            style={{
+              right: message.reactionEmote ? -30 : -20,
+              bottom: message.reactionEmote ? 3 : 5,
+            }}
             className="is-displayed-indicator"
             src="https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
             alt="user"
@@ -124,31 +128,38 @@ function Message({
           {isMessageDeleted && (
             <span className="chat-message-deleted">Message deleted</span>
           )}
-          {!isMessageDeleted && body}
-          {type === "other" && <File name={file.name} url={file.url} />}
-          {type === "image" && (
+          {!isMessageDeleted && message.body}
+          {message.type === "other" && (
+            <File name={message.file.name} url={message.file.url} />
+          )}
+          {message.type === "image" && (
             <img
               onClick={openFullImage}
               className="image-small"
-              src={file.url}
+              src={message.file.url}
             ></img>
           )}
-          {type === "video" && (
+          {message.type === "video" && (
             <>
               <BrowserView>
                 <video className="video" controls>
-                  <source src={file.url}></source>
+                  <source src={message.file.url}></source>
                 </video>
               </BrowserView>
               {/* displays thumbnail on mobile browsers */}
               <MobileView>
                 <video preload="metadata" className="video" controls>
-                  <source src={`${file.url}#t=0.01`}></source>
+                  <source src={`${message.file.url}#t=0.01`}></source>
                 </video>
               </MobileView>
             </>
           )}
         </span>
+        {message.reactionEmote && (
+          <span className="message-reaction-emotes-container">
+            {message.reactionEmote}
+          </span>
+        )}
       </div>
       <span className="chat-message-time">{formattedCreatedAt}</span>
     </div>

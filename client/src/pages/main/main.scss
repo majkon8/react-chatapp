@@ -2,6 +2,7 @@
 
 $text-dark: #333;
 $theme-light: #eee;
+$theme-dark: rgb(40, 40, 40);
 
 .main-container {
   display: grid;
@@ -11,6 +12,22 @@ $theme-light: #eee;
   background-color: $dark-color;
   transition: background-color 0.5s;
   overflow-x: hidden;
+
+  .message-action-trigger {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    transition: border-radius 0.5s;
+    opacity: 0.5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:hover {
+      background-color: $theme-dark;
+      opacity: 1;
+      border-radius: 100%;
+    }
+  }
 }
 
 .simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
@@ -56,6 +73,21 @@ $theme-light: #eee;
       border: 1px solid $theme-light;
       transition: background-color 0.5s, border 0.5s;
     }
+  }
+
+  .message-reaction-emotes-container {
+    background-color: $theme-light !important;
+    border: 4px solid white !important;
+  }
+
+  .message-action-trigger {
+    &:hover {
+      background-color: $theme-light;
+    }
+  }
+
+  .reaction-emotes-panel {
+    background-color: $theme-light !important;
   }
 
   .settings-container {
