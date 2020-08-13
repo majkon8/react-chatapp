@@ -6,26 +6,15 @@
   margin-top: 5px;
   margin-right: 20px;
 
+  &:hover {
+    .chat-message-delete {
+      display: block;
+    }
+  }
+
   .chat-message-content {
     display: grid;
     position: relative;
-
-    &:hover {
-      .chat-message-delete {
-        display: block;
-      }
-    }
-
-    .chat-message-delete {
-      color: hsl(348, 100%, 61%);
-      position: absolute;
-      left: -25px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      padding: 5px;
-      display: none;
-    }
   }
 
   .chat-message-text {

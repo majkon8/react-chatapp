@@ -1,0 +1,19 @@
+.chat-message-delete {
+  color: hsl(348, 100%, 61%);
+  position: absolute;
+  left: -35px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  padding: 5px;
+  display: none;
+  transition: all 0.5s;
+  width: 30px;
+  height: 30px;
+
+  &:hover {
+    background-color: hsl(348, 100%, 61%);
+    color: #eee;
+    border-radius: 100%;
+  }
+}

@@ -8,6 +8,7 @@ import { connect, ConnectedProps } from "react-redux";
 import { setImageUrlToOpen } from "../../redux/actions/uiActions";
 import { IState } from "../../redux/store";
 import { IFile } from "../../redux/reducers/dataReducer";
+import DeleteMessage from "../DeleteMessage/DeleteMessage";
 
 const mapStateToProps = (state: IState) => ({
   UI: state.UI,
@@ -84,12 +85,6 @@ function Message({
 
   const openFullImage = () => setImageUrlToOpen(file.url);
 
-  const handleMessageDelete = () =>
-    socket?.emit("deleteMessage", {
-      messageId,
-      otherUserId: data.selectedConversation?.userId,
-    });
-
   return (
     <div
       className={`chat-message-container ${
@@ -98,9 +93,11 @@ function Message({
     >
       <div className="chat-message-content">
         {isOwnMessage && !isMessageDeleted && (
-          <div onClick={handleMessageDelete} className="chat-message-delete">
-            <i className="far fa-trash-alt"></i>
-          </div>
+          <DeleteMessage
+            socket={socket}
+            messageId={messageId}
+            otherUserId={data.selectedConversation!.userId}
+          />
         )}
         {!isOwnMessage && (
           <img

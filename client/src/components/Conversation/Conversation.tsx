@@ -1,7 +1,8 @@
-import React, { useEffect, MouseEvent } from "react";
+import React, { useEffect } from "react";
 import "./Conversation.scss";
 import { formatDate } from "../Message/Message";
 import TypingIndicator from "../../common/TypingIndicator/TypingIndicator";
+import DeleteConversation from "../DeleteConversation/DeleteConversation";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { setIsChatOpen } from "../../redux/actions/uiActions";
@@ -82,24 +83,16 @@ function Conversation({
     handleActive(id);
   };
 
-  const handleConversationDelete = (event: MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-    const confirmed = confirm("Are you sure?");
-    if (confirmed) deleteConversation(id);
-  };
-
   return (
     <div
       onClick={handleClick}
       className={`conversation-container ${isActive && "active-conversation"}`}
     >
       {!isNew && (
-        <div
-          onClick={(e) => handleConversationDelete(e)}
-          className="conversation-delete"
-        >
-          <i className="far fa-trash-alt"></i>
-        </div>
+        <DeleteConversation
+          conversationId={id}
+          deleteConversation={deleteConversation}
+        />
       )}
       <img
         src="https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
