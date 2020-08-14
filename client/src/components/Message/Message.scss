@@ -40,6 +40,7 @@
     margin-bottom: 5px;
     text-align: left;
     transition: background-color 0.5s, border 0.5s, color 0.5s;
+    word-break: break-all;
 
     .chat-message-deleted {
       font-style: italic;
@@ -54,10 +55,6 @@
       opacity: 0.8;
       font-size: 0.9em;
       margin-bottom: 5px;
-
-      span {
-        display: block;
-      }
     }
   }
 

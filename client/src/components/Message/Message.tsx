@@ -134,7 +134,7 @@ function Message({
             alt="user"
           ></img>
         )}
-        <span
+        <p
           style={{
             backgroundColor: isOwnMessage ? UI.color : "",
             borderColor: isOwnMessage ? UI.color : "",
@@ -143,12 +143,12 @@ function Message({
           className="chat-message-text"
         >
           {isMessageDeleted && (
-            <span className="chat-message-deleted">Message deleted</span>
+            <p className="chat-message-deleted">Message deleted</p>
           )}
           {!isMessageDeleted && message?.replyData && (
             <div className="chat-message-reply-data">
-              <span>{message.replyData.to}:</span>
-              <span>{shorten(message.replyData.body)}</span>
+              <p>{message.replyData.to}:</p>
+              <p>{shorten(message.replyData.body)}</p>
             </div>
           )}
           {!isMessageDeleted && message.body}
@@ -177,14 +177,14 @@ function Message({
               </MobileView>
             </>
           )}
-        </span>
+        </p>
         {message.reactionEmote && (
           <span className="message-reaction-emotes-container">
             {message.reactionEmote}
           </span>
         )}
       </div>
-      <span className="chat-message-time">{formattedCreatedAt}</span>
+      <p className="chat-message-time">{formattedCreatedAt}</p>
     </div>
   );
 }
