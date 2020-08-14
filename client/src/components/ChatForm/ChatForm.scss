@@ -22,8 +22,10 @@ $dark-color: rgb(40, 40, 40);
 
       & + label {
         cursor: pointer;
-        height: 40px;
-        width: 40px;
+        min-height: 40px;
+        min-width: 40px;
+        max-width: 40px;
+        max-height: 40px;
         text-align: center;
         margin-left: 10px;
         margin-right: 10px;
@@ -36,21 +38,42 @@ $dark-color: rgb(40, 40, 40);
       }
     }
 
-    .remove-file-button {
-      height: 40px;
-      width: 40px;
+    .remove-button {
+      min-height: 40px;
+      min-width: 40px;
+      max-width: 40px;
+      max-height: 40px;
       margin-left: 10px;
       background-color: rgb(40, 40, 40);
       border-color: rgb(40, 40, 40);
       color: hsl(348, 100%, 61%);
       margin-right: 10px;
+      transition: background-color 0.5s, border 0.5s;
+    }
+
+    .circular-progress-container {
+      min-height: 40px;
+      min-width: 40px;
+      max-width: 40px;
+      max-height: 40px;
+    }
+
+    .form-reply-data {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-right: 5px;
+
+      svg {
+        margin-right: 5px;
+      }
     }
   }
 
   .submit-button {
     margin: 15px 0;
     margin-bottom: 0;
-    margin-right: 20px;
+    margin-right: 10px;
     background-color: $dark-color;
     color: white;
     border-color: $dark-color;

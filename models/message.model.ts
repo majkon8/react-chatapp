@@ -1,10 +1,5 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
-export interface IFile {
-  name: string;
-  url: string;
-}
-
 export interface IMessageDocument extends Document {
   conversationId: mongoose.Types.ObjectId;
   authorId: mongoose.Types.ObjectId;
@@ -15,6 +10,17 @@ export interface IMessageDocument extends Document {
   // contains ids of users that deleted the conversation in which the message is in
   isDeletedConversationBy: string[];
   reactionEmote: string;
+  replyData: IReplyData;
+}
+
+export interface IFile {
+  name: string;
+  url: string;
+}
+
+export interface IReplyData {
+  to: string;
+  body: string;
 }
 
 export interface IMessageModel extends Model<IMessageDocument> {
@@ -43,6 +49,7 @@ const MessageSchema: Schema = new Schema(
     file: { name: String, url: String },
     isDeletedConversationBy: [String],
     reactionEmote: String,
+    replyData: { to: String, body: String },
   },
   { timestamps: { createdAt: true, updatedAt: false } }
 );
@@ -64,7 +71,8 @@ MessageSchema.statics.setMessageToDeleted = async function (messageId: string) {
     body: "",
     type: "text",
     file: undefined,
-    emote: "",
+    reactionEmote: "",
+    replyData: undefined,
   });
 };
 

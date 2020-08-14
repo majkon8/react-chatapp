@@ -12,18 +12,21 @@ import ChatInput from "../../common/ChatInput/ChatInput";
 import { CircularProgress } from "@material-ui/core";
 import File from "../../common/File/File";
 import api from "../../api/api";
+import { isMobile } from "react-device-detect";
 // redux
 import { connect, ConnectedProps } from "react-redux";
+import { setReplyData } from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
 
 const mapStateToProps = (state: IState) => ({ data: state.data });
-const connector = connect(mapStateToProps, {});
+const mapActionsToProps = { setReplyData };
+const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux & { socket: SocketIOClient.Socket | null };
 
-function ChatForm({ data, socket }: Props) {
+function ChatForm({ data, socket, setReplyData }: Props) {
   const [messageBody, setMessageBody] = useState("");
   const [messageType, setMessageType] = useState("text");
   const [fileName, setFileName] = useState("");
@@ -55,10 +58,12 @@ function ChatForm({ data, socket }: Props) {
       type: messageType,
       file: { name: fileName, url: fileUrl },
       conversation: data.selectedConversation,
+      replyData: data.replyData,
     };
     socket?.emit("sendMessage", message);
     setMessageBody("");
     resetFileData();
+    setReplyData(null);
   };
 
   const handleFileAdd = async () => {
@@ -102,6 +107,11 @@ function ChatForm({ data, socket }: Props) {
     fileInputRef.current.value = "";
   };
 
+  const resetReplyData = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setReplyData(null);
+  };
+
   return (
     <form className="chat-form-container" onSubmit={submitChatMessage}>
       <div className="file-container">
@@ -115,7 +125,7 @@ function ChatForm({ data, socket }: Props) {
         {fileName ? (
           <button
             onClick={(e) => handleFileRemove(e)}
-            className="button is-rounded remove-file-button"
+            className="button is-rounded remove-button"
             title="Remove file"
           >
             <i className="fas fa-times"></i>
@@ -129,7 +139,30 @@ function ChatForm({ data, socket }: Props) {
         {isFileError && (
           <p style={{ color: "hsl(348, 100%, 61%)" }}>Cannot upload file</p>
         )}
-        {isUploadingFile && <CircularProgress color="inherit" />}
+        {isUploadingFile && (
+          <div className="circular-progress-container">
+            <CircularProgress color="inherit" />
+          </div>
+        )}
+        {data.replyData && (
+          <>
+            <button
+              onClick={(e) => resetReplyData(e)}
+              className="button is-rounded remove-button"
+              title="Cancel reply"
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            <span
+              title={`Replying to ${data.replyData.to}`}
+              className="form-reply-data"
+              style={{ marginLeft: isMobile ? -5 : 0 }}
+            >
+              <i className="fas fa-reply"></i>
+              {data.replyData.to}: {data.replyData.body}
+            </span>
+          </>
+        )}
       </div>
       <ChatInput handleChange={handleChange} type="chat" value={messageBody} />
       <button

@@ -8,7 +8,8 @@
 
   &:hover {
     .chat-message-delete,
-    .reaction-emotes-container {
+    .reaction-emotes-container,
+    .reply-trigger-container {
       display: block;
     }
   }
@@ -45,6 +46,18 @@
       text-decoration: line-through;
       opacity: 0.7;
       font-size: 0.9em;
+    }
+
+    .chat-message-reply-data {
+      border-left: 3px solid;
+      padding-left: 5px;
+      opacity: 0.8;
+      font-size: 0.9em;
+      margin-bottom: 5px;
+
+      span {
+        display: block;
+      }
     }
   }
 

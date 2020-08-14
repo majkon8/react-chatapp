@@ -14,3 +14,15 @@
     margin-right: 5px;
   }
 }
+
+@media screen and (max-width: 568px) {
+  .file-name {
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 374px) {
+  .file-name {
+    width: 100px;
+  }
+}

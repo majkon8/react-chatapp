@@ -10,12 +10,14 @@ import {
   SET_MESSAGE_DELETED,
   DELETE_CONVERSATION,
   ADD_REACTION_EMOTE_TO_MESSAGE,
+  SET_REPLY_DATA,
 } from "../types";
 import { Dispatch } from "redux";
 import {
   ISelectedConversation,
   IMessage,
   IConversation,
+  IReplyData,
 } from "../reducers/dataReducer";
 import { IMessageConversation } from "../../components/Chat/Chat";
 import api from "../../api/api";
@@ -105,9 +107,12 @@ export const deleteConversation = (conversationId: string) => async (
 
 export const addReactionEmoteToMessage = (messageId: string, emote: string) => (
   dispatch: Dispatch
-) => {
+) =>
   dispatch({
     type: ADD_REACTION_EMOTE_TO_MESSAGE,
     payload: { messageId, emote },
   });
-};
+
+export const setReplyData = (replyData: IReplyData | null) => (
+  dispatch: Dispatch
+) => dispatch({ type: SET_REPLY_DATA, payload: replyData });

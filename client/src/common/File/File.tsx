@@ -12,6 +12,7 @@ export default function File({ name, url }: IProps) {
   const handleDownload = () => {
     saveAs(url, name);
   };
+
   return (
     <>
       <BrowserView>
@@ -27,6 +28,7 @@ export default function File({ name, url }: IProps) {
           target="_blank"
           className="file-name"
           title="Download file"
+          style={{ marginLeft: -5 }}
         >
           <i className="far fa-file-alt"></i>
           {name}

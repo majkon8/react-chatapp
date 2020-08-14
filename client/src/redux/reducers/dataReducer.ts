@@ -10,13 +10,9 @@ import {
   SET_MESSAGE_DELETED,
   DELETE_CONVERSATION,
   ADD_REACTION_EMOTE_TO_MESSAGE,
+  SET_REPLY_DATA,
 } from "../types";
 import { IUser } from "./userReducer";
-
-export interface IFile {
-  name: string;
-  url: string;
-}
 
 export interface IMessage {
   _id: string;
@@ -28,11 +24,17 @@ export interface IMessage {
   createdAt: string;
   messageConversation: boolean;
   reactionEmote: string;
+  replyData: IReplyData | null;
 }
 
 interface IMembers {
   ids: string[];
   usernames: string[];
+}
+
+export interface IFile {
+  name: string;
+  url: string;
 }
 
 export interface IConversation {
@@ -50,12 +52,18 @@ export interface ISelectedConversation {
   userId: string;
 }
 
+export interface IReplyData {
+  to: string;
+  body: string;
+}
+
 export interface IDataState {
   searchedUsers: IUser[] | null;
   selectedConversation: ISelectedConversation | null;
   conversations: IConversation[] | null;
   searchConversations: string;
   messages: IMessage[] | null;
+  replyData: IReplyData | null;
 }
 
 const initialState: IDataState = {
@@ -64,6 +72,7 @@ const initialState: IDataState = {
   conversations: null,
   searchConversations: "",
   messages: null,
+  replyData: null,
 };
 
 export default function (state = initialState, action: DataActionTypes) {
@@ -231,6 +240,8 @@ export default function (state = initialState, action: DataActionTypes) {
           }),
         ],
       };
+    case SET_REPLY_DATA:
+      return { ...state, replyData: action.payload };
     default:
       return state;
   }

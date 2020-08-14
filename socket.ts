@@ -5,7 +5,7 @@ import { tokenAuthSocket, IDecodedUser } from "./middlewares/auth";
 import { mongoose } from "./mongoose";
 import { User, IUserDocument } from "./models/user.model";
 import { IConversationDocument } from "./models/conversation.model";
-import { IFile } from "./models/message.model";
+import { IFile, IReplyData } from "./models/message.model";
 
 interface IConversation {
   new: boolean;
@@ -19,6 +19,7 @@ interface IMessage {
   type: "text" | "image" | "video" | "other";
   file: IFile;
   conversation: IConversation;
+  replyData: IReplyData;
 }
 
 export type Socket = SocketIO.Socket & { user: IDecodedUser };
@@ -85,6 +86,7 @@ io.on("connection", (socket: Socket) => {
         body: message.body,
         type: message.type,
         file: message.file,
+        replyData: message.replyData,
       };
       const createdMessage = await messages.create(newMessage);
       // in this case, we need to get the message conversation after we create new message

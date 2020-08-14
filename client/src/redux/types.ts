@@ -3,6 +3,7 @@ import {
   ISelectedConversation,
   IConversation,
   IMessage,
+  IReplyData,
 } from "./reducers/dataReducer";
 import { IMessageConversation } from "../components/Chat/Chat";
 import { IPending } from "./reducers/uiReducer";
@@ -30,6 +31,7 @@ export const DISPLAY_MESSAGE = "DISPLAY_MESSAGE";
 export const SET_MESSAGE_DELETED = "SET_MESSAGE_DELETED";
 export const DELETE_CONVERSATION = "DELETE_CONVERSATION";
 export const ADD_REACTION_EMOTE_TO_MESSAGE = "ADD_REACTION_EMOTE_TO_MESSAGE";
+export const SET_REPLY_DATA = "SET_REPLY_DATA";
 
 // user interfaces
 interface ISetAuthenticatedAction {
@@ -133,6 +135,10 @@ interface IAddReactionToMessageAction {
   type: typeof ADD_REACTION_EMOTE_TO_MESSAGE;
   payload: { messageId: string; emote: string };
 }
+interface ISetReplyAction {
+  type: typeof SET_REPLY_DATA;
+  payload: IReplyData | null;
+}
 
 export type DataActionTypes =
   | ISetSearchedUsersAction
@@ -144,4 +150,5 @@ export type DataActionTypes =
   | IDisplayMessageAction
   | ISetMessageDeletedAction
   | IDeleteConversationAction
-  | IAddReactionToMessageAction;
+  | IAddReactionToMessageAction
+  | ISetReplyAction;

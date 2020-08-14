@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./SideNav.scss";
 import { NavLink } from "react-router-dom";
+import { useOuterClick } from "../../hooks/hooks";
 
 interface IProps {
   isOpen: boolean;
@@ -9,6 +10,10 @@ interface IProps {
 
 export default function SideNav({ isOpen, toggleOpen }: IProps) {
   const [canOpen, setCanOpen] = useState(false);
+  const innerRef = useOuterClick(() => {
+    if (!isOpen) return;
+    toggleOpen();
+  });
 
   useEffect(() => {
     setTimeout(() => {
@@ -17,6 +22,7 @@ export default function SideNav({ isOpen, toggleOpen }: IProps) {
   }, []);
   return (
     <div
+      ref={innerRef}
       className={
         "side-container" +
         (isOpen ? " side-open" : " side-close") +

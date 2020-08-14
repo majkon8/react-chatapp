@@ -1,0 +1,14 @@
+.reply-trigger-container {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+}
+
+.own-message {
+    left: -35px
+  }
+
+  .other-message {
+    right: -65px
+  }

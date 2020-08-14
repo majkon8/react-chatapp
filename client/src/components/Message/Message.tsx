@@ -5,6 +5,7 @@ import File from "../../common/File/File";
 import { BrowserView, MobileView } from "react-device-detect";
 import DeleteMessage from "../DeleteMessage/DeleteMessage";
 import ReactionEmotes from "../ReactionEmotes/ReactionEmotes";
+import Reply from "../Reply/Reply";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { setImageUrlToOpen } from "../../redux/actions/uiActions";
@@ -71,12 +72,16 @@ function Message({
       isOwnMessage &&
       // check if conversation which is currently selected is displayed
       conversation?.isDisplayed &&
-      conversation?.lastMessage.authorId === user.authenticatedUser?._id &&
+      conversation?.lastMessage.authorId === user.authenticatedUser!._id &&
       isLast
     );
   };
 
   const openFullImage = () => setImageUrlToOpen(message.file.url);
+
+  const shorten = (text: String) => {
+    return text.length <= 100 ? text : text.slice(0, 98) + "...";
+  };
 
   return (
     <div
@@ -85,15 +90,27 @@ function Message({
       }`}
     >
       <div className="chat-message-content">
-        {isOwnMessage && !isMessageDeleted && (
-          <DeleteMessage
+        {!isOwnMessage && !isMessageDeleted && (
+          <ReactionEmotes
             socket={socket}
             messageId={message._id}
             otherUserId={data.selectedConversation!.userId}
           />
         )}
-        {!isOwnMessage && !isMessageDeleted && (
-          <ReactionEmotes
+        {!isMessageDeleted && (
+          <Reply
+            isOwnMessage={isOwnMessage}
+            to={
+              isOwnMessage
+                ? user.authenticatedUser!.username
+                : data.selectedConversation!.username
+            }
+            body={message.body}
+            fileName={message.file.name}
+          />
+        )}
+        {isOwnMessage && !isMessageDeleted && (
+          <DeleteMessage
             socket={socket}
             messageId={message._id}
             otherUserId={data.selectedConversation!.userId}
@@ -127,6 +144,12 @@ function Message({
         >
           {isMessageDeleted && (
             <span className="chat-message-deleted">Message deleted</span>
+          )}
+          {!isMessageDeleted && message?.replyData && (
+            <div className="chat-message-reply-data">
+              <span>{message.replyData.to}:</span>
+              <span>{shorten(message.replyData.body)}</span>
+            </div>
           )}
           {!isMessageDeleted && message.body}
           {message.type === "other" && (

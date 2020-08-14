@@ -1,7 +1,7 @@
 import { useRef, useEffect, MutableRefObject, RefObject } from "react";
 
 export function useOuterClick(callback: Function) {
-  const innerRef = useRef() as RefObject<HTMLDivElement>;
+  const innerRef = useRef() as RefObject<any>
   const callbackRef = useRef() as MutableRefObject<Function>;
   // set current callback in ref, before second useEffect uses it
   useEffect(() => {

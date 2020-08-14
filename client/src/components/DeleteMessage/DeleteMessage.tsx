@@ -19,7 +19,7 @@ export default function DeleteMessage({
     });
 
   return (
-    <div onClick={handleMessageDelete} className="chat-message-delete">
+    <div title="Delete" onClick={handleMessageDelete} className="chat-message-delete">
       <i className="far fa-trash-alt"></i>
     </div>
   );
