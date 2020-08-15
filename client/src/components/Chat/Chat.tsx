@@ -9,7 +9,7 @@ import TypingIndicator from "../../common/TypingIndicator/TypingIndicator";
 import { connect, ConnectedProps } from "react-redux";
 import {
   setNewMessage,
-  getMessages,
+  getMoreMessages,
   setMessageDeleted,
 } from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
@@ -23,7 +23,11 @@ const mapStateToProps = (state: IState) => ({
   data: state.data,
   user: state.user,
 });
-const mapActionsToProps = { setNewMessage, getMessages, setMessageDeleted };
+const mapActionsToProps = {
+  setNewMessage,
+  getMoreMessages,
+  setMessageDeleted,
+};
 const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -53,7 +57,7 @@ function Chat({
   user,
   isTyping,
   setNewMessage,
-  getMessages,
+  getMoreMessages,
   setMessageDeleted,
 }: Props) {
   const [isScrolling, setIsScrolling] = useState(false);
@@ -78,7 +82,7 @@ function Chat({
     if (isScrolling) {
       // if getting more messages then scroll a little bit down
       if (scrollRef.current.getScrollElement().scrollTop === 0)
-        scrollRef.current.getScrollElement().scrollTop = 100;
+        scrollRef.current.getScrollElement().scrollTop = 1;
     } else scrollToBottom();
   }, [data.messages, UI.pending.messages, isTyping]);
 
@@ -126,7 +130,7 @@ function Chat({
       const newMessagesSinceLastMessagesFetch = (page - 1) * 10;
       const count =
         page * 10 + messagesCount - newMessagesSinceLastMessagesFetch;
-      getMessages(data.selectedConversation.id, count);
+      getMoreMessages(data.selectedConversation.id, count);
     }
   }, [page]);
 
@@ -164,19 +168,16 @@ function Chat({
         onScroll={handleScroll}
         style={{ maxHeight: "calc(100vh - 170px)" }}
       >
-        {UI.pending.messages ? (
-          <CircularProgress color="inherit" />
-        ) : (
-          data.messages?.map((message, index) => (
-            <Message
-              key={message._id}
-              isOwnMessage={message.authorId === user.authenticatedUser?._id}
-              message={message}
-              isLast={index === data.messages!.length - 1}
-              socket={socket}
-            />
-          ))
-        )}
+        {data.messages?.map((message, index) => (
+          <Message
+            key={message._id}
+            isOwnMessage={message.authorId === user.authenticatedUser?._id}
+            message={message}
+            isLast={index === data.messages!.length - 1}
+            socket={socket}
+          />
+        ))}
+        {UI.pending.messages && <CircularProgress color="inherit" />}
         {isTyping && (
           <div style={{ marginBottom: 5 }}>
             <TypingIndicator showImage={true} />

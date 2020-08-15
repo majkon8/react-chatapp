@@ -63,7 +63,26 @@ export const getAllConversations = () => async (dispatch: Dispatch) => {
   }
 };
 
-export const getMessages = (
+export const getInitialMessages = (
+  conversationId: string | null,
+  count?: number
+) => async (dispatch: Dispatch) => {
+  dispatch({ type: SET_PENDING, payload: { messages: true } });
+  dispatch({ type: SET_MESSAGES, payload: [] });
+  try {
+    if (conversationId === null) return;
+    else {
+      const response = await api.getMessages(conversationId, count);
+      dispatch({ type: SET_MESSAGES, payload: response.data });
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    dispatch({ type: SET_PENDING, payload: { messages: false } });
+  }
+};
+
+export const getMoreMessages = (
   conversationId: string | null,
   count?: number
 ) => async (dispatch: Dispatch) => {

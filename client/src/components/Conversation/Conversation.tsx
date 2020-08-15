@@ -8,7 +8,7 @@ import { connect, ConnectedProps } from "react-redux";
 import { setIsChatOpen } from "../../redux/actions/uiActions";
 import {
   setSelectedConversation,
-  getMessages,
+  getInitialMessages,
   deleteConversation,
 } from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
@@ -18,7 +18,7 @@ const mapStateToProps = (state: IState) => ({ UI: state.UI, data: state.data });
 const mapActionsToProps = {
   setIsChatOpen,
   setSelectedConversation,
-  getMessages,
+  getInitialMessages,
   deleteConversation,
 };
 const connector = connect(mapStateToProps, mapActionsToProps);
@@ -57,14 +57,14 @@ function Conversation({
   handleActive,
   setIsChatOpen,
   setSelectedConversation,
-  getMessages,
+  getInitialMessages,
   deleteConversation,
 }: Props) {
   useEffect(() => {
     if (isActive) {
       selectNewConversation(id);
-      if (!isNew) getMessages(id, 20);
-      else getMessages(null);
+      if (!isNew) getInitialMessages(id, 20);
+      else getInitialMessages(null);
     }
   }, [isActive]);
 

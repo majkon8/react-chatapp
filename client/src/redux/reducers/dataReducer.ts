@@ -97,7 +97,21 @@ export default function (state = initialState, action: DataActionTypes) {
     case SEARCH_CONVERSATIONS:
       return { ...state, searchConversations: action.payload };
     case SET_MESSAGES:
-      return { ...state, messages: action.payload };
+      if (action.payload.length === 0) return { ...state, messages: [] };
+      const newMessages = state.messages
+        ? action.payload.filter(
+            (newMessage) =>
+              !state.messages?.some(
+                (stateMessage) => stateMessage._id === newMessage._id
+              )
+          )
+        : action.payload;
+      return {
+        ...state,
+        messages: state.messages
+          ? [...newMessages, ...state.messages]
+          : action.payload,
+      };
     case SET_NEW_MESSAGE:
       const isSender =
         action.payload.createdMessage.authorId ===
