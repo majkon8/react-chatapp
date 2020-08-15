@@ -12,14 +12,23 @@ export default function DeleteMessage({
   messageId,
   otherUserId,
 }: IProps) {
-  const handleMessageDelete = () =>
-    socket?.emit("deleteMessage", {
-      messageId,
-      otherUserId,
-    });
+  const handleMessageDelete = () => {
+    const confirmed = confirm(
+      "Are you sure you want to delete the message? The process is irreversible"
+    );
+    if (confirmed)
+      socket?.emit("deleteMessage", {
+        messageId,
+        otherUserId,
+      });
+  };
 
   return (
-    <div title="Delete" onClick={handleMessageDelete} className="chat-message-delete">
+    <div
+      title="Delete"
+      onClick={handleMessageDelete}
+      className="chat-message-delete"
+    >
       <i className="far fa-trash-alt"></i>
     </div>
   );

@@ -6,6 +6,7 @@ import { BrowserView, MobileView } from "react-device-detect";
 import DeleteMessage from "../DeleteMessage/DeleteMessage";
 import ReactionEmotes from "../ReactionEmotes/ReactionEmotes";
 import Reply from "../Reply/Reply";
+import Forward from "../Forward/Forward";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { setImageUrlToOpen } from "../../redux/actions/uiActions";
@@ -98,16 +99,19 @@ function Message({
           />
         )}
         {!isMessageDeleted && (
-          <Reply
-            isOwnMessage={isOwnMessage}
-            to={
-              isOwnMessage
-                ? user.authenticatedUser!.username
-                : data.selectedConversation!.username
-            }
-            body={message.body}
-            fileName={message.file.name}
-          />
+          <>
+            <Reply
+              isOwnMessage={isOwnMessage}
+              to={
+                isOwnMessage
+                  ? user.authenticatedUser!.username
+                  : data.selectedConversation!.username
+              }
+              body={message.body}
+              fileName={message.file.name}
+            />
+            <Forward isOwnMessage={isOwnMessage} />
+          </>
         )}
         {isOwnMessage && !isMessageDeleted && (
           <DeleteMessage
@@ -134,7 +138,7 @@ function Message({
             alt="user"
           ></img>
         )}
-        <p
+        <div
           style={{
             backgroundColor: isOwnMessage ? UI.color : "",
             borderColor: isOwnMessage ? UI.color : "",
@@ -177,7 +181,7 @@ function Message({
               </MobileView>
             </>
           )}
-        </p>
+        </div>
         {message.reactionEmote && (
           <span className="message-reaction-emotes-container">
             {message.reactionEmote}

@@ -12,7 +12,9 @@ export default function DeleteConversation({
 }: IProps) {
   const handleConversationDelete = (event: MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    const confirmed = confirm("Are you sure?");
+    const confirmed = confirm(
+      "Are you sure you want to delete the conversation? The process is irreversible"
+    );
     if (confirmed) deleteConversation(conversationId);
   };
 

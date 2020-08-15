@@ -5,10 +5,15 @@
   display: none;
 }
 
-.own-message {
-    left: -35px
-  }
+.own-message-reply {
+  left: -35px;
+}
 
-  .other-message {
-    right: -65px
+.other-message-reply {
+  right: -65px;
+}
+@media screen and (max-width: 340px) {
+  .own-message-reply {
+    left: -30px;
   }
+}

@@ -21,7 +21,7 @@ export interface IUIState {
   pending: IPending;
   error: string | null;
   success: string | null;
-  theme: string;
+  theme: "dark" | "light";
   color: string;
   isChatOpen: boolean;
   imageUrlToOpen: string | null;
@@ -36,7 +36,7 @@ const initialState: IUIState = {
   },
   error: null,
   success: null,
-  theme: localStorage.getItem("theme") || "dark",
+  theme: <"dark" | "light">localStorage.getItem("theme") || "dark",
   color: localStorage.getItem("color") || "rgb(84, 89, 230)",
   // Only usable for screen resolution <= 768px
   isChatOpen: false,

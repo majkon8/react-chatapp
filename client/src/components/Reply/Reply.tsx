@@ -1,6 +1,5 @@
 import React from "react";
 import "./Reply.scss";
-import { IFile } from "../../redux/reducers/dataReducer";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { setReplyData } from "../../redux/actions/dataActions";
@@ -29,7 +28,7 @@ function Reply({ isOwnMessage, to, body, fileName, setReplyData }: Props) {
     <div
       title="Reply"
       className={`reply-trigger-container ${
-        isOwnMessage ? "own-message" : "other-message"
+        isOwnMessage ? "own-message-reply" : "other-message-reply"
       }`}
     >
       <div onClick={handleReply} className="message-action-trigger">
