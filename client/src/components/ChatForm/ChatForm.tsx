@@ -124,6 +124,7 @@ function ChatForm({ data, socket, setReplyData }: Props) {
         />
         {fileName ? (
           <button
+            type="button"
             onClick={(e) => handleFileRemove(e)}
             className="button is-rounded remove-button"
             title="Remove file"
@@ -147,6 +148,7 @@ function ChatForm({ data, socket, setReplyData }: Props) {
         {data.replyData && (
           <>
             <button
+              type="button"
               onClick={(e) => resetReplyData(e)}
               className="button is-rounded remove-button"
               title="Cancel reply"
