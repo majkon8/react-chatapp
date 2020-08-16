@@ -7,9 +7,9 @@ import DeleteMessage from "../DeleteMessage/DeleteMessage";
 import ReactionEmotes from "../ReactionEmotes/ReactionEmotes";
 import Reply from "../Reply/Reply";
 import Forward from "../Forward/Forward";
+import MessageImage from "../MessageImage/MessageImage";
 // redux
 import { connect, ConnectedProps } from "react-redux";
-import { setImageUrlToOpen } from "../../redux/actions/uiActions";
 import { IState } from "../../redux/store";
 import { IMessage } from "../../redux/reducers/dataReducer";
 
@@ -18,8 +18,7 @@ const mapStateToProps = (state: IState) => ({
   data: state.data,
   user: state.user,
 });
-const mapActionsToProps = { setImageUrlToOpen };
-const connector = connect(mapStateToProps, mapActionsToProps);
+const connector = connect(mapStateToProps, {});
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
@@ -50,7 +49,6 @@ function Message({
   message,
   isLast,
   socket,
-  setImageUrlToOpen,
 }: Props) {
   const isMessageDeleted = message.type === "text" && message.body === "";
 
@@ -77,8 +75,6 @@ function Message({
       isLast
     );
   };
-
-  const openFullImage = () => setImageUrlToOpen(message.file.url);
 
   const shorten = (text: String) => {
     return text.length <= 100 ? text : text.slice(0, 98) + "...";
@@ -163,13 +159,7 @@ function Message({
           {message.type === "other" && (
             <File name={message.file.name} url={message.file.url} />
           )}
-          {message.type === "image" && (
-            <img
-              onClick={openFullImage}
-              className="image-small"
-              src={message.file.url}
-            ></img>
-          )}
+          {message.type === "image" && <MessageImage url={message.file.url} />}
           {message.type === "video" && (
             <>
               <BrowserView>

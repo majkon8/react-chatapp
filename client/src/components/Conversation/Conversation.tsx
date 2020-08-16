@@ -122,7 +122,9 @@ function Conversation({
             )}
           </span>
         )}
-        {isTyping && <TypingIndicator showImage={false} />}
+        {isTyping && (
+          <TypingIndicator showImage={false} changeBackgroundColor={true} />
+        )}
       </div>
     </div>
   );

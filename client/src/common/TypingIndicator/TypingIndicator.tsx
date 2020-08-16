@@ -3,9 +3,13 @@ import "./TypingIndicator.scss";
 
 interface IProps {
   showImage: boolean;
+  changeBackgroundColor?: boolean;
 }
 
-export default function TypingIndicator({ showImage }: IProps) {
+export default function TypingIndicator({
+  showImage,
+  changeBackgroundColor,
+}: IProps) {
   return (
     <div className="typing-indicator-container">
       {showImage && (
@@ -15,7 +19,11 @@ export default function TypingIndicator({ showImage }: IProps) {
           alt="user"
         ></img>
       )}
-      <div className="typing-indicator">
+      <div
+        className={`typing-indicator ${
+          changeBackgroundColor && "typing-indicator-change-background-color"
+        }`}
+      >
         <span></span>
         <span></span>
         <span></span>

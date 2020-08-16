@@ -19,7 +19,6 @@ export const SET_PENDING = "SET_PENDING";
 export const SET_THEME = "SET_THEME";
 export const SET_COLOR = "SET_COLOR";
 export const SET_CHAT_OPEN = "SET_IS_CHAT_OPEN";
-export const SET_IMAGE_URL_TO_OPEN = "SET_IMAGE_URL_TO_OPEN";
 // data reducer types
 export const SET_SEARCHED_USERS = "SET_SEARCHED_USERS";
 export const SET_SELECTED_CONVERSATION = "SET_SELECTED_CONVERSATION";
@@ -77,10 +76,6 @@ interface ISetChatOpenAction {
   type: typeof SET_CHAT_OPEN;
   payload: boolean;
 }
-interface ISetImageUrlToOpenAction {
-  type: typeof SET_IMAGE_URL_TO_OPEN;
-  payload: string | null;
-}
 
 export type UIActionTypes =
   | ISetErrorAction
@@ -88,8 +83,7 @@ export type UIActionTypes =
   | ISetPendingAction
   | ISetThemeAction
   | ISetColorAction
-  | ISetChatOpenAction
-  | ISetImageUrlToOpenAction;
+  | ISetChatOpenAction;
 
 // data interfaces
 interface ISetSearchedUsersAction {

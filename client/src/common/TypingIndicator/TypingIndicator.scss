@@ -11,36 +11,48 @@
   }
 
   .typing-indicator {
-    $ti-color-bg: #e6e7ed;
-    background-color: $ti-color-bg;
+    background-color: rgb(40, 40, 40);
     will-change: transform;
-    width: auto;
+    width: 45px;
+    height: 24px;
     border-radius: 50px;
     padding: 8px;
     display: table;
     position: relative;
     animation: 2s bulge infinite ease-out;
+    transition: background-color 0.5s;
 
     span {
+      position: absolute;
       height: 7.5px;
       width: 7.5px;
-      float: left;
-      margin: 0 1px;
       background-color: #9e9ea1;
       display: block;
       border-radius: 50%;
       opacity: 0.4;
       @for $i from 1 through 3 {
         &:nth-of-type(#{$i}) {
-          animation: 1s blink infinite ($i * 0.3333s);
+          animation: 1s blink infinite ($i * 0.3333s),
+            1s move infinite ($i * 0.3333s);
+          left: $i * 9.5px;
         }
       }
     }
   }
 
+  .typing-indicator-change-background-color {
+    background-color: rgb(30, 30, 30);
+  }
+
   @keyframes blink {
     50% {
       opacity: 1;
+    }
+  }
+
+  @keyframes move {
+    50% {
+      top: 9px;
     }
   }
 }

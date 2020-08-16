@@ -1,29 +1,24 @@
 import React from "react";
 import "./ImageFull.scss";
 import { useOuterClick } from "../../hooks/hooks";
-// redux
-import { connect, ConnectedProps } from "react-redux";
-import { setImageUrlToOpen } from "../../redux/actions/uiActions";
+import { createPortal } from "react-dom";
 
-const mapActionsToProps = { setImageUrlToOpen };
-const connector = connect(null, mapActionsToProps);
+interface IProps {
+  url: string;
+  closeImage(): void;
+}
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & { url: string };
-
-function ImageFull({ url, setImageUrlToOpen }: Props) {
-  const closeImage = () => setImageUrlToOpen(null);
+export default function ImageFull({ url, closeImage }: IProps) {
   const innerRef = useOuterClick(() => closeImage());
 
-  return (
+  return createPortal(
     <div className="image-full-container">
       <div className="image-full-close">
         <i className="fas fa-times"></i>
       </div>
       <img ref={innerRef} className="image-full" src={url}></img>
-    </div>
+    </div>,
+    // @ts-ignore
+    document.getElementById("main-container")
   );
 }
-
-export default connector(ImageFull);

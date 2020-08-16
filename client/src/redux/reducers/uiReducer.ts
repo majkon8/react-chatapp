@@ -6,7 +6,6 @@ import {
   UIActionTypes,
   SET_CHAT_OPEN,
   SET_PENDING,
-  SET_IMAGE_URL_TO_OPEN,
 } from "../types";
 
 export interface IPending {
@@ -24,7 +23,6 @@ export interface IUIState {
   theme: "dark" | "light";
   color: string;
   isChatOpen: boolean;
-  imageUrlToOpen: string | null;
 }
 
 const initialState: IUIState = {
@@ -40,7 +38,6 @@ const initialState: IUIState = {
   color: localStorage.getItem("color") || "rgb(84, 89, 230)",
   // Only usable for screen resolution <= 768px
   isChatOpen: false,
-  imageUrlToOpen: null,
 };
 
 export default function (state = initialState, action: UIActionTypes) {
@@ -57,8 +54,6 @@ export default function (state = initialState, action: UIActionTypes) {
       return { ...state, color: action.payload };
     case SET_CHAT_OPEN:
       return { ...state, isChatOpen: action.payload };
-    case SET_IMAGE_URL_TO_OPEN:
-      return { ...state, imageUrlToOpen: action.payload };
     default:
       return state;
   }

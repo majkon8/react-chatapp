@@ -46,6 +46,14 @@ $theme-dark: rgb(40, 40, 40);
   color: $text-dark;
   transition: background-color 0.5s, color 0.5s;
 
+  .typing-indicator {
+    background-color: $theme-light !important;
+  }
+
+  .typing-indicator-change-background-color {
+    background-color: white !important;
+  }
+
   .forward-users-list {
     background-color: white !important;
     color: $text-dark !important;

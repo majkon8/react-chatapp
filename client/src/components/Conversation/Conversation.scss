@@ -28,6 +28,11 @@
     overflow: hidden;
     white-space: nowrap;
 
+    .conversation-title {
+      width: 100%;
+      text-align: left;
+    }
+
     .conversation-message {
       font-size: 0.8em;
       opacity: 0.5;
@@ -37,10 +42,15 @@
       .conversation-message-body,
       .conversation-message-deleted {
         margin-left: 3px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
       }
+    }
+
+    .conversation-title,
+    .conversation-message-body,
+    .conversation-message-deleted {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .conversation-message-not-displayed {
