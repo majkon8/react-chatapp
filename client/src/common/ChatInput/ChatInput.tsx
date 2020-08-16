@@ -3,34 +3,47 @@ import "./ChatInput.scss";
 import { DebounceInput } from "react-debounce-input";
 
 interface IProps {
-  type: "search" | "chat";
   value?: string;
+  icon?: string;
+  debounce?: boolean;
+  placeholder: string;
   handleChange(event: ChangeEvent<HTMLInputElement>): void;
 }
 
-export default function ChatInput({ type, value, handleChange }: IProps) {
-  const inputMarkup =
-    type === "search" ? (
+export default function ChatInput({
+  value,
+  icon,
+  debounce,
+  placeholder,
+  handleChange,
+}: IProps) {
+  return (
+    <div className="chat-input-container">
       <div className="control has-icons-left">
-        <DebounceInput
-          debounceTimeout={300}
-          type="text"
-          className="chat-input input is-rounded"
-          placeholder="Search for users..."
-          onChange={(e) => handleChange(e)}
-        />
-        <span className="icon is-small is-left">
-          <i className="fa fa-search"></i>
-        </span>
+        {debounce && (
+          <DebounceInput
+            debounceTimeout={300}
+            type="text"
+            className="chat-input input is-rounded"
+            placeholder={placeholder}
+            onChange={(e) => handleChange(e)}
+          />
+        )}
+        {!debounce && (
+          <input
+            type="text"
+            className="chat-input input is-rounded"
+            placeholder={placeholder}
+            onChange={(e) => handleChange(e)}
+            value={value}
+          />
+        )}
+        {icon && (
+          <span className="icon is-small is-left">
+            <i className={icon}></i>
+          </span>
+        )}
       </div>
-    ) : (
-      <input
-        type="text"
-        className="chat-input input is-rounded"
-        placeholder="New message..."
-        onChange={(e) => handleChange(e)}
-        value={value}
-      />
-    );
-  return <div className="chat-input-container">{inputMarkup}</div>;
+    </div>
+  );
 }

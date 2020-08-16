@@ -110,7 +110,11 @@ function Message({
               body={message.body}
               fileName={message.file.name}
             />
-            <Forward isOwnMessage={isOwnMessage} />
+            <Forward
+              isOwnMessage={isOwnMessage}
+              message={message}
+              socket={socket}
+            />
           </>
         )}
         {isOwnMessage && !isMessageDeleted && (

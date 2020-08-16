@@ -12,7 +12,7 @@ import {
   deleteConversation,
 } from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
-import { IFile } from "../../redux/reducers/dataReducer";
+import { IFile, IMessage } from "../../redux/reducers/dataReducer";
 
 const mapStateToProps = (state: IState) => ({ UI: state.UI, data: state.data });
 const mapActionsToProps = {
@@ -28,14 +28,11 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 interface IProps {
   isActive?: boolean;
   isNew: boolean;
+  lastMessage?: IMessage;
   username: string;
   userId: string;
   id: string;
-  messageBody?: string;
   isTyping?: boolean;
-  type?: string;
-  file?: IFile;
-  createdAt?: string;
   isDisplayed?: boolean;
   handleActive(id: string): void;
 }
@@ -45,14 +42,11 @@ type Props = PropsFromRedux & IProps;
 function Conversation({
   isActive,
   isNew,
+  lastMessage,
   username,
   userId,
   id,
-  messageBody,
   isTyping,
-  type,
-  file,
-  createdAt,
   isDisplayed,
   handleActive,
   setIsChatOpen,
@@ -68,7 +62,8 @@ function Conversation({
     }
   }, [isActive]);
 
-  const isMessageDeleted = type === "text" && messageBody === "";
+  const isMessageDeleted =
+    lastMessage?.type === "text" && lastMessage.body === "";
 
   const handleChatOpen = () => setIsChatOpen(true);
 
@@ -105,7 +100,7 @@ function Conversation({
         >
           {username}
         </span>
-        {!isNew && createdAt && !isTyping && (
+        {!isNew && lastMessage?.createdAt && !isTyping && (
           <span
             className={
               isDisplayed
@@ -113,11 +108,11 @@ function Conversation({
                 : "conversation-message-not-displayed"
             }
           >
-            <span>{formatDate(createdAt)} &middot; </span>
+            <span>{formatDate(lastMessage.createdAt)} &middot; </span>
             {/* if there is no message body and message is not deleted, then there is only a file in the message */}
             {!isMessageDeleted && (
               <span className="conversation-message-body">
-                {messageBody ? messageBody : file?.name}
+                {lastMessage.body ? lastMessage.body : lastMessage.file?.name}
               </span>
             )}
             {isMessageDeleted && (

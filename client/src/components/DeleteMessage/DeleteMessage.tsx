@@ -14,7 +14,7 @@ export default function DeleteMessage({
 }: IProps) {
   const handleMessageDelete = () => {
     const confirmed = confirm(
-      "Are you sure you want to delete the message? The process is irreversible"
+      "Are you sure you want to delete the message? It will be deleted for both users in this conversation. This process is irreversible."
     );
     if (confirmed)
       socket?.emit("deleteMessage", {

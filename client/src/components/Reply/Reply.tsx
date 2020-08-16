@@ -31,9 +31,9 @@ function Reply({ isOwnMessage, to, body, fileName, setReplyData }: Props) {
         isOwnMessage ? "own-message-reply" : "other-message-reply"
       }`}
     >
-      <div onClick={handleReply} className="message-action-trigger">
+      <button onClick={handleReply} className="action-trigger">
         <i className="fas fa-reply"></i>
-      </div>
+      </button>
     </div>
   );
 }

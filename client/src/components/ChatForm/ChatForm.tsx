@@ -164,7 +164,12 @@ function ChatForm({ data, socket, setReplyData }: Props) {
           </>
         )}
       </div>
-      <ChatInput handleChange={handleChange} type="chat" value={messageBody} />
+      <ChatInput
+        handleChange={handleChange}
+        value={messageBody}
+        placeholder="New message..."
+        icon="far fa-envelope"
+      />
       <button
         className="button is-rounded submit-button"
         type="submit"

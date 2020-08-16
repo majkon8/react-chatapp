@@ -56,13 +56,13 @@ function ReactionEmotes({
           <Emoji handleClick={reactToMessage} emote="👎" label="thumb-down" />
         </div>
       )}
-      <div
+      <button
         title="React"
         onClick={toggleEmotesPanelOpen}
-        className="message-action-trigger"
+        className="action-trigger"
       >
         <i className="far fa-smile"></i>
-      </div>
+      </button>
     </div>
   );
 }

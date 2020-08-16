@@ -1,7 +1,13 @@
-import { useRef, useEffect, MutableRefObject, RefObject } from "react";
+import {
+  useRef,
+  useEffect,
+  MutableRefObject,
+  RefObject,
+  useState,
+} from "react";
 
 export function useOuterClick(callback: Function) {
-  const innerRef = useRef() as RefObject<any>
+  const innerRef = useRef() as RefObject<any>;
   const callbackRef = useRef() as MutableRefObject<Function>;
   // set current callback in ref, before second useEffect uses it
   useEffect(() => {
@@ -24,4 +30,19 @@ export function useOuterClick(callback: Function) {
     return () => document.removeEventListener("click", handleClick);
   }, []); // no need for callback + innerRef dep
   return innerRef; // return ref; client can omit `useRef`
+}
+
+export function useWindowWidth() {
+  const [windowWidth, setWindowWidth] = useState<number>();
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return windowWidth;
 }

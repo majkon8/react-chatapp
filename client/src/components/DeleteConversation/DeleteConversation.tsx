@@ -13,7 +13,7 @@ export default function DeleteConversation({
   const handleConversationDelete = (event: MouseEvent<HTMLElement>) => {
     event.stopPropagation();
     const confirmed = confirm(
-      "Are you sure you want to delete the conversation? The process is irreversible"
+      "Are you sure you want to delete the conversation? It will be deleted only for you and not for the other user. This process is irreversible."
     );
     if (confirmed) deleteConversation(conversationId);
   };

@@ -13,19 +13,24 @@ $theme-dark: rgb(40, 40, 40);
   transition: background-color 0.5s;
   overflow-x: hidden;
 
-  .message-action-trigger {
+  .action-trigger {
+    border: none;
     cursor: pointer;
     width: 30px;
     height: 30px;
     transition: border-radius 0.5s;
     opacity: 0.5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: none;
+    color: inherit;
+
     &:hover {
       background-color: $theme-dark;
       opacity: 1;
       border-radius: 100%;
+    }
+
+    &:focus {
+      outline: none;
     }
   }
 }
@@ -40,6 +45,15 @@ $theme-dark: rgb(40, 40, 40);
   background-color: white;
   color: $text-dark;
   transition: background-color 0.5s, color 0.5s;
+
+  .forward-users-list {
+    background-color: white !important;
+    color: $text-dark !important;
+
+    .user-forward-container {
+      background-color: $theme-light;
+    }
+  }
 
   .chat-search-container {
     background-color: white;
@@ -80,7 +94,7 @@ $theme-dark: rgb(40, 40, 40);
     border: 4px solid white !important;
   }
 
-  .message-action-trigger {
+  .action-trigger {
     &:hover {
       background-color: $theme-light;
     }

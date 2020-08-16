@@ -92,6 +92,7 @@ function Main({ UI, user, data, getAuthenticatedUser }: Props) {
 
   return (
     <motion.div
+      id="main-container"
       className={`main-container ${UI.theme === "light" && "theme-light"}`}
       initial="initial"
       animate="in"
@@ -102,12 +103,14 @@ function Main({ UI, user, data, getAuthenticatedUser }: Props) {
       <ChatSearch />
       <ConversationsList socket={socket} typingUsersIds={typingUsersIds} />
       <ChatBar />
-      {<Chat
-        socket={socket}
-        isTyping={typingUsersIds.includes(
-          data.selectedConversation?.userId || ""
-        )}
-      />}
+      {
+        <Chat
+          socket={socket}
+          isTyping={typingUsersIds.includes(
+            data.selectedConversation?.userId || ""
+          )}
+        />
+      }
       <ChatForm socket={socket} />
       {UI.imageUrlToOpen && <ImageFull url={UI.imageUrlToOpen} />}
     </motion.div>

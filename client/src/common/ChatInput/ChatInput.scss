@@ -21,6 +21,10 @@
     }
   }
 
+  span {
+    z-index: 0 !important;
+  }
+
   .chat-input {
     border: none;
     color: #eee;

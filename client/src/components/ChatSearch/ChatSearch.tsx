@@ -26,7 +26,12 @@ function ChatSearch({ UI, searchForUsers, setSearchConversations }: Props) {
 
   return (
     <div className={`chat-search-container ${UI.isChatOpen && "is-closed"}`}>
-      <ChatInput handleChange={(e) => handleChange(e)} type="search" />
+      <ChatInput
+        handleChange={(e) => handleChange(e)}
+        debounce={true}
+        icon="fa fa-search"
+        placeholder="Search for users..."
+      />
     </div>
   );
 }
