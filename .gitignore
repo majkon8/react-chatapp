@@ -1,8 +1,8 @@
 # dependencies
 /node_modules
 
-# typescript compiled files
-*.js
+# # typescript compiled files
+# *.js
 
 #enviroment variables file
 .env
