@@ -91,6 +91,7 @@ function ConversationsList({
               key={searchedUser._id}
               isNew={true}
               username={searchedUser.username}
+              userImageUrl={searchedUser.imageUrl}
               userId={searchedUser._id}
               id={searchedUser._id}
               handleActive={handleActive}
@@ -108,6 +109,7 @@ function ConversationsList({
               key={conversation._id}
               isNew={false}
               username={conversation.user.username}
+              userImageUrl={conversation.user.imageUrl}
               userId={conversation.user._id}
               id={conversation._id}
               lastMessage={conversation.lastMessage}

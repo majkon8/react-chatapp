@@ -39,6 +39,32 @@ $theme-dark: rgb(40, 40, 40);
   background-color: #666;
 }
 
+.settings-container {
+  .dropdown-trigger-button {
+    padding: 0;
+    box-sizing: border-box;
+    width: 30px;
+    height: 30px;
+    background: rgb(40, 40, 40);
+    border: none;
+    color: #eee;
+    transition: all 0.5s;
+
+    &:focus,
+    &:hover {
+      color: #eee;
+      box-shadow: none !important;
+    }
+  }
+
+  .dropdown-content {
+    background: rgb(40, 40, 40);
+
+    .dropdown-item {
+      color: #eee;
+    }
+  }
+}
 // LIGHT THEME STYLES
 
 .theme-light {
@@ -67,6 +93,17 @@ $theme-dark: rgb(40, 40, 40);
     background-color: white;
   }
 
+  .user-settings-username-input,
+  .user-settings-bio-textarea {
+    background-color: white !important;
+    color: $text-dark !important;
+
+    &::placeholder {
+      color: $text-dark !important;
+      opacity: 0.5;
+    }
+  }
+
   .chat-input-container {
     .input {
       background-color: $theme-light;
@@ -74,6 +111,7 @@ $theme-dark: rgb(40, 40, 40);
 
       &::placeholder {
         color: $text-dark;
+        opacity: 0.5;
         transition: color 0.5s;
       }
     }

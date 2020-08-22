@@ -5,6 +5,7 @@ import {
   SET_AUTHENTICATED,
   SET_AUTHENTICATED_USER,
   SET_ACCESS_TOKEN,
+  UPDATE_USER_ACCOUNT_DETAILS,
 } from "../types";
 import { Dispatch } from "redux";
 import axios from "axios";
@@ -172,6 +173,30 @@ export const externalLogin = (userData: IUserData) => async (
       });
   } finally {
     dispatch({ type: SET_PENDING, payload: { auth: false } });
+  }
+};
+
+export const updateUserAccountDetails = (
+  newBio: string,
+  newUsername: string,
+  newImageUrl: string
+) => async (dispatch: Dispatch) => {
+  try {
+    const response = await api.updateUserAccountDetails(
+      newBio,
+      newUsername,
+      newImageUrl
+    );
+    dispatch({
+      type: UPDATE_USER_ACCOUNT_DETAILS,
+      payload: {
+        bio: response.data.bio,
+        username: response.data.username,
+        imageUrl: response.data.imageUrl,
+      },
+    });
+  } catch (error) {
+    console.error(error);
   }
 };
 

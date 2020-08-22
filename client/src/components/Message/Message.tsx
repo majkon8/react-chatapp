@@ -123,7 +123,11 @@ function Message({
         {!isOwnMessage && (
           <img
             className="chat-message-user-image"
-            src="https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
+            src={
+              data.selectedConversation?.userImageUrl
+                ? data.selectedConversation.userImageUrl
+                : "https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
+            }
             alt="user"
           ></img>
         )}
@@ -134,7 +138,11 @@ function Message({
               bottom: message.reactionEmote ? 3 : 5,
             }}
             className="is-displayed-indicator"
-            src="https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
+            src={
+              data.selectedConversation?.userImageUrl
+                ? data.selectedConversation.userImageUrl
+                : "https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
+            }
             alt="user"
           ></img>
         )}

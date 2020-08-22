@@ -66,13 +66,13 @@ function ChatForm({ data, socket, setReplyData }: Props) {
     setReplyData(null);
   };
 
-  const handleFileAdd = async () => {
-    setIsFileError(false);
-    if (!fileInputRef.current.files) return;
-    const file = fileInputRef.current.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
+  const handleFileUpload = async () => {
     try {
+      setIsFileError(false);
+      if (!fileInputRef.current.files) return;
+      const file = fileInputRef.current.files[0];
+      const formData = new FormData();
+      formData.append("file", file);
       setIsUploadingFile(true);
       const response = await api.uploadFile(formData);
       setFileUrl(response.data.fileUrl);
@@ -120,7 +120,7 @@ function ChatForm({ data, socket, setReplyData }: Props) {
           className="file-input"
           type="file"
           id="file-input"
-          onChange={handleFileAdd}
+          onChange={handleFileUpload}
         />
         {fileName ? (
           <button
@@ -171,6 +171,7 @@ function ChatForm({ data, socket, setReplyData }: Props) {
         value={messageBody}
         placeholder="New message..."
         icon="far fa-envelope"
+        disabled={!data.selectedConversation}
       />
       <button
         className="button is-rounded submit-button"

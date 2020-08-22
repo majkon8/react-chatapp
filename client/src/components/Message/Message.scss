@@ -68,6 +68,9 @@
     border-radius: 100%;
     align-self: end;
     margin-bottom: 5px;
+    object-fit: cover;
+    width: 25px;
+    height: 25px;
   }
 }
 
@@ -115,6 +118,8 @@
   .is-displayed-indicator {
     border-radius: 100%;
     width: 15px;
+    height: 15px;
+    object-fit: cover;
     position: absolute;
   }
 }

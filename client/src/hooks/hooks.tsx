@@ -22,9 +22,8 @@ export function useOuterClick(callback: Function) {
         callbackRef.current &&
         // @ts-ignore
         !innerRef.current.contains(event.target)
-      ) {
+      )
         callbackRef.current(event);
-      }
     }
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
@@ -34,7 +33,6 @@ export function useOuterClick(callback: Function) {
 
 export function useWindowWidth() {
   const [windowWidth, setWindowWidth] = useState<number>();
-
   useEffect(() => {
     function handleResize() {
       setWindowWidth(window.innerWidth);
@@ -43,6 +41,5 @@ export function useWindowWidth() {
     handleResize();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
   return windowWidth;
 }

@@ -1,6 +1,7 @@
 import { io } from "./index";
 import * as messages from "./controlers/message.controller";
 import * as conversations from "./controlers/conversation.controller";
+import * as users from "./controlers/user.controler";
 import { tokenAuthSocket, IDecodedUser } from "./middlewares/auth";
 import { mongoose } from "./mongoose";
 import { User, IUserDocument } from "./models/user.model";
@@ -51,12 +52,16 @@ io.on("connection", (socket: Socket) => {
             )
         );
         if (deletedConversation.length === 0) {
+          const otherUser = await users.getUserById(
+            message.conversation.userId
+          );
+          if (!otherUser) throw new Error("User doesn't exist");
           const members = {
             ids: [
               mongoose.Types.ObjectId(socket.user._id),
               mongoose.Types.ObjectId(message.conversation.userId),
             ],
-            usernames: [socket.user.username, message.conversation.username],
+            usernames: [socket.user.username, otherUser!.username],
           };
           messageConversation = await conversations.create(members);
           // we need the conversationId in order to save message to database

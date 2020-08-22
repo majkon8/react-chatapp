@@ -50,6 +50,7 @@ export interface ISelectedConversation {
   id: string;
   username: string;
   userId: string;
+  userImageUrl: string;
 }
 
 export interface IReplyData {

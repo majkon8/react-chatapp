@@ -180,7 +180,9 @@ function Chat({
         {UI.pending.messages && <CircularProgress color="inherit" />}
         {isTyping && (
           <div style={{ marginBottom: 5 }}>
-            <TypingIndicator showImage={true} />
+            <TypingIndicator
+              imageUrl={data.selectedConversation?.userImageUrl}
+            />
           </div>
         )}
       </SimpleBar>

@@ -1,4 +1,5 @@
 import { User } from "../models/user.model";
+import { Conversation } from "../models/conversation.model";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { transporter } from "../helpers/mailerConfig";
@@ -10,6 +11,16 @@ interface ISignupBody {
   password: string;
   birthDate: string;
 }
+
+// GET USER BY ID
+export const getUserById = async (userId: string) => {
+  try {
+    const user = await User.findById(userId);
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 // GET AUTHENTICATED USER
 export const getAuthenticatedUser = async (req: Req, res: Response) => {
@@ -26,7 +37,7 @@ export const getAuthenticatedUser = async (req: Req, res: Response) => {
 };
 
 // SEARCH FOR USERS BY NAME
-export const searchForUsers = async (req: Req, res: Response) => {
+export const searchForUsers = async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
     const usernameRegex = new RegExp(username);
@@ -201,4 +212,42 @@ export const refreshAccessToken = (req: Req, res: Response) => {
       }
     );
   });
+};
+
+// UPDATE USER ACCOUNT DETAILS
+export const updateUserAccountDetails = async (req: Req, res: Response) => {
+  try {
+    const userId = req.user!._id;
+    const bio = req.body.newBio;
+    const username = req.body.newUsername;
+    const imageUrl = req.body.newImageUrl;
+    const oldUser = await User.findById(userId);
+    const newUser = await User.updateUserAccountDetails(
+      userId,
+      bio,
+      username,
+      imageUrl
+    );
+    await Conversation.changeUsernameInConversations(
+      userId,
+      oldUser!.username,
+      newUser.username
+    );
+    return res.json(newUser);
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json(error);
+  }
+};
+
+// DELETE USER ACCOUNT
+export const deleteUserAccount = async (req: Req, res: Response) => {
+  try {
+    const userId = req.user!._id;
+    await User.findByIdAndDelete(userId);
+    return res.json("success");
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json(error);
+  }
 };

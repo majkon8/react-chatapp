@@ -12,6 +12,7 @@ import { IPending } from "./reducers/uiReducer";
 export const SET_AUTHENTICATED = "SET_AUTHENTICATED";
 export const SET_AUTHENTICATED_USER = "SET_AUTHENTICATED_USER";
 export const SET_ACCESS_TOKEN = "SET_ACCESS_TOKEN";
+export const UPDATE_USER_ACCOUNT_DETAILS = "UPDATE_USER_ACCOUNT_DETAILS";
 // UI reducer types
 export const SET_ERROR = "SET_ERROR";
 export const SET_SUCCESS = "SET_SUCCESS";
@@ -45,11 +46,16 @@ interface ISetAccessTokenAction {
   type: typeof SET_ACCESS_TOKEN;
   payload: string;
 }
+interface IUpdateUserAccountDetailsAction {
+  type: typeof UPDATE_USER_ACCOUNT_DETAILS;
+  payload: { bio: string; username: string; imageUrl: string };
+}
 
 export type UserActionTypes =
   | ISetAuthenticatedAction
   | ISetAuthenticatedUserAction
-  | ISetAccessTokenAction;
+  | ISetAccessTokenAction
+  | IUpdateUserAccountDetailsAction;
 
 // UI interfaces
 interface ISetErrorAction {

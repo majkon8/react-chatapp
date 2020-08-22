@@ -40,6 +40,12 @@ export interface IConversationModel extends Model<IConversationDocument> {
   getUserConversations(
     userId: string | undefined
   ): Promise<IConversationDocument[]>;
+
+  changeUsernameInConversations(
+    userId: string,
+    oldUsername: string,
+    newUsername: string
+  ): Promise<void>;
 }
 
 const ConversationSchema: Schema = new Schema(
@@ -114,9 +120,30 @@ ConversationSchema.statics.getUserConversations = async function (
 ConversationSchema.statics.getUserDeletedConversations = async function (
   userId: string
 ) {
+  const Conversation = this;
   return await Conversation.find({
     "members.ids": mongoose.Types.ObjectId(userId),
   });
+};
+
+ConversationSchema.statics.changeUsernameInConversations = async function (
+  userId: string,
+  oldUsername: string,
+  newUsername: string
+) {
+  const Conversation = this;
+  const conversations: IConversationDocument[] = await Conversation.getUserConversations(
+    userId
+  );
+  for (const conversation of conversations) {
+    conversation.members.usernames = [
+      ...conversation.members.usernames.filter(
+        (username) => username !== oldUsername
+      ),
+      newUsername,
+    ];
+    await conversation.save();
+  }
 };
 
 export const Conversation: IConversationModel = mongoose.model<

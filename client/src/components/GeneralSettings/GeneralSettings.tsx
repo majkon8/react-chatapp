@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Settings.scss";
+import "./GeneralSettings.scss";
 import ColorPicker from "../../common/ColorPicker/ColorPicker";
 import { useOuterClick } from "../../hooks/hooks";
 // redux
@@ -13,7 +13,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux;
 
-function Settings({ setTheme }: Props) {
+function GeneralSettings({ setTheme }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const innerRef = useOuterClick(() => setIsOpen(false));
 
@@ -32,13 +32,13 @@ function Settings({ setTheme }: Props) {
     <div
       ref={innerRef}
       onClick={toggleOpen}
-      className={`settings-container dropdown is-right ${
+      className={`settings-container general-settings-container dropdown is-right ${
         isOpen && "is-active"
       }`}
     >
       <div className="dropdown-trigger">
         <button
-          className="button is-rounded settings-button"
+          className="button is-rounded settings-button dropdown-trigger-button"
           aria-haspopup="true"
           aria-controls="dropdown-menu"
         >
@@ -65,7 +65,7 @@ function Settings({ setTheme }: Props) {
             style={{ cursor: "pointer" }}
             className="dropdown-item logout"
           >
-            Log out
+            Log out <i className="fas fa-sign-out-alt"></i>
           </strong>
         </div>
       </div>
@@ -73,4 +73,4 @@ function Settings({ setTheme }: Props) {
   );
 }
 
-export default connector(Settings);
+export default connector(GeneralSettings);

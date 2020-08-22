@@ -77,9 +77,10 @@ export const getAll = async (req: Req, res: Response) => {
         // then it is a conversation with user himself
         user?._id;
       const conversationUser = await User.findById(otherUserId);
-      conversation.user = conversationUser;
+      if (conversationUser) conversation.user = conversationUser;
     }
-    res.send(conversationsAndUsers);
+    // return only conversations with users that didn't deleted their accounts
+    res.send(conversationsAndUsers.filter((conversation) => conversation.user));
   } catch (error) {
     console.error(error);
     res.status(400).send(error);

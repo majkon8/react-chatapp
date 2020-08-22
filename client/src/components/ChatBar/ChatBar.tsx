@@ -1,6 +1,7 @@
 import React from "react";
 import "./ChatBar.scss";
-import Settings from "../Settings/Settings";
+import GeneralSettings from "../GeneralSettings/GeneralSettings";
+import UserSettings from "../UserSettings/UserSettings";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { setIsChatOpen } from "../../redux/actions/uiActions";
@@ -27,16 +28,26 @@ function ChatBar({ data, setIsChatOpen }: Props) {
       {data.selectedConversation && (
         <div className="user-info">
           <img
-            src="https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
+            src={
+              data.selectedConversation.userImageUrl
+                ? data.selectedConversation.userImageUrl
+                : "https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
+            }
             alt="user"
+            className="chat-bar-user-image"
           />
           <div className="title-active-container">
-            <span className="conversation-title"></span>
+            <span className="conversation-title">
+              {data.selectedConversation.username}
+            </span>
             <span className="last-active"></span>
           </div>
         </div>
       )}
-      <Settings />
+      <div className="chat-bar-settings-container">
+        <UserSettings />
+        <GeneralSettings />
+      </div>
     </div>
   );
 }

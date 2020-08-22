@@ -30,6 +30,7 @@ interface IProps {
   isNew: boolean;
   lastMessage?: IMessage;
   username: string;
+  userImageUrl: string;
   userId: string;
   id: string;
   isTyping?: boolean;
@@ -44,6 +45,7 @@ function Conversation({
   isNew,
   lastMessage,
   username,
+  userImageUrl,
   userId,
   id,
   isTyping,
@@ -68,7 +70,13 @@ function Conversation({
   const handleChatOpen = () => setIsChatOpen(true);
 
   const selectNewConversation = (id: string) => {
-    const conversation = { new: isNew === true, id, username, userId };
+    const conversation = {
+      new: isNew === true,
+      id,
+      username,
+      userId,
+      userImageUrl,
+    };
     setSelectedConversation(conversation);
   };
 
@@ -90,7 +98,11 @@ function Conversation({
         />
       )}
       <img
-        src="https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
+        src={
+          userImageUrl
+            ? userImageUrl
+            : "https://socialape-98946.firebaseapp.com/static/media/no-image.5a021ab9.png"
+        }
         alt="user"
       />
       <div className="title-message-container">
@@ -109,7 +121,6 @@ function Conversation({
             }
           >
             <span>{formatDate(lastMessage.createdAt)} &middot; </span>
-            {/* if there is no message body and message is not deleted, then there is only a file in the message */}
             {!isMessageDeleted && (
               <span className="conversation-message-body">
                 {lastMessage.body ? lastMessage.body : lastMessage.file?.name}
@@ -122,9 +133,7 @@ function Conversation({
             )}
           </span>
         )}
-        {isTyping && (
-          <TypingIndicator showImage={false} changeBackgroundColor={true} />
-        )}
+        {isTyping && <TypingIndicator changeBackgroundColor={true} />}
       </div>
     </div>
   );

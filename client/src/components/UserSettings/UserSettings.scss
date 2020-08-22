@@ -1,0 +1,64 @@
+@import "../../App.scss";
+
+.user-settings-container {
+  margin-right: 10px;
+
+  .dropdown-menu {
+    width: 240px;
+
+    .dropdown-content {
+      text-align: center;
+
+      .input,
+      .textarea-container {
+        // minus 32px for padding of .dropdown-menu
+        width: 208px;
+        margin: 6px auto;
+      }
+
+      .user-settings-user-image {
+        margin-top: 6px;
+        border-radius: 100%;
+        width: 100%;
+        // height equal to width
+        height: 220px;
+        cursor: pointer;
+        object-fit: cover;
+      }
+
+      .user-settings-username {
+        font-weight: bold;
+        font-size: 24px;
+      }
+
+      .user-settings-bio,
+      .user-settings-username {
+        cursor: pointer;
+      }
+
+      .user-settings-button {
+        display: block;
+        margin: 12px auto;
+        width: 150px;
+      }
+
+      .user-settings-username-input,
+      .user-settings-bio-textarea {
+        background-color: rgb(30, 30, 30);
+        box-shadow: 0 0 0 0em $base-color;
+        transition: background-color 0.5s, box-shadow 0.4s;
+        border: none;
+        color: #eee;
+
+        &:focus {
+          box-shadow: 0 0 0 0.1em $base-color !important;
+        }
+
+        &::placeholder {
+          color: rgba(238, 238, 238, 0.5);
+          transition: color 0.5s;
+        }
+      }
+    }
+  }
+}

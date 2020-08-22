@@ -1,0 +1,36 @@
+.general-settings-container {
+  .dropdown-content {
+    text-align: left;
+    
+    .select-theme {
+      margin-left: 20px;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .break {
+    margin: 5px 0;
+    background-color: #eee;
+  }
+
+  .logout {
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background-color: inherit;
+      color: hsl(348, 100%, 61%) !important;
+    }
+
+    svg {
+      margin-left: 10px;
+    }
+  }
+}

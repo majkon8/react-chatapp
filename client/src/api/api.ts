@@ -40,4 +40,12 @@ export default {
 
   deleteConversation: async (conversationId: string) =>
     await axios.post("/conversations/delete", { conversationId }),
+
+  updateUserAccountDetails: async (
+    newBio: string,
+    newUsername: string,
+    newImageUrl: string
+  ) => await axios.patch("/users", { newBio, newUsername, newImageUrl }),
+
+  deleteUserAccount: async () => await axios.delete("/users"),
 };

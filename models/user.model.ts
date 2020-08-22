@@ -19,6 +19,8 @@ export interface IUserDocument extends Document {
   username: string;
   password: string;
   birthDate: Date;
+  bio: string;
+  imageUrl: string;
   refreshToken: string;
   temporaryToken: string;
   confirmed: boolean;
@@ -37,7 +39,7 @@ interface IUserModel extends Model<IUserDocument> {
   findByIdAndRefreshToken(
     _id: string | undefined,
     token: string | undefined
-  ): IUserDocument;
+  ): Promise<IUserDocument>;
 
   getJWTSecret(): string;
   findByUsername(usernameRegex: RegExp): Promise<IUserDocument[]>;
@@ -45,9 +47,16 @@ interface IUserModel extends Model<IUserDocument> {
   findByIdAndTemporaryToken(
     _id: string | undefined,
     token: string | undefined
-  ): IUserDocument;
+  ): Promise<IUserDocument>;
 
   getDeletedConversations(userId: string): Promise<string[] | undefined>;
+
+  updateUserAccountDetails(
+    userId: string,
+    bio: string,
+    username: string,
+    imageUrl: string
+  ): Promise<IUserDocument>;
 }
 
 const UserSchema: Schema = new Schema({
@@ -67,6 +76,7 @@ const UserSchema: Schema = new Schema({
     type: String,
     required: [true, "Username is required"],
     minlength: [3, "Username too short"],
+    maxlength: [30, "Username too long"],
     trim: true,
   },
   password: {
@@ -86,6 +96,8 @@ const UserSchema: Schema = new Schema({
       message: "Minimum age is 13",
     },
   },
+  bio: { type: String, maxlength: 100 },
+  imageUrl: String,
   refreshToken: String,
   temporaryToken: String, // used for reseting password and confirming user account
   confirmed: { type: Boolean, required: true, default: false },
@@ -223,8 +235,21 @@ UserSchema.statics.findByUsername = async function (usernameRegex: RegExp) {
 };
 
 UserSchema.statics.getDeletedConversations = async function (userId: string) {
+  const User: IUserModel = this;
   const user = await User.findById(userId);
   return user?.deletedConversations;
+};
+
+UserSchema.statics.updateUserAccountDetails = async function (
+  userId: string,
+  bio: string,
+  username: string,
+  imageUrl: string
+) {
+  const User: IUserModel = this;
+  await User.findByIdAndUpdate(userId, { bio, username, imageUrl });
+  const updatedUser = await User.findById(userId);
+  return updatedUser;
 };
 
 /*** Middleware ***/

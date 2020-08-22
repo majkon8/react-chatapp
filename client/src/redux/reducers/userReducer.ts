@@ -3,6 +3,7 @@ import {
   SET_AUTHENTICATED_USER,
   SET_ACCESS_TOKEN,
   UserActionTypes,
+  UPDATE_USER_ACCOUNT_DETAILS,
 } from "../types";
 
 export interface IUser {
@@ -10,6 +11,8 @@ export interface IUser {
   createdExternally: boolean;
   email: string;
   username: string;
+  bio: string;
+  imageUrl: string;
   _id: string;
 }
 
@@ -35,6 +38,16 @@ export default function (state = initialState, action: UserActionTypes) {
       return {
         ...state,
         accessToken: action.payload,
+      };
+    case UPDATE_USER_ACCOUNT_DETAILS:
+      return {
+        ...state,
+        authenticatedUser: {
+          ...state.authenticatedUser,
+          bio: action.payload.bio,
+          username: action.payload.username,
+          imageUrl: action.payload.imageUrl,
+        },
       };
     default:
       return state;

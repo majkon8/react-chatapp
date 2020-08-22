@@ -31,4 +31,10 @@ router.post("/login/external", users.externalLogin);
 /* GET /users/token */
 router.get("/token", users.refreshAccessToken);
 
+/* PATCH /users */
+router.patch("/", tokenAuth, users.updateUserAccountDetails);
+
+/* DELETE /users */
+router.delete("/", tokenAuth, users.deleteUserAccount);
+
 module.exports = router;

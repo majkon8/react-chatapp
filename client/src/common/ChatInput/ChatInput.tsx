@@ -7,6 +7,7 @@ interface IProps {
   icon?: string;
   debounce?: boolean;
   placeholder: string;
+  disabled?: boolean;
   handleChange(event: ChangeEvent<HTMLInputElement>): void;
 }
 
@@ -15,6 +16,7 @@ export default function ChatInput({
   icon,
   debounce,
   placeholder,
+  disabled,
   handleChange,
 }: IProps) {
   return (
@@ -27,6 +29,7 @@ export default function ChatInput({
             className="chat-input input is-rounded"
             placeholder={placeholder}
             onChange={(e) => handleChange(e)}
+            disabled={disabled}
           />
         )}
         {!debounce && (
@@ -36,6 +39,7 @@ export default function ChatInput({
             placeholder={placeholder}
             onChange={(e) => handleChange(e)}
             value={value}
+            disabled={disabled}
           />
         )}
         {icon && (
