@@ -14,6 +14,22 @@
     object-fit: cover;
   }
 
+  .conversation-is-active-indicator {
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 100%;
+    border: 4.5px solid rgb(30, 30, 30);
+    box-sizing: content-box;
+    position: absolute;
+    bottom: 0;
+    transition: border 0.5s;
+  }
+
+  .active-conversation-is-active-indicator {
+    border-color: rgb(40, 40, 40);
+  }
+
   &:hover {
     .conversation-delete {
       display: block;
@@ -63,6 +79,7 @@
     .conversation-message-deleted {
       font-style: italic;
       text-decoration: line-through;
+      padding-right: 5px;
     }
   }
 }

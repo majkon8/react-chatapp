@@ -21,6 +21,7 @@ export interface IUserDocument extends Document {
   birthDate: Date;
   bio: string;
   imageUrl: string;
+  lastActive: Date | "now";
   refreshToken: string;
   temporaryToken: string;
   confirmed: boolean;
@@ -57,6 +58,8 @@ interface IUserModel extends Model<IUserDocument> {
     username: string,
     imageUrl: string
   ): Promise<IUserDocument>;
+
+  updateLastActive(userId: string, lastActive: string | Date): Promise<void>;
 }
 
 const UserSchema: Schema = new Schema({
@@ -98,6 +101,7 @@ const UserSchema: Schema = new Schema({
   },
   bio: { type: String, maxlength: 100 },
   imageUrl: String,
+  lastActive: Schema.Types.Mixed,
   refreshToken: String,
   temporaryToken: String, // used for reseting password and confirming user account
   confirmed: { type: Boolean, required: true, default: false },
@@ -250,6 +254,14 @@ UserSchema.statics.updateUserAccountDetails = async function (
   await User.findByIdAndUpdate(userId, { bio, username, imageUrl });
   const updatedUser = await User.findById(userId);
   return updatedUser;
+};
+
+UserSchema.statics.updateLastActive = async function (
+  userId: string,
+  lastActive: string | Date
+) {
+  const User = this;
+  await User.findByIdAndUpdate(userId, { lastActive });
 };
 
 /*** Middleware ***/

@@ -32,6 +32,7 @@ interface IProps {
   username: string;
   userImageUrl: string;
   userId: string;
+  lastActive: string | Date;
   id: string;
   isTyping?: boolean;
   isDisplayed?: boolean;
@@ -47,6 +48,7 @@ function Conversation({
   username,
   userImageUrl,
   userId,
+  lastActive,
   id,
   isTyping,
   isDisplayed,
@@ -76,6 +78,7 @@ function Conversation({
       username,
       userId,
       userImageUrl,
+      lastActive,
     };
     setSelectedConversation(conversation);
   };
@@ -105,6 +108,13 @@ function Conversation({
         }
         alt="user"
       />
+      {lastActive === "now" && (
+        <div
+          className={`conversation-is-active-indicator has-background-success ${
+            isActive && "active-conversation-is-active-indicator"
+          }`}
+        ></div>
+      )}
       <div className="title-message-container">
         <span
           style={{ fontWeight: isDisplayed || isNew ? "normal" : "bold" }}

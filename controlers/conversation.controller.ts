@@ -5,11 +5,11 @@ import {
 } from "../models/conversation.model";
 import { IMessageDocument, Message } from "../models/message.model";
 import { Response } from "express";
-import { Req } from "../middlewares/auth";
+import { Req, IDecodedUser } from "../middlewares/auth";
 import { User, IUserDocument } from "../models/user.model";
 
 // GET CONVERSATION
-export const get = async (conversationId: string) => {
+export const getOne = async (conversationId: string) => {
   try {
     return await Conversation.findById(conversationId);
   } catch (error) {
@@ -62,9 +62,14 @@ export interface IConversationWithUsers extends IConversationDocument {
 }
 
 // GET ALL USERS'S CONVERSATIONS
-export const getAll = async (req: Req, res: Response) => {
+// when calling from socket only userId is provided, else only req and res are provided
+export const getAll = async (req?: Req, res?: Response, userId?: string) => {
   try {
-    const user = req.user;
+    let user: IUserDocument | IDecodedUser | undefined | null;
+    if (!(req && res)) {
+      user = await User.findById(userId);
+    } else user = req.user;
+    if (!user) throw new Error("User not found");
     const conversations = await Conversation.getUserConversations(user!._id);
     const conversationsAndUsers = <IConversationWithUsers[]>[
       ...conversations.map((conversation) => conversation.toObject()),
@@ -79,11 +84,16 @@ export const getAll = async (req: Req, res: Response) => {
       const conversationUser = await User.findById(otherUserId);
       if (conversationUser) conversation.user = conversationUser;
     }
-    // return only conversations with users that didn't deleted their accounts
-    res.send(conversationsAndUsers.filter((conversation) => conversation.user));
+    const conversationsAndUsersToSend = conversationsAndUsers.filter(
+      (conversation) => conversation.user
+    );
+    if (req && res)
+      // return only conversations with users that didn't deleted their accounts
+      res.send(conversationsAndUsersToSend);
+    else return conversationsAndUsersToSend;
   } catch (error) {
     console.error(error);
-    res.status(400).send(error);
+    if (req && res) res.status(400).send(error);
   }
 };
 

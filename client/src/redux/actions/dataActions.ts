@@ -11,6 +11,7 @@ import {
   DELETE_CONVERSATION,
   ADD_REACTION_EMOTE_TO_MESSAGE,
   SET_REPLY_DATA,
+  UPDATE_LAST_ACTIVE,
 } from "../types";
 import { Dispatch } from "redux";
 import {
@@ -135,3 +136,7 @@ export const addReactionEmoteToMessage = (messageId: string, emote: string) => (
 export const setReplyData = (replyData: IReplyData | null) => (
   dispatch: Dispatch
 ) => dispatch({ type: SET_REPLY_DATA, payload: replyData });
+
+export const updateLastActive = (userId: string, lastActive: string | Date) => (
+  dispatch: Dispatch
+) => dispatch({ type: UPDATE_LAST_ACTIVE, payload: { userId, lastActive } });

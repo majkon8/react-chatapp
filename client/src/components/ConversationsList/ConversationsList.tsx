@@ -93,6 +93,7 @@ function ConversationsList({
               username={searchedUser.username}
               userImageUrl={searchedUser.imageUrl}
               userId={searchedUser._id}
+              lastActive={searchedUser.lastActive}
               id={searchedUser._id}
               handleActive={handleActive}
             />
@@ -111,6 +112,7 @@ function ConversationsList({
               username={conversation.user.username}
               userImageUrl={conversation.user.imageUrl}
               userId={conversation.user._id}
+              lastActive={conversation.user.lastActive}
               id={conversation._id}
               lastMessage={conversation.lastMessage}
               handleActive={handleActive}

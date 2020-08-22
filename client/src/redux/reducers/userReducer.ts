@@ -13,6 +13,7 @@ export interface IUser {
   username: string;
   bio: string;
   imageUrl: string;
+  lastActive: string | Date;
   _id: string;
 }
 

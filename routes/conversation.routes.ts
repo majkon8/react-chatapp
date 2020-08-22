@@ -5,6 +5,7 @@ import { tokenAuth } from "../middlewares/auth";
 let router = express.Router();
 
 /* GET /conversations/ */
+// @ts-ignore
 router.get("/", tokenAuth, conversations.getAll);
 
 /* POST /conversations/delete */

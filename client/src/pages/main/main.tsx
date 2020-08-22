@@ -11,6 +11,7 @@ import io from "socket.io-client";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { getAuthenticatedUser } from "../../redux/actions/userActions";
+import { updateLastActive } from "../../redux/actions/dataActions";
 import { IState } from "../../redux/store";
 
 const mapStateToProps = (state: IState) => ({
@@ -18,7 +19,7 @@ const mapStateToProps = (state: IState) => ({
   user: state.user,
   data: state.data,
 });
-const mapActionsToProps = { getAuthenticatedUser };
+const mapActionsToProps = { getAuthenticatedUser, updateLastActive };
 const connector = connect(mapStateToProps, mapActionsToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -30,7 +31,13 @@ interface ITypingData {
   userId: string;
 }
 
-function Main({ UI, user, data, getAuthenticatedUser }: Props) {
+function Main({
+  UI,
+  user,
+  data,
+  getAuthenticatedUser,
+  updateLastActive,
+}: Props) {
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
   const [typingUsersIds, setTypingUsersIds] = useState<string[]>([]);
 
@@ -81,6 +88,15 @@ function Main({ UI, user, data, getAuthenticatedUser }: Props) {
     });
     return () => {
       socket?.off("receiveIsTyping");
+    };
+  }, [socket, user.authenticatedUser]);
+
+  useEffect(() => {
+    socket?.on("lastActive", (userId: string, lastActive: string | Date) => {
+      updateLastActive(userId, lastActive);
+    });
+    return () => {
+      socket?.off("lastActive");
     };
   }, [socket, user.authenticatedUser]);
 

@@ -2,6 +2,7 @@ import React from "react";
 import "./ChatBar.scss";
 import GeneralSettings from "../GeneralSettings/GeneralSettings";
 import UserSettings from "../UserSettings/UserSettings";
+import moment from "moment";
 // redux
 import { connect, ConnectedProps } from "react-redux";
 import { setIsChatOpen } from "../../redux/actions/uiActions";
@@ -37,10 +38,20 @@ function ChatBar({ data, setIsChatOpen }: Props) {
             className="chat-bar-user-image"
           />
           <div className="title-active-container">
-            <span className="conversation-title">
+            <span className="chat-bar-conversation-title">
               {data.selectedConversation.username}
             </span>
-            <span className="last-active"></span>
+            <span className="chat-bar-last-active">
+              {data.selectedConversation.lastActive === "now" && (
+                <div className="chat-bar-active-indicator has-background-success"></div>
+              )}
+              <span style={{ opacity: 0.5 }}>
+                Active{" "}
+                {data.selectedConversation.lastActive === "now"
+                  ? data.selectedConversation.lastActive
+                  : moment(data.selectedConversation.lastActive).fromNow()}
+              </span>
+            </span>
           </div>
         </div>
       )}

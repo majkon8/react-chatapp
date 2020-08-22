@@ -10,7 +10,7 @@ $theme-dark: rgb(40, 40, 40);
   grid-template-rows: 70px calc(100vh - 140px) 70px;
   color: $theme-light;
   background-color: $dark-color;
-  transition: background-color 0.5s;
+  transition: background-color 0.5s, color 0.5s;
   overflow-x: hidden;
 
   .action-trigger {
@@ -70,7 +70,6 @@ $theme-dark: rgb(40, 40, 40);
 .theme-light {
   background-color: white;
   color: $text-dark;
-  transition: background-color 0.5s, color 0.5s;
 
   .typing-indicator {
     background-color: $theme-light !important;
@@ -87,6 +86,14 @@ $theme-dark: rgb(40, 40, 40);
     .user-forward-container {
       background-color: $theme-light;
     }
+  }
+
+  .conversation-is-active-indicator {
+    border-color: white !important;
+  }
+
+  .active-conversation-is-active-indicator {
+    border-color: $theme-light !important;
   }
 
   .chat-search-container {
@@ -135,7 +142,7 @@ $theme-dark: rgb(40, 40, 40);
     }
   }
 
-  .message-reaction-emotes-container {
+  .message-reaction-emote-container {
     background-color: $theme-light !important;
     border: 4px solid white !important;
   }

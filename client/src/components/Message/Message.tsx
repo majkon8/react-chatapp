@@ -185,7 +185,7 @@ function Message({
           )}
         </div>
         {message.reactionEmote && (
-          <span className="message-reaction-emotes-container">
+          <span className="message-reaction-emote-container">
             {message.reactionEmote}
           </span>
         )}

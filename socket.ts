@@ -4,7 +4,7 @@ import * as conversations from "./controlers/conversation.controller";
 import * as users from "./controlers/user.controler";
 import { tokenAuthSocket, IDecodedUser } from "./middlewares/auth";
 import { mongoose } from "./mongoose";
-import { User, IUserDocument } from "./models/user.model";
+import { IUserDocument } from "./models/user.model";
 import { IConversationDocument } from "./models/conversation.model";
 import { IFile, IReplyData } from "./models/message.model";
 
@@ -27,7 +27,21 @@ export type Socket = SocketIO.Socket & { user: IDecodedUser };
 
 io.use(tokenAuthSocket);
 
-io.on("connection", (socket: Socket) => {
+io.on("connection", async (socket: Socket) => {
+  await users.updateLastActive(socket.user._id, "now");
+  const userConversations = await conversations.getAll(
+    undefined,
+    undefined,
+    socket.user._id
+  );
+  // send to every user that we have conversation with
+  userConversations?.forEach((conversation) => {
+    const conversationUserId = conversation.members.ids.filter(
+      (id) => id.toHexString() !== socket.user._id
+    )[0];
+    io.in(conversationUserId).emit("lastActive", socket.user._id, "now");
+  });
+
   socket.join(socket.user._id);
   socket.on("sendMessage", async (message: IMessage) => {
     try {
@@ -42,7 +56,7 @@ io.on("connection", (socket: Socket) => {
           )) || [];
         const deletedConversations: IConversationDocument[] = [];
         for (const conversationId of deletedConversationsIds) {
-          const conversation = await conversations.get(conversationId);
+          const conversation = await conversations.getOne(conversationId);
           if (conversation) deletedConversations.push(conversation);
         }
         const deletedConversation = deletedConversations.filter(
@@ -96,13 +110,13 @@ io.on("connection", (socket: Socket) => {
       const createdMessage = await messages.create(newMessage);
       // in this case, we need to get the message conversation after we create new message
       if (!messageConversation)
-        messageConversation = await conversations.get(conversationId);
+        messageConversation = await conversations.getOne(conversationId);
       if (createdMessage) {
         let sender: IUserDocument | null | undefined;
         let receiver: IUserDocument | null | undefined;
         // now we need to get both users from conversations to send them back and set to conversation
-        sender = await User.findById(socket.user._id);
-        receiver = await User.findById(message.conversation.userId);
+        sender = await users.getUserById(socket.user._id);
+        receiver = await users.getUserById(message.conversation.userId);
         return (
           io
             //emit created message both to sender and receiver
@@ -184,4 +198,21 @@ io.on("connection", (socket: Socket) => {
       }
     }
   );
+
+  socket.on("disconnect", async () => {
+    const now = new Date();
+    users.updateLastActive(socket.user._id, now);
+    const userConversations = await conversations.getAll(
+      undefined,
+      undefined,
+      socket.user._id
+    );
+    // send to every user that we have conversation with
+    userConversations?.forEach((conversation) => {
+      const conversationUserId = conversation.members.ids.filter(
+        (id) => id.toHexString() !== socket.user._id
+      )[0];
+      io.in(conversationUserId).emit("lastActive", socket.user._id, now);
+    });
+  });
 });

@@ -11,6 +11,7 @@ import {
   DELETE_CONVERSATION,
   ADD_REACTION_EMOTE_TO_MESSAGE,
   SET_REPLY_DATA,
+  UPDATE_LAST_ACTIVE,
 } from "../types";
 import { IUser } from "./userReducer";
 
@@ -51,6 +52,7 @@ export interface ISelectedConversation {
   username: string;
   userId: string;
   userImageUrl: string;
+  lastActive: string | Date;
 }
 
 export interface IReplyData {
@@ -130,15 +132,12 @@ export default function (state = initialState, action: DataActionTypes) {
           ...state,
           // remove from searched the user whom we started new conversation with
           searchedUsers: state.searchedUsers
-            ? [
-                ...state.searchedUsers.filter((user) => {
-                  if (isSender)
-                    // when messsage starts a new conversation, the id of selectedConversation is id of a user with whom we are starting the conversation
-                    return user._id !== state.selectedConversation?.id;
-                  else
-                    return user._id !== action.payload.createdMessage.authorId;
-                }),
-              ]
+            ? state.searchedUsers.filter((user) => {
+                if (isSender)
+                  // when messsage starts a new conversation, the id of selectedConversation is id of a user with whom we are starting the conversation
+                  return user._id !== state.selectedConversation?.id;
+                else return user._id !== action.payload.createdMessage.authorId;
+              })
             : null,
           // add just created conversation to our conversations list
           conversations: [
@@ -197,47 +196,40 @@ export default function (state = initialState, action: DataActionTypes) {
     case DISPLAY_MESSAGE:
       return {
         ...state,
-        conversations: [
-          ...state.conversations?.map((conversation) => {
-            if (conversation._id === action.payload._id)
-              conversation.isDisplayed = true;
-            return conversation;
-          }),
-        ],
+        conversations: state.conversations?.map((conversation) => {
+          if (conversation._id === action.payload._id)
+            conversation.isDisplayed = true;
+          return conversation;
+        }),
       };
     case SET_MESSAGE_DELETED:
       return {
         ...state,
-        messages: [
-          ...state.messages?.map((message) => {
-            if (message._id === action.payload) {
-              message.type = "text";
-              message.body = "";
-              message.reactionEmote = "";
-            }
-            return message;
-          }),
-        ],
-        conversations: [
-          ...state.conversations?.map((conversation) => {
-            if (conversation.lastMessage._id === action.payload) {
-              conversation.lastMessage.type = "text";
-              conversation.lastMessage.body = "";
-            }
-            return conversation;
-          }),
-        ],
+        messages: state.messages?.map((message) => {
+          if (message._id === action.payload) {
+            message.type = "text";
+            message.body = "";
+            message.reactionEmote = "";
+          }
+          return message;
+        }),
+
+        conversations: state.conversations?.map((conversation) => {
+          if (conversation.lastMessage._id === action.payload) {
+            conversation.lastMessage.type = "text";
+            conversation.lastMessage.body = "";
+          }
+          return conversation;
+        }),
       };
     case DELETE_CONVERSATION:
       const isDeletingSelectedConversation =
         state.selectedConversation?.id === action.payload;
       return {
         ...state,
-        conversations: [
-          ...state.conversations?.filter(
-            (conversation) => conversation._id !== action.payload
-          ),
-        ],
+        conversations: state.conversations?.filter(
+          (conversation) => conversation._id !== action.payload
+        ),
         selectedConversation: isDeletingSelectedConversation
           ? null
           : state.selectedConversation,
@@ -246,17 +238,31 @@ export default function (state = initialState, action: DataActionTypes) {
     case ADD_REACTION_EMOTE_TO_MESSAGE:
       return {
         ...state,
-        messages: [
-          ...state.messages?.map((message) => {
-            if (message._id === action.payload.messageId) {
-              message.reactionEmote = action.payload.emote;
-            }
-            return message;
-          }),
-        ],
+        messages: state.messages?.map((message) => {
+          if (message._id === action.payload.messageId) {
+            message.reactionEmote = action.payload.emote;
+          }
+          return message;
+        }),
       };
     case SET_REPLY_DATA:
       return { ...state, replyData: action.payload };
+    case UPDATE_LAST_ACTIVE:
+      return {
+        ...state,
+        conversations: state.conversations?.map((conversation) => {
+          if (conversation.user._id === action.payload.userId)
+            conversation.user.lastActive = action.payload.lastActive;
+          return conversation;
+        }),
+        selectedConversation:
+          state.selectedConversation?.userId === action.payload.userId
+            ? {
+                ...state.selectedConversation,
+                lastActive: action.payload.lastActive,
+              }
+            : state.selectedConversation,
+      };
     default:
       return state;
   }

@@ -251,3 +251,15 @@ export const deleteUserAccount = async (req: Req, res: Response) => {
     return res.status(400).json(error);
   }
 };
+
+// UPDATE LAST ACTIVE
+export const updateLastActive = async (
+  userId: string,
+  lastActive: string | Date
+) => {
+  try {
+    await User.updateLastActive(userId, lastActive);
+  } catch (error) {
+    console.error(error);
+  }
+};

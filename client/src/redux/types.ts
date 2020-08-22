@@ -32,6 +32,7 @@ export const SET_MESSAGE_DELETED = "SET_MESSAGE_DELETED";
 export const DELETE_CONVERSATION = "DELETE_CONVERSATION";
 export const ADD_REACTION_EMOTE_TO_MESSAGE = "ADD_REACTION_EMOTE_TO_MESSAGE";
 export const SET_REPLY_DATA = "SET_REPLY_DATA";
+export const UPDATE_LAST_ACTIVE = "UPDATE_LAST_ACTIVE";
 
 // user interfaces
 interface ISetAuthenticatedAction {
@@ -139,6 +140,10 @@ interface ISetReplyAction {
   type: typeof SET_REPLY_DATA;
   payload: IReplyData | null;
 }
+interface IUpdateLastActiveAction {
+  type: typeof UPDATE_LAST_ACTIVE;
+  payload: { userId: string; lastActive: string | Date };
+}
 
 export type DataActionTypes =
   | ISetSearchedUsersAction
@@ -151,4 +156,5 @@ export type DataActionTypes =
   | ISetMessageDeletedAction
   | IDeleteConversationAction
   | IAddReactionToMessageAction
-  | ISetReplyAction;
+  | ISetReplyAction
+  | IUpdateLastActiveAction;

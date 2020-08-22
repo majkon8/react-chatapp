@@ -35,9 +35,17 @@
     cursor: pointer;
     white-space: nowrap;
 
-    .last-active {
+    .chat-bar-last-active {
       font-size: 0.8em;
-      opacity: 0.5;
+      max-width: 100px;
+
+      .chat-bar-active-indicator {
+        width: 9px;
+        height: 9px;
+        display: inline-block;
+        border-radius: 100%;
+        margin-right: 5px;
+      }
     }
   }
 
@@ -46,7 +54,7 @@
     padding: 0 10px;
     padding-left: 40px;
 
-    .conversation-title {
+    .chat-bar-conversation-title {
       overflow: hidden;
       max-width: 60vw;
     }
